@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "start_date": "2025-08-12",
+    "start_time": "21:28:28.310",
+    "end_date": "2025-08-12",
+    "end_time": "21:28:51.919",
+    "server": "http://localhost:11434",
+    "model": "gemma3:12b",
+    "concurrent": 1,
+    "questions": 2,
+    "timeout": 120.0,
+    "total_duration_ms": 23608.9
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "Die Hauptstadt von Deutschland ist Berlin.\n",
+      "time": 459.9,
+      "token": 9,
+      "quality": 0.491,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 0.983,
+        "completeness_score": 0.25,
+        "relevance_score": 0.75,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.0,
+        "overall_quality": 0.491,
+        "word_count": 6,
+        "sentence_count": 1,
+        "avg_sentence_length": 6.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "Stell dir vor, du bringst einem Hund Tricks bei. Du sagst \"Sitz!\" und gibst ihm ein Leckerli, wenn er sich setzt. Nach einer Weile versteht der Hund, dass \"Sitz!\" und das Hinsetzen zusammengehören und er setzt sich, wenn du den Befehl gibst.\n\n**Machine Learning (ML) ist im Grunde das Gleiche, aber mit Computern statt mit Hunden.**\n\nHier ist eine einfachere Erklärung:\n\n* **Daten sind das Futter:**  Statt Leckerlis bekommt der Computer Daten. Das können Bilder, Zahlen, Texte, oder alles andere sein.\n* **Algorithmus ist der Trainer:** Ein Algorithmus ist ein Satz von Regeln und Anweisungen, der dem Computer sagt, wie er die Daten analysieren und daraus lernen soll.  Denk an ihn als den Trainer, der dem Hund erklärt, was er tun soll.\n* **Lernen durch Erfahrung:** Der Computer schaut sich die Daten an und versucht, Muster zu erkennen.  Je mehr Daten er sieht, desto besser lernt er.  Er \"lernt\" also, indem er aus seinen \"Erfahrungen\" mit den Daten verbessert.\n* **Vorhersagen treffen:**  Nachdem der Computer gelernt hat, kann er Vorhersagen treffen oder Entscheidungen treffen, wenn er mit neuen, unbekannten Daten konfrontiert wird.  So wie der Hund \"Sitz!\" versteht und sich setzt, kann der Computer anhand der gelernten Muster eine Vorhersage treffen.\n\n**Ein paar Beispiele, wo Machine Learning eingesetzt wird:**\n\n* **Spam-Filter:**  Der Filter lernt, welche E-Mails Spam sind, indem er sich Millionen von E-Mails ansieht.\n* **Netflix-Empfehlungen:** Netflix schaut, welche Filme du gesehen hast und schlägt dir Filme vor, die dir wahrscheinlich auch gefallen.\n* **Selbstfahrende Autos:**  Das Auto lernt, wie es fahren muss, indem es sich Millionen von Fahrten ansieht.\n* **Sprachassistenten (Siri, Alexa):** Sie lernen, deine Stimme zu erkennen und deine Befehle zu verstehen.\n\n**Es gibt verschiedene Arten von Machine Learning:**\n\n* **Überwachtes Lernen:** Der Computer lernt von Daten, die bereits mit der richtigen Antwort versehen sind (wie ein Trainer, der dem",
+      "time": 22165.2,
+      "token": 500,
+      "quality": 0.589,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.6,
+        "relevance_score": 0.014,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.529,
+        "overall_quality": 0.589,
+        "word_count": 304,
+        "sentence_count": 21,
+        "avg_sentence_length": 14.5,
+        "unique_words_ratio": 0.622
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 22625.1,
+    "runtime_avg": 11312.6,
+    "runtime_min": 459.9,
+    "runtime_max": 22165.2,
+    "token_sum": 509,
+    "token_avg": 254,
+    "token_min": 9,
+    "token_max": 500,
+    "quality_sum": 1.08,
+    "quality_avg": 0.54,
+    "quality_min": 0.491,
+    "quality_max": 0.589,
+    "llm_load_time": 519.4,
+    "cold_start_factor": 0.05
+  }
+}

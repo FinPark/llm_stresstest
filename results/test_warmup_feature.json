@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "start_date": "2025-08-12",
+    "start_time": "21:27:50.054",
+    "end_date": "2025-08-12",
+    "end_time": "21:28:17.612",
+    "server": "http://localhost:11434",
+    "model": "gemma3:12b",
+    "concurrent": 1,
+    "questions": 2,
+    "timeout": 120.0,
+    "total_duration_ms": 27557.5
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "Die Hauptstadt von Deutschland ist Berlin.\n",
+      "time": 460.1,
+      "token": 9,
+      "quality": 0.491,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 0.983,
+        "completeness_score": 0.25,
+        "relevance_score": 0.75,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.0,
+        "overall_quality": 0.491,
+        "word_count": 6,
+        "sentence_count": 1,
+        "avg_sentence_length": 6.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "Okay, lass uns Machine Learning (maschinelles Lernen) in einfachen Worten erklären. Stell dir vor, du bringst einem Computer etwas bei, ohne ihm explizit zu sagen, *wie* er das machen soll.\n\n**1. Was ist das Problem?**\n\nNormalerweise, wenn du einem Computer etwas beibringen willst, musst du ihm ganz präzise Anweisungen geben: \"Wenn X passiert, dann mach Y.\"  Das ist traditionelle Programmierung.  Aber was, wenn das zu kompliziert ist?  Was, wenn du die Regeln nicht kennst?  Hier kommt Machine Learning ins Spiel.\n\n**2. Die Idee hinter Machine Learning**\n\nMachine Learning bedeutet, dass du dem Computer **Daten** gibst und ihn dann **lernt**, Muster und Zusammenhänge in diesen Daten zu erkennen.  Anstatt ihm also zu sagen, *wie* er eine Katze von einem Hund unterscheidet, zeigst du ihm tausende Fotos von Katzen und Hunden und lässt ihn selbst herausfinden, woran er sie erkennt (z.B. Form der Ohren, Schnauze, usw.).\n\n**3. Ein Beispiel: Spam-Filter**\n\nDenk an deinen Spam-Filter in der E-Mail.  Wie funktioniert der?\n\n*   **Traditionelle Programmierung:**  Man müsste eine lange Liste von Regeln erstellen: \"Wenn die E-Mail 'Viagra' enthält, dann ist sie Spam.\"  \"Wenn die E-Mail von einem unbekannten Absender kommt und viele Großbuchstaben verwendet, dann ist sie Spam.\"  Das ist mühsam und die Spammer finden immer Wege, die Regeln zu umgehen.\n*   **Machine Learning:**  Man gibt dem Computer eine große Menge an E-Mails, die als \"Spam\" oder \"Nicht-Spam\" markiert sind.  Der Computer analysiert diese E-Mails und findet selbst Muster:  \"E-Mails mit vielen Großbuchstaben und seltsamen Links sind oft Spam.\"  Der Computer lernt also, Spam zu erkennen, ohne dass ihm jemand explizit gesagt hat, *wie* Spam aussieht.\n\n**4. Verschiedene Arten von Machine Learning**\n\nEs gibt verschiedene Arten von Machine Learning, aber hier sind die wichtigsten:\n\n*   **Überwachtes Lernen (Supervised Learning):**  Du gibst dem Computer Daten, bei denen die",
+      "time": 22985.8,
+      "token": 500,
+      "quality": 0.583,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.7,
+        "relevance_score": 0.03,
+        "factual_consistency": 0.8,
+        "fluency_score": 0.615,
+        "coherence_score": 0.537,
+        "overall_quality": 0.583,
+        "word_count": 293,
+        "sentence_count": 26,
+        "avg_sentence_length": 11.3,
+        "unique_words_ratio": 0.628
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 23445.9,
+    "runtime_avg": 11722.9,
+    "runtime_min": 460.1,
+    "runtime_max": 22985.8,
+    "token_sum": 509,
+    "token_avg": 254,
+    "token_min": 9,
+    "token_max": 500,
+    "quality_sum": 1.074,
+    "quality_avg": 0.537,
+    "quality_min": 0.491,
+    "quality_max": 0.583,
+    "llm_load_time": 3649.7,
+    "cold_start_factor": 0.31
+  }
+}

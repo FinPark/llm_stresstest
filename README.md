@@ -55,6 +55,7 @@ Bearbeite `config.json`:
     "questions": 5,                    // Anzahl der zu testenden Fragen
     "concurrent": 1,                   // Anzahl paralleler Anfragen
     "url": "http://localhost:11434",   // LLM API Endpoint
+    "server_name": "MacBook Pro M1",   // Sprechender Server-Name für Auswertungen
     "model": "llama2",                 // Modell-Name
     "timeout": 120.0,                  // Timeout in Sekunden
     "max_keepalive_connections": 20    // Connection Pool Größe
@@ -163,6 +164,38 @@ uv add sentence-transformers
 # spaCy Modell herunterladen
 python -m spacy download de_core_news_sm
 ```
+
+## Grafische Auswertung
+
+Das Tool enthält ein umfassendes Streamlit-Dashboard zur Analyse aller Testergebnisse:
+
+```bash
+# Dashboard starten
+streamlit run llm_auswertung.py
+
+# Oder mit speziellem Port
+streamlit run llm_auswertung.py --server.port 8502
+```
+
+### Dashboard-Features
+
+- **📊 Übersicht**: Gesamtstatistiken und Tabellenansicht aller Tests
+- **📝 Log-Analyse**: Durchsuchen und Filtern von Logs, automatische Fehleranzeige
+- **⚡ Performance**: Token/Zeit-Analyse, Performance-Rankings, Effizienz-Matrix
+- **🔄 Vergleiche**: 
+  - Gleiche Modelle auf verschiedenen Servern
+  - Verschiedene Modelle auf gleichem Server
+  - Interaktive Balkengrafiken
+- **📈 Qualitätsmetriken**: 
+  - Radar-Charts für Metrik-Vergleiche
+  - Box-Plots für Verteilungen
+  - Detaillierte Statistiken
+
+### Unterstützte Plattformen
+
+- ✅ macOS
+- ✅ Linux
+- ✅ Windows
 
 ## Lizenz
 

@@ -1,8 +1,7 @@
 {
-    "questions": 2,
+    "questions": 5,
     "concurrent": 1,
     "url": "http://localhost:11434",
-    "server_name": "MacBook Pro M1",
     "model": "gemma3:12b",
     "timeout": 120.0,
     "max_keepalive_connections": 20

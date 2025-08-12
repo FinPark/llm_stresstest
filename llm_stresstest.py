@@ -361,6 +361,7 @@ class LLMStressTest:
         self.end_time = None
         self.client = None
         self.quality_evaluator = QualityEvaluator()
+        self.llm_load_time = 0
         
     def load_config(self) -> bool:
         """Load and validate configuration from config.json"""
@@ -438,8 +439,14 @@ class LLMStressTest:
             logger.error(f"Connection test failed: {e}")
             return False
     
-    async def send_question(self, question: str, session: aiohttp.ClientSession) -> Dict[str, Any]:
-        """Send a single question to the LLM and measure response"""
+    async def send_question(self, question: str, session: aiohttp.ClientSession, is_warmup: bool = False) -> Dict[str, Any]:
+        """Send a single question to the LLM and measure response
+        
+        Args:
+            question: The question to send
+            session: aiohttp session for connection pooling
+            is_warmup: If True, skip quality evaluation and logging details
+        """
         result = {
             "question": question,
             "answer": "",
@@ -467,32 +474,36 @@ class LLMStressTest:
             result["time"] = round(elapsed_ms, 1)
             result["token"] = response.usage.completion_tokens if response.usage else 0
             
-            # Berechne Qualitätsmetriken
-            if result["answer"] and not result["answer"].startswith("ERROR"):
-                try:
-                    quality_metrics = self.quality_evaluator.evaluate_answer(question, result["answer"])
-                    result["quality"] = quality_metrics.overall_quality
-                    result["quality_metrics"] = {
-                        "structure_score": quality_metrics.structure_score,
-                        "readability_score": quality_metrics.readability_score,
-                        "completeness_score": quality_metrics.completeness_score,
-                        "relevance_score": quality_metrics.relevance_score,
-                        "factual_consistency": quality_metrics.factual_consistency,
-                        "fluency_score": quality_metrics.fluency_score,
-                        "coherence_score": quality_metrics.coherence_score,
-                        "overall_quality": quality_metrics.overall_quality,
-                        "word_count": quality_metrics.word_count,
-                        "sentence_count": quality_metrics.sentence_count,
-                        "avg_sentence_length": quality_metrics.avg_sentence_length,
-                        "unique_words_ratio": quality_metrics.unique_words_ratio
-                    }
-                    logger.info(f"Question processed in {elapsed_ms:.1f}ms, {result['token']} tokens, quality: {quality_metrics.overall_quality}")
-                except Exception as e:
-                    logger.warning(f"Quality evaluation failed: {e}")
-                    result["quality"] = 0.0
-                    result["quality_metrics"] = None
+            if is_warmup:
+                # Bei Warmup nur Zeit loggen, keine Quality-Bewertung
+                logger.info(f"[WARMUP] Model loading completed in {elapsed_ms:.1f}ms")
             else:
-                logger.info(f"Question processed in {elapsed_ms:.1f}ms, {result['token']} tokens")
+                # Normale Verarbeitung mit Qualitätsmetriken
+                if result["answer"] and not result["answer"].startswith("ERROR"):
+                    try:
+                        quality_metrics = self.quality_evaluator.evaluate_answer(question, result["answer"])
+                        result["quality"] = quality_metrics.overall_quality
+                        result["quality_metrics"] = {
+                            "structure_score": quality_metrics.structure_score,
+                            "readability_score": quality_metrics.readability_score,
+                            "completeness_score": quality_metrics.completeness_score,
+                            "relevance_score": quality_metrics.relevance_score,
+                            "factual_consistency": quality_metrics.factual_consistency,
+                            "fluency_score": quality_metrics.fluency_score,
+                            "coherence_score": quality_metrics.coherence_score,
+                            "overall_quality": quality_metrics.overall_quality,
+                            "word_count": quality_metrics.word_count,
+                            "sentence_count": quality_metrics.sentence_count,
+                            "avg_sentence_length": quality_metrics.avg_sentence_length,
+                            "unique_words_ratio": quality_metrics.unique_words_ratio
+                        }
+                        logger.info(f"Question processed in {elapsed_ms:.1f}ms, {result['token']} tokens, quality: {quality_metrics.overall_quality}")
+                    except Exception as e:
+                        logger.warning(f"Quality evaluation failed: {e}")
+                        result["quality"] = 0.0
+                        result["quality_metrics"] = None
+                else:
+                    logger.info(f"Question processed in {elapsed_ms:.1f}ms, {result['token']} tokens")
             
         except asyncio.TimeoutError:
             logger.error(f"Timeout for question: {question[:50]}...")
@@ -524,13 +535,40 @@ class LLMStressTest:
             )
             
             async with aiohttp.ClientSession(connector=connector) as session:
+                # WARMUP: Erste Frage zweimal ausführen für LLM-Ladezeit-Messung
+                if len(self.questions) > 0:
+                    first_question = self.questions[0]
+                    logger.info("Starting warmup phase to measure LLM loading time...")
+                    
+                    # Erste Ausführung (mit Ladezeit)
+                    warmup_result = await self.send_question(first_question, session, is_warmup=True)
+                    warmup_time = warmup_result['time']
+                    
+                    # Zweite Ausführung (ohne Ladezeit) 
+                    logger.info("Running first question again without loading time...")
+                    real_result = await self.send_question(first_question, session, is_warmup=False)
+                    real_time = real_result['time']
+                    
+                    # LLM-Ladezeit berechnen
+                    self.llm_load_time = round(warmup_time - real_time, 1)
+                    logger.info(f"LLM load time calculated: {self.llm_load_time}ms (warmup: {warmup_time}ms, real: {real_time}ms)")
+                    
+                    # Nur das echte Ergebnis zu results hinzufügen
+                    self.results.append(real_result)
+                    
+                    # Restliche Fragen verarbeiten (ab Index 1)
+                    remaining_questions = self.questions[1:]
+                else:
+                    self.llm_load_time = 0
+                    remaining_questions = []
+                
                 concurrent = self.config['concurrent']
                 
-                if concurrent > 1:
-                    logger.info(f"Processing questions with concurrency: {concurrent}")
+                if concurrent > 1 and len(remaining_questions) > 0:
+                    logger.info(f"Processing remaining questions with concurrency: {concurrent}")
                     
-                    for i in range(0, len(self.questions), concurrent):
-                        batch = self.questions[i:i+concurrent]
+                    for i in range(0, len(remaining_questions), concurrent):
+                        batch = remaining_questions[i:i+concurrent]
                         batch_results = await self.process_questions_batch(batch, session)
                         self.results.extend(batch_results)
                         
@@ -539,11 +577,11 @@ class LLMStressTest:
                         if timeout_found:
                             logger.error("Request timeout detected in batch. Aborting test to prevent further timeouts.")
                             break
-                else:
-                    logger.info("Processing questions sequentially")
+                elif len(remaining_questions) > 0:
+                    logger.info("Processing remaining questions sequentially")
                     
-                    for question in self.questions:
-                        result = await self.send_question(question, session)
+                    for question in remaining_questions:
+                        result = await self.send_question(question, session, is_warmup=False)
                         self.results.append(result)
                         
                         # Check for timeout error and abort if found
@@ -575,9 +613,11 @@ class LLMStressTest:
         tokens = [r['token'] for r in self.results if r['token'] > 0]
         qualities = [r['quality'] for r in self.results if r.get('quality', 0) > 0]
         
+        runtime_avg = round(sum(runtimes) / len(runtimes), 1) if runtimes else 0
+        
         aggregates = {
             "runtime_sum": round(sum(runtimes), 1) if runtimes else 0,
-            "runtime_avg": round(sum(runtimes) / len(runtimes), 1) if runtimes else 0,
+            "runtime_avg": runtime_avg,
             "runtime_min": round(min(runtimes), 1) if runtimes else 0,
             "runtime_max": round(max(runtimes), 1) if runtimes else 0,
             "token_sum": sum(tokens) if tokens else 0,
@@ -587,7 +627,9 @@ class LLMStressTest:
             "quality_sum": round(sum(qualities), 3) if qualities else 0,
             "quality_avg": round(sum(qualities) / len(qualities), 3) if qualities else 0,
             "quality_min": round(min(qualities), 3) if qualities else 0,
-            "quality_max": round(max(qualities), 3) if qualities else 0
+            "quality_max": round(max(qualities), 3) if qualities else 0,
+            "llm_load_time": self.llm_load_time,
+            "cold_start_factor": round(self.llm_load_time / runtime_avg, 2) if self.llm_load_time > 0 and runtime_avg > 0 else 0
         }
         
         return aggregates
@@ -596,6 +638,20 @@ class LLMStressTest:
         """Save test results to JSON file"""
         output_path = Path('results') / f"{self.output_filename}.json"
         
+        # Prüfe ob Datei bereits existiert
+        if output_path.exists():
+            logger.warning(f"Output file {output_path} already exists!")
+            print(f"\n⚠️  Die Datei '{output_path}' existiert bereits.")
+            response = input("Möchten Sie die Datei überschreiben? (j/n): ").strip().lower()
+            
+            if response not in ['j', 'ja', 'y', 'yes']:
+                # Generiere alternativen Dateinamen mit Timestamp
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                alternative_name = f"{self.output_filename}_{timestamp}"
+                output_path = Path('results') / f"{alternative_name}.json"
+                logger.info(f"Using alternative filename: {output_path}")
+                print(f"✅ Speichere unter alternativem Namen: {output_path}")
+        
         output_data = {
             "meta": {
                 "start_date": self.start_time.strftime("%Y-%m-%d"),
@@ -603,6 +659,7 @@ class LLMStressTest:
                 "end_date": self.end_time.strftime("%Y-%m-%d"),
                 "end_time": self.end_time.strftime("%H:%M:%S.%f")[:-3],
                 "server": self.config['url'],
+                "server_name": self.config.get('server_name', self.config['url']),  # Fallback auf URL wenn nicht gesetzt
                 "model": self.config['model'],
                 "concurrent": self.config['concurrent'],
                 "questions": self.config['questions'],

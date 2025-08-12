@@ -51,6 +51,7 @@ llm_stresstest/
     "questions": 5,           // Number of questions to process
     "concurrent": 1,          // Parallel requests (1 = sequential)
     "url": "http://...",     // LLM API endpoint
+    "server_name": "Server 1", // Descriptive server name for reports
     "model": "model_name",   // Model identifier
     "timeout": 120.0,        // Request timeout in seconds
     "max_keepalive_connections": 20  // Connection pool size
