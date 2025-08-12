@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "start_date": "2025-08-12",
+    "start_time": "23:49:03.422",
+    "end_date": "2025-08-12",
+    "end_time": "23:57:34.149",
+    "server": "http://test-ki.ams.local:11434",
+    "server_name": "TEST-KI",
+    "model": "deepseek-r1:14b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 510727.0,
+    "parameter_size": "14.8B",
+    "quantization_level": "Q4_K_M",
+    "size_bytes": 8988112209,
+    "family": "qwen2"
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "<think>\nDie Hauptstadt von Deutschland ist Berlin.\n</think>\n\nDie Hauptstadt von Deutschland ist **Berlin**.",
+      "time": 2505.4,
+      "token": 23,
+      "quality": 0.583,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 0.936,
+        "completeness_score": 0.25,
+        "relevance_score": 0.6,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.667,
+        "overall_quality": 0.583,
+        "word_count": 14,
+        "sentence_count": 2,
+        "avg_sentence_length": 7.0,
+        "unique_words_ratio": 0.643
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "<think>\nOkay, so I need to explain machine learning in simple terms. Hmm, where do I start? I remember that it's a part of artificial intelligence, but I'm not exactly sure what that means. Maybe it's like how computers can learn things without being explicitly programmed?\n\nWait, how does that work? If you don't program it step by step, how does the computer know what to do? Oh right, maybe it uses data to figure things out on its own. So instead of telling the computer every single rule, you give it a bunch of examples and let it find patterns.\n\nLike, if I have pictures of cats and dogs, I can show them to the machine learning algorithm, and over time, it learns what makes a picture a cat or a dog. That way, when new images come in, it can guess whether they're cats or dogs based on what it learned from the examples.\n\nOh, so it's kind of like teaching a child by showing them things and letting them figure out the rules themselves. Instead of telling the child every single detail, you let them observe and learn from their experiences. That makes sense because if we had to program every possible rule, especially for something as complex as recognizing images, it would be practically impossible.\n\nBut wait, how does the computer actually process all those examples? I think it uses some kind of mathematical model or algorithm that can adjust itself based on the data it's given. So these algorithms are designed to improve over time by learning from more data. It's like when you practice something many times and get better at it; the algorithm gets better with more data too.\n\nI've heard terms like neural networks and deep learning thrown around. Are those part of machine learning? I think they are, but I'm not entirely sure how they fit in. Neural networks are inspired by the human brain's structure, right? They have layers of nodes that process information, and each layer can extract different features from the data. So for image recognition, maybe one layer detects edges, another detects shapes, and so on until it can recognize entire objects.\n\nDeep learning is a subset of machine learning that uses neural networks with many layers. The \"deep\" refers to the number of layers in the network. These networks are capable of learning very complex patterns because they have more capacity to process information through multiple layers. But I'm not sure how exactly they train these networks; does it involve some kind of trial and error where the network",
+      "time": 54185.0,
+      "token": 500,
+      "quality": 0.456,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 1.0,
+        "completeness_score": 0.35,
+        "relevance_score": 0.011,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.612,
+        "overall_quality": 0.456,
+        "word_count": 433,
+        "sentence_count": 27,
+        "avg_sentence_length": 16.0,
+        "unique_words_ratio": 0.52
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "<think>\n\n</think>\n\nEin neuronales Netzwerk ist eine Computervorrichtung, die sich an biologische neuronalre Netze orientiert. Es besteht aus mehreren Schichten von künstlichen Neuronen, die in Verknüpfungen (Weight) miteinander verbunden sind. Jedes neuronale Netz hat eine Eingabelayer, eine oder mehrere versteckte Lagen und einen Ausgabetlayer.\n\n### Funktionsweise:\n\n1. **Eingangsschicht**: Die Eingangsschicht empfängt die Input-Daten. Diese Inputs können reelle Zahlen sein, die je nach Problemstellung verschiedene Bedeutungen haben.\n\n2. **Versteckte Lagen**: Jede versteckte Schicht besteht aus neuronalen Knoten, die sogenannte Aktivierungsfunktionen verwenden, um die Summe der Eingänge zu transformieren. Diese Aktivierungsfunktionen können Sigmoid-, ReLU (Rectified Linear Unit), Tanh usw. sein.\n\n3. **Aktivierung**: Jedes künstliche Neuron in einer Schicht erzeugt einen Output basierend auf den Gewichten der Verbindungen zu den Neuronen der vorherigen Schicht und einer Aktivierungsfunktion.\n\n4. **Ausgabeschicht**: Die letzte Schicht des neuronalen Netzes liefert die finale Vorhersage oder Ausgabe.\n\n### Lernalgorithmus:\n\nNeuronale Netzwerke lernen durch den Adjustieren der Gewichte zwischen den Neuronen basierend auf Trainingsdaten. Der Lernalgorithmus verwendet meist den **Rückpropagationsalgorithmus** (Backpropagation), der mit dem Gradientenabstieg (Gradient Descent) kombiniert wird, um die Fehlerfunktion zu minimieren.\n\n1. **Fehlerberechnung**: Der Fehler zwischen der vorhergesagten Ausgabe und der tatsächlichen Ausgabe wird berechnet.\n\n2. **Gradient Berechnung**: Die partiellen Ableitungen des Fehlers bezüglich der Gewichte werden berechnet, um zu bestimmen, wie die Gewichte angepasst werden sollen.\n\n3. **Gewichtsanpassung**: Die Gewichte werden in einer Iteration umgeändert, um den Fehler zu verringern.\n\n",
+      "time": 108982.1,
+      "token": 500,
+      "quality": 0.531,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.884,
+        "completeness_score": 0.417,
+        "relevance_score": 0.024,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.727,
+        "coherence_score": 0.493,
+        "overall_quality": 0.531,
+        "word_count": 224,
+        "sentence_count": 22,
+        "avg_sentence_length": 10.2,
+        "unique_words_ratio": 0.683
+      }
+    },
+    {
+      "question": "Was sind die Vor- und Nachteile von Cloud Computing?",
+      "answer": "<think>\nOkay, I need to figure out the pros and cons of cloud computing. Let me start by understanding what cloud computing is. From what I know, it's about delivering computing services like servers, storage, databases, and software over the internet, usually on a pay-as-you-go basis.\n\nSo, thinking about the advantages first. One big plus must be cost savings because you don't have to invest in physical hardware. Instead, you rent resources from providers, which is more budget-friendly. Also, scalability is easier since you can adjust your resources up or down based on demand without upfront investments. That makes sense for businesses that experience fluctuating traffic.\n\nAnother advantage could be the ability to access services and data from anywhere with an internet connection, which supports remote work and collaboration. Plus, cloud providers handle updates and maintenance, so you don't have to worry about those tasks yourself. Security is another point; top providers probably have better security measures than what a small business could manage on its own.\n\nNow, the disadvantages. Dependence on internet connectivity is a big one. If your connection goes down, you can't access your data or applications. Also, there might be concerns about data privacy and ownership, especially since you're storing it with third parties. I've heard about issues where companies might not have complete control over their data.\n\nIntegration could be tricky too. Migrating existing systems to the cloud isn't always straightforward and might require significant effort and time. There's also the risk of vendor lock-in, meaning once you set up your systems on one provider's platform, it can be hard and costly to switch providers later.\n\nSecurity is a double-edged sword; while providers often have robust security measures, there are still potential vulnerabilities that could lead to breaches. Performance might vary depending on factors like network latency or the provider's infrastructure, which could affect application speed and responsiveness.\n\nLastly, there's the issue of environmental impact. Data centers consume a lot of energy, so the carbon footprint of cloud computing is something to consider. However, some providers are making strides in using renewable energy, which might mitigate this concern somewhat.\n\nPutting it all together, I think these points cover both the benefits and challenges of cloud computing.\n</think>\n\n**Cloud Computing: Pros and Cons**\n\n**Advantages (Vorteile):**\n1. **Cost Efficiency:** Avoids expensive hardware investments by renting resources, making it budget-friendly.\n2. **Scalability:** Easily adjust resources based on demand without",
+      "time": 110045.5,
+      "token": 500,
+      "quality": 0.508,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 1.0,
+        "completeness_score": 0.375,
+        "relevance_score": 0.009,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.741,
+        "coherence_score": 0.496,
+        "overall_quality": 0.508,
+        "word_count": 401,
+        "sentence_count": 29,
+        "avg_sentence_length": 13.8,
+        "unique_words_ratio": 0.646
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen HTTP und HTTPS.",
+      "answer": "<think>\nOkay, so I need to explain the difference between HTTP and HTTPS. Hmm, I remember that both are related to how websites communicate over the internet, but there's something about security with HTTPS.\n\nAlright, let's start by breaking down each term. HTTP stands for HyperText Transfer Protocol. It's like the basic protocol that web servers use to send pages to browsers. But wait, isn't it unsecured? So maybe HTTP doesn't have encryption, which means data could be intercepted.\n\nOn the other hand, HTTPS adds an 'S' for Secure. That must mean it's more secure. I think HTTPS uses something called SSL/TLS encryption to protect data. So when you see a padlock in your browser, that's HTTPS at work. It keeps information like credit card details safe from hackers.\n\nSo the main differences would be security and encryption. HTTP is unencrypted, making it less secure, while HTTPS encrypts data, offering better protection. Also, HTTPS builds trust with users because they know their info is safe.\n\nAnother point is how they handle connections. I remember something about port numbers; maybe HTTP uses port 80 by default, while HTTPS uses 443. That's probably why some URLs have :80 or :443 sometimes, but most of the time it's just omitted.\n\nI should also mention that all major websites now use HTTPS because it's become a standard for security and SEO. Browsers even mark HTTP sites as not secure, which can make users hesitant to trust them.\n\nWait, I think there are other technical differences too, like how they establish connections. Maybe HTTP is stateless, meaning each request is separate, while HTTPS sessions might have some persistence through cookies or tokens. But that's more about application layer stuff rather than the protocol itself.\n\nSo putting it all together: HTTP is unsecured, faster maybe because of less encryption overhead, but not safe for sensitive data. HTTPS is slower due to encryption, but way more secure and trustworthy.\n</think>\n\n**HTTP vs HTTPS: A Comprehensive Overview**\n\nIn the realm of internet communication, HTTP (HyperText Transfer Protocol) and HTTPS (HyperText Transfer Protocol Secure) are fundamental protocols that enable data transfer between web servers and browsers. While they share foundational similarities, their differences in security, encryption, and usage are significant.\n\n### Key Differences:\n\n1. **Security and Encryption:**\n   - **HTTP** operates without encryption, making it vulnerable to data interception. This lack",
+      "time": 54728.4,
+      "token": 500,
+      "quality": 0.502,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 1.0,
+        "completeness_score": 0.35,
+        "relevance_score": 0.011,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.75,
+        "coherence_score": 0.521,
+        "overall_quality": 0.502,
+        "word_count": 391,
+        "sentence_count": 30,
+        "avg_sentence_length": 13.0,
+        "unique_words_ratio": 0.604
+      }
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Liste und einem Tupel in Python?",
+      "answer": "<think>\nOkay, so I'm trying to understand the difference between lists and tuples in Python. From what I've heard, both are used to store collections of items, but there must be some key differences that make them distinct.\n\nFirst, I remember that in Python, you can create a list using square brackets, like `my_list = [1, 2, 3]`, and a tuple with parentheses, like `my_tuple = (1, 2, 3)`. So the syntax is different right there. But what does that mean for how we use them?\n\nI think one main difference is immutability. I've heard that tuples are immutable, which means you can't change their elements after they're created. For example, if I try to reassign an element in a tuple, it should give me an error. Let me test that: `my_tuple[0] = 4` would raise a TypeError because tuples don't allow item assignment. On the other hand, lists are mutable, so I can change elements like `my_list[0] = 4`, and it will update without issues.\n\nAnother thing is methods available. Lists have methods like append(), insert(), and remove() which let you modify them. Tuples don't have these methods because they're not meant to be changed. So if I need to add or change elements frequently, a list would be more appropriate.\n\nI also recall that tuples are often used for functions that return multiple values. For example, when using the `divmod` function, it returns a tuple of the quotient and remainder. This makes sense because the result is meant to stay as two separate but related values that shouldn't be changed.\n\nIn terms of memory, I think tuples might take up less space since they don't need to store methods for modification, which could make them more efficient in certain situations where you just need to hold data without changing it.\n\nUse cases are another consideration. If I'm working with data that should remain constant, like coordinates (x, y) or dates, using tuples makes sense because it prevents accidental modifications. Lists would be better when I need flexibility, such as building a list of items dynamically during runtime.\n\nWait, but what about situations where you have to modify elements? Since tuples can't be changed directly, the only way is to create a new tuple, which might be less efficient for large data sets if done frequently.\n\nSo, in summary, lists are mutable,",
+      "time": 55633.6,
+      "token": 500,
+      "quality": 0.46,
+      "quality_metrics": {
+        "structure_score": 0.6,
+        "readability_score": 1.0,
+        "completeness_score": 0.286,
+        "relevance_score": 0.006,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.74,
+        "coherence_score": 0.558,
+        "overall_quality": 0.46,
+        "word_count": 393,
+        "sentence_count": 24,
+        "avg_sentence_length": 16.4,
+        "unique_words_ratio": 0.562
+      }
+    },
+    {
+      "question": "Erkläre das Konzept der Vererbung in der objektorientierten Programmierung.",
+      "answer": "<think>\nOkay, I need to explain inheritance in object-oriented programming. Let me start by recalling what I know.\n\nInheritance is a key OOP concept that allows classes to inherit properties and methods from other classes. It promotes code reusability and establishes a parent-child relationship between classes.\n\nI should break down the main components: parent class, child class, and base class. The parent provides attributes and methods, while the child can add more or override existing ones.\n\nPolymorphism is closely related—it allows methods to behave differently based on the object type. This flexibility is important for scalability.\n\nAbstract classes are those that cannot be instantiated and serve as templates for subclasses. They include abstract methods that must be implemented by derived classes.\n\nI should also mention encapsulation, which ties into how inheritance works with access modifiers like public, protected, and private.\n\nIncluding an example would help clarify things. Maybe a simple one where a Shape class is the parent, and Circle and Rectangle are children inheriting from it.\n\nWait, I need to ensure that my explanation flows logically, starting from basics to more advanced topics. Also, highlighting benefits and real-world applications will make it more relatable.\n\nI should keep each section clear and concise, using bullet points for easy reading. Making sure technical terms are explained in simple language is crucial so that even newcomers can understand.\n</think>\n\n### Erklärung des Konzepts der Vererbung in der objektorientierten Programmierung:\n\n**Vererbung** ist ein zentrales Prinzip in der objektorientierten Softwareentwicklung (OOP). Es ermöglicht es, Attribute und Methoden einer Klasse (\"Basisklasse\" oder \"Elternklasse\") von anderen Klassen (\"Unterklassen\" oder \"Kindesklassen\") zu erben. Dies fördert die Code-Wiederverwuseligbarkeit und reduziert die Duplikation von Code.\n\n#### Grundlegende Konzepte:\n\n1. **Basisklasse (Elternklasse):**\n   - Die Basisklasse ist diejenige, die Traits, Attribute und Methoden definiert, die von den Unterklassen verwendet werden sollen.\n   - Beispiele: Eine Klasse namens \"Vogel\" könnte eine Basisklasse für spezifischere Klassen wie \"Sperling\" oder \"Eule\" sein.\n\n2. **Unterklassen (Kindesklassen):",
+      "time": 111189.3,
+      "token": 500,
+      "quality": 0.54,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.991,
+        "completeness_score": 0.4,
+        "relevance_score": 0.016,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.448,
+        "overall_quality": 0.54,
+        "word_count": 320,
+        "sentence_count": 25,
+        "avg_sentence_length": 12.8,
+        "unique_words_ratio": 0.734
+      }
+    },
+    {
+      "question": "Was ist ein REST-API und wie funktioniert es?",
+      "answer": "<think>\nOkay, so I'm trying to understand what a REST API is and how it works. I've heard the term thrown around a lot in tech discussions, but I'm not entirely clear on the details. Let me start by breaking down the acronym: REST stands for Representational State Transfer. That's a bit of a mouthful. I think it refers to some kind of architectural style for designing networked applications.\n\nI remember someone mentioning that APIs are like intermediaries that allow different software systems to communicate. So, a REST API must be one such intermediary that follows the REST principles. But what exactly makes it RESTful? I'm not sure. Maybe it's about how data is transferred and accessed over the internet.\n\nFrom what I've gathered, REST APIs use HTTP methods like GET, POST, PUT, DELETE, etc., which are verbs that define actions to be performed on resources. Resources could be anything, like a user profile, a product, or an order. Each resource probably has a specific URL endpoint where you can send requests to.\n\nSo, for example, if I want to retrieve information about a user, maybe I would make a GET request to something like `https://api.example.com/users/123`. That makes sense because HTTP GET is typically used to fetch data. Similarly, creating a new user might involve sending a POST request to the same endpoint with the necessary data in the request body.\n\nI'm also thinking about how authentication works with REST APIs. I've heard terms like API keys and OAuth mentioned in this context. So, when making requests, you'd have to include some form of authentication token or key to prove who you are and what permissions you have. This is crucial for security, especially when dealing with sensitive data.\n\nAnother thing I'm a bit confused about is the difference between REST and other API types, like SOAP. I think SOAP uses XML messages and has more strict standards, whereas REST is more flexible, using formats like JSON which are easier to read and work with. This flexibility probably contributes to the popularity of REST APIs in modern web development.\n\nI'm also curious about versioning. How do developers handle changes or updates to their APIs without breaking existing clients? Maybe they include a version number in the URL, like `https://api.example.com/v2/users`. That way, both old and new versions can coexist until all clients are updated to the latest version.\n\nTesting REST APIs is another area I'm interested in. Tools like",
+      "time": 55417.0,
+      "token": 500,
+      "quality": 0.445,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 1.0,
+        "completeness_score": 0.375,
+        "relevance_score": 0.009,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.735,
+        "coherence_score": 0.473,
+        "overall_quality": 0.445,
+        "word_count": 408,
+        "sentence_count": 34,
+        "avg_sentence_length": 12.0,
+        "unique_words_ratio": 0.61
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen SQL und NoSQL-Datenbanken.",
+      "answer": "<think>\nOkay, I need to explain the differences between SQL and NoSQL databases. Let me start by recalling what each stands for. SQL is Structured Query Language, which I know is used with relational databases. NoSQL is not SQL, often used for non-relational data.\n\nHmm, so maybe I should break it down into key aspects like structure, scalability, query language, schema, and use cases. That makes sense because these are the main areas where they differ.\n\nFor the structure, SQL uses tables with predefined schemas, right? So each table has a fixed set of columns. NoSQL is more flexible, using collections or documents without fixed schemas. I should explain that in simple terms.\n\nScalability-wise, SQL scales vertically by adding more power to a single machine, which can get expensive. NoSQL typically scales horizontally by adding more servers, making it easier and cheaper at scale. That's an important point for businesses considering growth.\n\nThe query language is another big difference. SQL uses standard SQL queries, which are structured and declarative. NoSQL has different query languages that vary between systems—some might use JSON queries or key-value pairs. I should mention that while SQL's language is consistent across systems, NoSQL varies more.\n\nSchema is another area. SQL requires a schema before data insertion; you have to define the structure first. NoSQL allows for dynamic schemas, so you can insert data without predefined structures, which offers more flexibility but might lead to inconsistency if not managed well.\n\nUse cases would be helpful too. SQL is great for complex joins and ACID transactions, making it suitable for financial systems or any application needing strict data integrity. NoSQL is better for unstructured data like social media posts, big data analytics, or real-time applications where scalability is key.\n\nI should also think about other factors. Maybe consistency models—SQL databases typically offer strong consistency, while NoSQL can vary from eventually consistent to strongly consistent depending on the system.\n\nPerformance-wise, SQL is good when you need precise queries and complex operations. NoSQL shines with large datasets and simpler queries, offering high throughput but possibly at the cost of some consistency or feature richness.\n\nI wonder if I've covered all the main points. Maybe I should also touch upon the examples of each type, like MySQL for SQL and MongoDB for NoSQL, to make it concrete.\n\nWait, did I miss anything? Perhaps the flexibility in data modeling with NoSQL versus the rigid schema of SQL. Also, scalability isn",
+      "time": 111225.9,
+      "token": 500,
+      "quality": 0.435,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 1.0,
+        "completeness_score": 0.3,
+        "relevance_score": 0.009,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.506,
+        "overall_quality": 0.435,
+        "word_count": 408,
+        "sentence_count": 32,
+        "avg_sentence_length": 12.8,
+        "unique_words_ratio": 0.603
+      }
+    },
+    {
+      "question": "Was ist Docker und wofür wird es verwendet?",
+      "answer": "<think>\nOkay, I need to explain what Docker is and its uses. Let me start by breaking it down simply.\n\nDocker helps create containers, which are like lightweight virtual machines. They let you package an app with all its dependencies so it runs smoothly anywhere. This portability is a big plus because it saves time on setup across different environments.\n\nI should mention the main use cases: development and testing since it streamlines workflows for developers. Then, deployment and scaling, as containers make it easier to scale apps up or down quickly. Also, microservices architecture is a key area where Docker shines because each service can run in its own container independently.\n\nAnother important point is continuous integration and delivery (CI/CD) where Docker helps automate the build and testing process. Lastly, it's useful for running legacy applications by encapsulating them without needing to refactor the code.\n\nI should keep it clear and straightforward, avoiding too much jargon so it's easy to understand.\n</think>\n\nDocker ist eine Plattform zur Containerisierung, die es ermöglicht, Anwendungen und ihre Abhängigkeiten in sogenannten Containern zu packen. Diese Containere sind leichte, isolierte Umgebungen, die es erlauben, Programme gleichauf both auf verschiedenen Systemen laufen zu lassen, unabhängig von der Underlying-OS.\n\nDocker wird hauptsächlich für folgende Ziele verwendet:\n\n1. **Entwicklung und Testung**: Entwickler können lokale Entwicklungsumgebungen erstellen, die identisch mit den Produktionsumgebungen sind, was zu konsistenten Ergebnissen führt.\n2. **Deployment und Skalierung**: Anwendungen können schnell und einfach in großen Mengen deployed werden, da Container leicht repliziert und skaliert werden können.\n3. **Microservices-Architektur**: Docker ermöglicht die Implementierung von Microservices, wobei jede Service selbstständig in einem eigenen Container läuft.\n4. **CI/CD Pipelines**: Docker wird verwendet, um Build-, Test- und_deploy-Pipelines zu automatisieren.\n5. **Laufzeitverwaltung**: Es ist möglich, legacy-Anwendungen inContainern zu laufen lassen, ohne die Anwendung zu ändern.\n\nZusammenfassend dient Docker dazu, entwicklungsprozesse zu beschleunigen, Kosten zu sparen und Anwendungen",
+      "time": 56020.8,
+      "token": 500,
+      "quality": 0.564,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.971,
+        "completeness_score": 0.688,
+        "relevance_score": 0.016,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.431,
+        "overall_quality": 0.564,
+        "word_count": 308,
+        "sentence_count": 24,
+        "avg_sentence_length": 12.8,
+        "unique_words_ratio": 0.76
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 719933.0,
+    "runtime_avg": 71993.3,
+    "runtime_min": 2505.4,
+    "runtime_max": 111225.9,
+    "token_sum": 4523,
+    "token_avg": 452,
+    "token_min": 23,
+    "token_max": 500,
+    "quality_sum": 5.024,
+    "quality_avg": 0.502,
+    "quality_min": 0.435,
+    "quality_max": 0.583,
+    "llm_load_time": 8250.6,
+    "cold_start_factor": 0.11
+  }
+}
