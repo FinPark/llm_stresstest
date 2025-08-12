@@ -1,9 +1,9 @@
 {
     "questions": 10,
     "concurrent": 2,
-    "url": "http://test-ki.ams.local:11434",
-    "server_name": "TEST-KI",
-    "model": "deepseek-r1:14b",
+    "url": "http://localhost:11434",
+    "server_name": "PC-FIN",
+    "model": "llama3.2:latest",
     "timeout": 120.0,
     "max_keepalive_connections": 20
 }

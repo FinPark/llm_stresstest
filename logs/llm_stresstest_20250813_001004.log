@@ -1,0 +1,40 @@
+2025-08-13 00:10:04,173 - __main__ - INFO - Starting LLM Stress Test
+2025-08-13 00:10:04,173 - __main__ - INFO - Configuration loaded: {'questions': 10, 'concurrent': 2, 'url': 'http://localhost:11434', 'server_name': 'PC-FIN', 'model': 'deepseek-r1:14b', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-13 00:10:04,173 - __main__ - INFO - Generated filename: result_PC-FIN_deepseek-r1_14b
+2025-08-13 00:10:04,173 - __main__ - INFO - Loaded 10 questions
+2025-08-13 00:10:04,173 - __main__ - WARNING - Output file results\result_PC-FIN_deepseek-r1_14b.json already exists!
+2025-08-13 00:10:10,404 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-13 00:10:10,579 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-13 00:10:10,579 - __main__ - INFO - Connection successful. Available models: ['deepseek-r1:14b', 'mistral-small:latest', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'yxchia/paraphrase-multilingual-minilm-l12-v2:Q4_K_M', 'llama3.2:latest']
+2025-08-13 00:10:10,641 - __main__ - INFO - Model metadata retrieved: {'parameter_size': '14.8B', 'quantization_level': 'Q4_K_M', 'size_bytes': 8988112209, 'family': 'qwen2'}
+2025-08-13 00:10:10,641 - __main__ - INFO - Starting warmup phase to measure LLM loading time...
+2025-08-13 00:12:10,649 - openai._base_client - INFO - Retrying request to /chat/completions in 0.488144 seconds
+2025-08-13 00:14:11,119 - openai._base_client - INFO - Retrying request to /chat/completions in 0.889410 seconds
+2025-08-13 00:14:14,178 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:14:14,179 - __main__ - INFO - [WARMUP] Model loading completed in 243537.7ms
+2025-08-13 00:14:14,179 - __main__ - INFO - Running first question again without loading time...
+2025-08-13 00:14:16,575 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:14:16,575 - __main__ - INFO - Question processed in 2396.4ms, 91 tokens, quality: 0.454
+2025-08-13 00:14:16,575 - __main__ - INFO - LLM load time calculated: 241141.3ms (warmup: 243537.7ms, real: 2396.4ms)
+2025-08-13 00:14:16,575 - __main__ - INFO - Processing remaining questions with concurrency: 2
+2025-08-13 00:14:29,762 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:14:29,762 - __main__ - INFO - Question processed in 13186.8ms, 500 tokens, quality: 0.529
+2025-08-13 00:14:42,888 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:14:42,894 - __main__ - INFO - Question processed in 26312.5ms, 500 tokens, quality: 0.565
+2025-08-13 00:14:56,044 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:14:56,044 - __main__ - INFO - Question processed in 13148.4ms, 500 tokens, quality: 0.452
+2025-08-13 00:15:08,984 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:15:08,986 - __main__ - INFO - Question processed in 26090.0ms, 500 tokens, quality: 0.549
+2025-08-13 00:15:22,103 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:15:22,108 - __main__ - INFO - Question processed in 13116.7ms, 500 tokens, quality: 0.55
+2025-08-13 00:15:35,174 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:15:35,174 - __main__ - INFO - Question processed in 26187.7ms, 500 tokens, quality: 0.485
+2025-08-13 00:15:48,313 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:15:48,318 - __main__ - INFO - Question processed in 13139.4ms, 500 tokens, quality: 0.541
+2025-08-13 00:16:01,370 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:16:01,370 - __main__ - INFO - Question processed in 26196.5ms, 500 tokens, quality: 0.547
+2025-08-13 00:16:14,498 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-13 00:16:14,498 - __main__ - INFO - Question processed in 13128.4ms, 500 tokens, quality: 0.482
+2025-08-13 00:16:14,498 - __main__ - INFO - Results saved to results\result_PC-FIN_deepseek-r1_14b.json
+2025-08-13 00:16:14,498 - __main__ - INFO - Test completed successfully. Results saved to results/result_PC-FIN_deepseek-r1_14b.json
+2025-08-13 00:16:14,506 - __main__ - INFO - Test completed successfully
