@@ -1,0 +1,9 @@
+2025-08-12 19:07:44,842 - __main__ - INFO - Starting LLM Stress Test - Output: results_PC_FIN_qwen13b
+2025-08-12 19:07:44,843 - __main__ - INFO - Configuration loaded: {'questions': 5, 'concurrent': 1, 'url': 'http://test-ki.ams.local:11434', 'model': 'qwen3:14b', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 19:07:44,843 - __main__ - INFO - Loaded 5 questions
+2025-08-12 19:07:44,918 - __main__ - INFO - Testing connection to http://test-ki.ams.local:11434/v1
+2025-08-12 19:07:50,381 - openai._base_client - INFO - Retrying request to /models in 0.422503 seconds
+2025-08-12 19:07:55,813 - openai._base_client - INFO - Retrying request to /models in 0.931349 seconds
+2025-08-12 19:08:01,752 - __main__ - ERROR - Connection test failed: Connection error.
+2025-08-12 19:08:01,753 - __main__ - ERROR - Connection test failed. Aborting.
+2025-08-12 19:08:01,753 - __main__ - ERROR - Test failed

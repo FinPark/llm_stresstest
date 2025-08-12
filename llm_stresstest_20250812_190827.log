@@ -1,0 +1,11 @@
+2025-08-12 19:08:27,978 - __main__ - INFO - Starting LLM Stress Test - Output: results_PC_FIN_qwen13b
+2025-08-12 19:08:27,978 - __main__ - INFO - Configuration loaded: {'questions': 5, 'concurrent': 1, 'url': 'http://test-ki.ams.local:11434', 'model': 'qwen3:14b', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 19:08:27,978 - __main__ - INFO - Loaded 5 questions
+2025-08-12 19:08:28,011 - __main__ - INFO - Testing connection to http://test-ki.ams.local:11434/v1
+2025-08-12 19:08:28,189 - httpx - INFO - HTTP Request: GET http://test-ki.ams.local:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 19:08:28,191 - __main__ - INFO - Connection successful. Available models: ['qwen3:14b', 'qwen3:32b', 'mistral-small3.2:latest', 'qwen3:8b', 'deepseek-r1:70b', 'nomic-embed-text:latest', 'mxbai-embed-large:latest', 'mixtral:8x7b-instruct-v0.1-fp16', 'qwen2.5-coder:32b', 'qwen2.5:72b', 'llama3:70b', 'llama3-groq-tool-use:70b']
+2025-08-12 19:08:28,191 - __main__ - INFO - Processing questions sequentially
+2025-08-12 19:09:08,318 - httpx - INFO - HTTP Request: POST http://test-ki.ams.local:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 19:09:08,322 - __main__ - INFO - Question processed in 40130.5ms, 250 tokens
+2025-08-12 19:10:27,709 - httpx - INFO - HTTP Request: POST http://test-ki.ams.local:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 19:10:27,712 - __main__ - INFO - Question processed in 79389.9ms, 500 tokens
