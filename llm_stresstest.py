@@ -496,7 +496,7 @@ class LLMStressTest:
             
         except asyncio.TimeoutError:
             logger.error(f"Timeout for question: {question[:50]}...")
-            result["answer"] = "TIMEOUT_ERROR"
+            result["answer"] = "ERROR: Request timed out."
         except Exception as e:
             logger.error(f"Error processing question: {e}")
             logger.debug(traceback.format_exc())
@@ -533,12 +533,23 @@ class LLMStressTest:
                         batch = self.questions[i:i+concurrent]
                         batch_results = await self.process_questions_batch(batch, session)
                         self.results.extend(batch_results)
+                        
+                        # Check for timeout errors in batch and abort if found
+                        timeout_found = any(result["answer"] == "ERROR: Request timed out." for result in batch_results)
+                        if timeout_found:
+                            logger.error("Request timeout detected in batch. Aborting test to prevent further timeouts.")
+                            break
                 else:
                     logger.info("Processing questions sequentially")
                     
                     for question in self.questions:
                         result = await self.send_question(question, session)
                         self.results.append(result)
+                        
+                        # Check for timeout error and abort if found
+                        if result["answer"] == "ERROR: Request timed out.":
+                            logger.error("Request timeout detected. Aborting test to prevent further timeouts.")
+                            break
             
             self.end_time = datetime.now()
             end_timestamp = time.time()
