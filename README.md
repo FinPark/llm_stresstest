@@ -38,8 +38,10 @@ Zusätzlich werden folgende Kennzahlen erfasst:
 git clone <repository-url>
 cd llm_stresstest
 
-# Virtual Environment erstellen und aktivieren
+# Virtual Environment erstellen (einmalig)
 uv venv
+
+# Virtual Environment aktivieren (bei jeder Terminal-Session)
 source .venv/bin/activate
 
 # Dependencies installieren
@@ -48,7 +50,7 @@ uv sync
 
 ## Konfiguration
 
-Bearbeite `config.json`:
+Bearbeite `config/config.json`:
 
 ```json
 {
@@ -62,17 +64,29 @@ Bearbeite `config.json`:
 }
 ```
 
+### Konfigurationsparameter
+
+- **`questions`**: Anzahl der zu testenden Fragen aus dem Fragenkatalog
+- **`concurrent`**: Anzahl paralleler Anfragen (1 = sequenziell) 
+- **`url`**: LLM API Endpoint (OpenAI-kompatibel)
+- **`server_name`**: Sprechender Server-Name für Dashboard-Auswertungen (optional, fallback auf URL)
+- **`model`**: Modell-Identifier für den LLM-Server
+- **`timeout`**: Request-Timeout in Sekunden
+- **`max_keepalive_connections`**: Connection Pool Größe für Performance
+
 ## Verwendung
 
 ```bash
-python llm_stresstest.py <output_filename>
-
-# Beispiele:
-python llm_stresstest.py test_local_llama
-python llm_stresstest.py results_PC_FIN_qwen13b
+# Einfach starten - Dateiname wird automatisch generiert
+python llm_stresstest.py
 ```
 
-Die Ergebnisse werden in `results/<output_filename>.json` gespeichert.
+Der Dateiname wird automatisch aus `server_name` und `model` aus der Konfiguration generiert:
+- Format: `result_{server_name}_{model}.json`
+- Leerzeichen werden zu `-`, Sonderzeichen zu `_`
+- Beispiel: `"MacBook Pro M1"` + `"gemma3:12b"` → `result_MacBook-Pro-M1_gemma3_12b.json`
+
+Die Ergebnisse werden in `results/` gespeichert.
 
 ## Ausgabeformat
 
@@ -133,13 +147,13 @@ Beispiel:
 
 ## Fragen
 
-Die Fragen werden aus `questions.json` geladen. Die Datei enthält 234 vordefinierte Fragen auf Deutsch zu verschiedenen IT- und Technologie-Themen.
+Die Fragen werden aus `config/questions.json` geladen. Die Datei enthält 234 vordefinierte Fragen auf Deutsch zu verschiedenen IT- und Technologie-Themen.
 
 ## Logging
 
 Log-Dateien werden automatisch mit Zeitstempel erstellt:
 - Konsolen-Ausgabe für Live-Monitoring
-- Detaillierte Log-Datei: `llm_stresstest_YYYYMMDD_HHMMSS.log`
+- Detaillierte Log-Datei: `logs/llm_stresstest_YYYYMMDD_HHMMSS.log`
 
 ## Fehlerbehandlung
 

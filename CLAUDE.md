@@ -15,9 +15,8 @@ source .venv/bin/activate
 # Install/update dependencies
 uv sync
 
-# Run the stress test
-python llm_stresstest.py <output_filename>
-# Example: python llm_stresstest.py results_PC_FIN_qwen13b
+# Run the stress test (filename auto-generated from config)
+python llm_stresstest.py
 
 # Add new dependencies
 uv add <package_name>
@@ -27,12 +26,14 @@ uv add <package_name>
 
 ```
 llm_stresstest/
-├── config.json          # Test configuration (questions count, concurrency, timeout, etc.)
-├── questions.json       # Question bank (234 questions in German)
-├── llm_stresstest.py   # Main application with async processing
+├── config/
+│   ├── config.json     # Test configuration (questions count, concurrency, timeout, etc.)
+│   └── questions.json  # Question bank (234 questions in German)
+├── logs/               # Log files with timestamps
 ├── results/            # Output directory for test results
-├── projectplan.md      # Detailed project planning and architecture
-└── *.log              # Log files with timestamps
+├── llm_stresstest.py   # Main application with async processing
+├── llm_auswertung.py   # Streamlit dashboard for analysis
+└── projectplan.md      # Detailed project planning and architecture
 ```
 
 ## Architecture
@@ -44,7 +45,7 @@ llm_stresstest/
 - **Detailed Logging**: File and console logging with timestamps
 - **Structured Output**: JSON results with metadata, individual results, quality metrics, and aggregates
 
-## Configuration (config.json)
+## Configuration (config/config.json)
 
 ```json
 {

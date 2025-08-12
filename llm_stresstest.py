@@ -11,11 +11,9 @@ import aiohttp
 import logging
 import time
 import re
-import statistics
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-import argparse
 from openai import AsyncOpenAI
 import traceback
 from dataclasses import dataclass
@@ -38,7 +36,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'llm_stresstest_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'),
+        logging.FileHandler(f'logs/llm_stresstest_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'),
         logging.StreamHandler()
     ]
 )
@@ -352,8 +350,8 @@ class QualityEvaluator:
 
 
 class LLMStressTest:
-    def __init__(self, output_filename: str):
-        self.output_filename = output_filename
+    def __init__(self):
+        self.output_filename = None
         self.config = {}
         self.questions = []
         self.results = []
@@ -362,11 +360,33 @@ class LLMStressTest:
         self.client = None
         self.quality_evaluator = QualityEvaluator()
         self.llm_load_time = 0
+    
+    def sanitize_filename(self, text: str) -> str:
+        """Bereinigt Text für Dateinamen - Leerzeichen zu -, Sonderzeichen zu _"""
+        import re
+        # Ersetze Leerzeichen durch Bindestriche
+        text = text.replace(' ', '-')
+        # Ersetze alle anderen Sonderzeichen durch Unterstriche (behalte nur Buchstaben, Zahlen und -)
+        text = re.sub(r'[^a-zA-Z0-9\-]', '_', text)
+        # Entferne mehrfache Unterstriche/Bindestriche
+        text = re.sub(r'[-_]+', lambda m: m.group(0)[0], text)
+        return text.strip('-_')
+    
+    def generate_filename(self) -> str:
+        """Generiert automatisch Dateinamen aus server_name und model"""
+        server_name = self.config.get('server_name', 'unknown')
+        model = self.config.get('model', 'unknown')
+        
+        # Bereinige beide Teile
+        clean_server = self.sanitize_filename(server_name)
+        clean_model = self.sanitize_filename(model)
+        
+        return f"result_{clean_server}_{clean_model}"
         
     def load_config(self) -> bool:
-        """Load and validate configuration from config.json"""
+        """Load and validate configuration from config/config.json"""
         try:
-            with open('config.json', 'r', encoding='utf-8') as f:
+            with open('config/config.json', 'r', encoding='utf-8') as f:
                 self.config = json.load(f)
             
             required_fields = ['questions', 'concurrent', 'url', 'model', 'timeout']
@@ -375,23 +395,27 @@ class LLMStressTest:
                     logger.error(f"Missing required field in config: {field}")
                     return False
             
+            # Generiere automatisch den Dateinamen
+            self.output_filename = self.generate_filename()
+            
             logger.info(f"Configuration loaded: {self.config}")
+            logger.info(f"Generated filename: {self.output_filename}")
             return True
             
         except FileNotFoundError:
-            logger.error("config.json not found")
+            logger.error("config/config.json not found")
             return False
         except json.JSONDecodeError as e:
-            logger.error(f"Invalid JSON in config.json: {e}")
+            logger.error(f"Invalid JSON in config/config.json: {e}")
             return False
         except Exception as e:
             logger.error(f"Error loading config: {e}")
             return False
     
     def load_questions(self) -> bool:
-        """Load questions from questions.json"""
+        """Load questions from config/questions.json"""
         try:
-            with open('questions.json', 'r', encoding='utf-8') as f:
+            with open('config/questions.json', 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
             if 'fragen' not in data:
@@ -406,10 +430,10 @@ class LLMStressTest:
             return True
             
         except FileNotFoundError:
-            logger.error("questions.json not found")
+            logger.error("config/questions.json not found")
             return False
         except json.JSONDecodeError as e:
-            logger.error(f"Invalid JSON in questions.json: {e}")
+            logger.error(f"Invalid JSON in config/questions.json: {e}")
             return False
         except Exception as e:
             logger.error(f"Error loading questions: {e}")
@@ -682,20 +706,9 @@ class LLMStressTest:
 
 
 async def main():
-    parser = argparse.ArgumentParser(description='LLM Stress Test Tool')
-    parser.add_argument('output_filename', help='Name for the output file (without .json extension)')
+    logger.info("Starting LLM Stress Test")
     
-    args = parser.parse_args()
-    
-    if not args.output_filename:
-        logger.error("Output filename is required")
-        sys.exit(1)
-    
-    output_filename = args.output_filename.replace('.json', '')
-    
-    logger.info(f"Starting LLM Stress Test - Output: {output_filename}")
-    
-    tester = LLMStressTest(output_filename)
+    tester = LLMStressTest()
     
     if not tester.load_config():
         logger.error("Failed to load configuration. Exiting.")

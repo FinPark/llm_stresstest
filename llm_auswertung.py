@@ -316,6 +316,44 @@ st.markdown("""
         color: #333333 !important;
     }
     
+    /* Log-Level Farben für DataFrames */
+    .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("ERROR")) {
+        background-color: #ffebee !important;
+    }
+    
+    .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("WARNING")) {
+        background-color: #fff3e0 !important;
+    }
+    
+    .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("INFO")) {
+        background-color: #e3f2fd !important;
+    }
+    
+    .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("DEBUG")) {
+        background-color: #f3e5f5 !important;
+    }
+    
+    /* Dark Mode Log-Level Farben */
+    .stApp[data-theme="dark"] .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("ERROR")) {
+        background-color: #4a1a1a !important;
+        color: #ffffff !important;
+    }
+    
+    .stApp[data-theme="dark"] .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("WARNING")) {
+        background-color: #4a3a1a !important;
+        color: #ffffff !important;
+    }
+    
+    .stApp[data-theme="dark"] .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("INFO")) {
+        background-color: #1a2a4a !important;
+        color: #ffffff !important;
+    }
+    
+    .stApp[data-theme="dark"] .stDataFrame [data-testid="stDataFrame"] tbody tr:has(td:nth-child(3):contains("DEBUG")) {
+        background-color: #2a1a4a !important;
+        color: #ffffff !important;
+    }
+    
     .stApp[data-theme="dark"] .stSidebar {
         background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 100%) !important;
     }
@@ -362,7 +400,7 @@ class LLMAnalyzer:
     
     def __init__(self):
         self.results_path = Path('./results')
-        self.log_path = Path('.')
+        self.log_path = Path('logs')
         self.data = []
         self.logs = []
         
@@ -605,9 +643,14 @@ def show_logs(logs: List[Dict]):
         )
     
     with col2:
+        # Setze WARNING als Standard, falls vorhanden
+        unique_levels = ["Alle"] + list(log_df['level'].unique())
+        default_index = unique_levels.index("WARNING") if "WARNING" in unique_levels else 0
+        
         level_filter = st.selectbox(
             "Log-Level:",
-            ["Alle"] + list(log_df['level'].unique())
+            unique_levels,
+            index=default_index
         )
     
     with col3:
@@ -640,34 +683,29 @@ def show_logs(logs: List[Dict]):
     with col4:
         st.metric("📁 Log-Dateien", log_df['file'].nunique())
     
-    # Fehler anzeigen wenn vorhanden
-    if len(errors) > 0:
-        st.markdown("### ❌ Fehler")
-        for _, error in errors.iterrows():
-            st.markdown(f"""
-            <div class="error-box">
-                <strong>{error['timestamp']}</strong> - {error['module']}<br>
-                {error['message']}
-            </div>
-            """, unsafe_allow_html=True)
     
-    # Warnungen anzeigen wenn vorhanden
-    if len(warnings) > 0:
-        st.markdown("### ⚠️ Warnungen")
-        for _, warning in warnings.iterrows():
-            st.markdown(f"""
-            <div class="warning-box">
-                <strong>{warning['timestamp']}</strong> - {warning['module']}<br>
-                {warning['message']}
-            </div>
-            """, unsafe_allow_html=True)
-    
-    # Log-Tabelle
+    # Log-Tabelle mit farblicher Hervorhebung
     st.markdown("### 📋 Log-Einträge")
+    
+    # Sortiere nach Timestamp (neueste zuerst) und begrenze auf doppelte Anzahl
+    display_df = filtered_df.sort_values('timestamp', ascending=False).head(200).copy()
+    
+    # Füge farbliche Styling-Spalte hinzu
+    def get_log_color(level):
+        colors = {
+            'ERROR': '#ffebee',    # Helles Rot
+            'WARNING': '#fff3e0',  # Helles Orange  
+            'INFO': '#e3f2fd',     # Helles Blau
+            'DEBUG': '#f3e5f5'     # Helles Lila
+        }
+        return colors.get(level, '#f5f5f5')  # Default grau
+    
+    # Zeige DataFrame mit mehr Einträgen
     st.dataframe(
-        filtered_df[['timestamp', 'module', 'level', 'message']],
+        display_df[['timestamp', 'module', 'level', 'message']],
         use_container_width=True,
-        hide_index=True
+        hide_index=True,
+        height=600  # Mehr Höhe für mehr Einträge
     )
 
 
