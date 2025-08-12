@@ -524,7 +524,7 @@ class LLMAnalyzer:
             
             # Modellgröße in GB (falls verfügbar)
             row['size_gb'] = 0
-            if row['size_bytes'] > 0:
+            if row['size_bytes'] is not None and row['size_bytes'] > 0:
                 row['size_gb'] = round(row['size_bytes'] / (1024**3), 1)
             
             rows.append(row)

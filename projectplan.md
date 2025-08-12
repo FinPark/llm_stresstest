@@ -287,6 +287,13 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
   - Server-Performance Anteil und Modell-Performance Anteil als Pie-Charts
   - Bessere Übersichtlichkeit und intuitivere Darstellung
 
+### Bugfixes - Dashboard ✅ IMPLEMENTIERT
+- **NoneType-Fehler behoben** in `llm_auswertung.py`:
+  - TypeError bei `size_bytes is None` in Zeile 527 der `get_dataframe()` Methode
+  - Zusätzliche None-Check: `if row['size_bytes'] is not None and row['size_bytes'] > 0:`
+  - Robuste Behandlung von fehlenden Modell-Metadaten in JSON-Dateien
+  - Fehler verhinderte Dashboard-Start bei Dateien ohne vollständige Metadaten
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen

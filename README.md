@@ -173,6 +173,8 @@ Log-Dateien werden automatisch mit Zeitstempel erstellt:
 - Einzelne fehlgeschlagene Anfragen stoppen nicht den gesamten Test
 - Notfall-Speicherung bei Fehlern beim regulären Speichern
 - Alle Fehler werden mit Stack-Traces geloggt
+- Robuste Behandlung fehlender Modell-Metadaten im Dashboard
+- NoneType-Checks für alle optionalen JSON-Felder
 
 ## Anforderungen
 
