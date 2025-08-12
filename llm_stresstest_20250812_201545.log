@@ -1,0 +1,7 @@
+2025-08-12 20:15:45,675 - __main__ - INFO - Starting LLM Stress Test - Output: results_PC_FIN_mistral_small_latest
+2025-08-12 20:15:45,681 - __main__ - INFO - Configuration loaded: {'questions': 5, 'concurrent': 1, 'url': 'http://localhost:11434', 'model': 'mistral-small:latest', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 20:15:45,681 - __main__ - INFO - Loaded 5 questions
+2025-08-12 20:15:46,143 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-12 20:15:46,549 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 20:15:46,549 - __main__ - INFO - Connection successful. Available models: ['mistral-small:latest', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'yxchia/paraphrase-multilingual-minilm-l12-v2:Q4_K_M', 'llama3.2:latest']
+2025-08-12 20:15:46,549 - __main__ - INFO - Processing questions sequentially

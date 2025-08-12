@@ -1,0 +1,28 @@
+2025-08-12 20:17:49,262 - __main__ - INFO - Starting LLM Stress Test - Output: results_PC_FIN_mistral_small_latest
+2025-08-12 20:17:49,262 - __main__ - INFO - Configuration loaded: {'questions': 5, 'concurrent': 1, 'url': 'http://localhost:11434', 'model': 'mistral-small:latest', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 20:17:49,262 - __main__ - INFO - Loaded 5 questions
+2025-08-12 20:17:49,456 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-12 20:17:49,667 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 20:17:49,671 - __main__ - INFO - Connection successful. Available models: ['mistral-small:latest', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'yxchia/paraphrase-multilingual-minilm-l12-v2:Q4_K_M', 'llama3.2:latest']
+2025-08-12 20:17:49,671 - __main__ - INFO - Processing questions sequentially
+2025-08-12 20:19:49,681 - openai._base_client - INFO - Retrying request to /chat/completions in 0.390046 seconds
+2025-08-12 20:21:50,085 - openai._base_client - INFO - Retrying request to /chat/completions in 0.871075 seconds
+2025-08-12 20:23:50,972 - __main__ - ERROR - Error processing question: Request timed out.
+2025-08-12 20:23:51,151 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-08-12 20:23:51,151 - openai._base_client - INFO - Retrying request to /chat/completions in 0.389097 seconds
+2025-08-12 20:25:51,561 - openai._base_client - INFO - Retrying request to /chat/completions in 0.833475 seconds
+2025-08-12 20:27:52,416 - __main__ - ERROR - Error processing question: Request timed out.
+2025-08-12 20:27:52,527 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-08-12 20:27:52,527 - openai._base_client - INFO - Retrying request to /chat/completions in 0.482101 seconds
+2025-08-12 20:29:53,029 - openai._base_client - INFO - Retrying request to /chat/completions in 0.818881 seconds
+2025-08-12 20:31:53,860 - __main__ - ERROR - Error processing question: Request timed out.
+2025-08-12 20:33:53,871 - openai._base_client - INFO - Retrying request to /chat/completions in 0.406745 seconds
+2025-08-12 20:35:54,297 - openai._base_client - INFO - Retrying request to /chat/completions in 0.853533 seconds
+2025-08-12 20:37:55,160 - __main__ - ERROR - Error processing question: Request timed out.
+2025-08-12 20:37:55,352 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 500 Internal Server Error"
+2025-08-12 20:37:55,353 - openai._base_client - INFO - Retrying request to /chat/completions in 0.464067 seconds
+2025-08-12 20:39:55,845 - openai._base_client - INFO - Retrying request to /chat/completions in 0.780513 seconds
+2025-08-12 20:41:56,644 - __main__ - ERROR - Error processing question: Request timed out.
+2025-08-12 20:41:56,645 - __main__ - INFO - Results saved to results\results_PC_FIN_mistral_small_latest.json
+2025-08-12 20:41:56,645 - __main__ - INFO - Test completed successfully. Results saved to results/results_PC_FIN_mistral_small_latest.json
+2025-08-12 20:41:56,645 - __main__ - INFO - Test completed successfully

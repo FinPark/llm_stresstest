@@ -1,0 +1,20 @@
+2025-08-12 21:20:47,965 - __main__ - INFO - Starting LLM Stress Test - Output: results_PC_FIN_llama_3_2_latest
+2025-08-12 21:20:47,975 - __main__ - INFO - Configuration loaded: {'questions': 5, 'concurrent': 1, 'url': 'http://localhost:11434', 'model': 'llama3.2:latest', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 21:20:47,981 - __main__ - INFO - Loaded 5 questions
+2025-08-12 21:20:48,159 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-12 21:20:48,415 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 21:20:48,415 - __main__ - INFO - Connection successful. Available models: ['mistral-small:latest', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'yxchia/paraphrase-multilingual-minilm-l12-v2:Q4_K_M', 'llama3.2:latest']
+2025-08-12 21:20:48,415 - __main__ - INFO - Processing questions sequentially
+2025-08-12 21:20:48,808 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 21:20:48,821 - __main__ - INFO - Question processed in 405.3ms, 9 tokens, quality: 0.29
+2025-08-12 21:20:52,739 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 21:20:52,742 - __main__ - INFO - Question processed in 3921.5ms, 484 tokens, quality: 0.557
+2025-08-12 21:20:56,709 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 21:20:56,709 - __main__ - INFO - Question processed in 3966.7ms, 500 tokens, quality: 0.514
+2025-08-12 21:21:00,686 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 21:21:00,686 - __main__ - INFO - Question processed in 3977.5ms, 500 tokens, quality: 0.507
+2025-08-12 21:21:04,661 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 21:21:04,661 - __main__ - INFO - Question processed in 3974.7ms, 500 tokens, quality: 0.54
+2025-08-12 21:21:04,661 - __main__ - INFO - Results saved to results\results_PC_FIN_llama_3_2_latest.json
+2025-08-12 21:21:04,661 - __main__ - INFO - Test completed successfully. Results saved to results/results_PC_FIN_llama_3_2_latest.json
+2025-08-12 21:21:04,661 - __main__ - INFO - Test completed successfully
