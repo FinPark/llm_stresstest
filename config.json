@@ -1,8 +1,8 @@
 {
-    "questions": 5,
+    "questions": 2,
     "concurrent": 1,
-    "url": "http://test-ki.ams.local:11434",
-    "model": "qwen3:14b",
+    "url": "http://localhost:11434",
+    "model": "gemma3:12b",
     "timeout": 120.0,
     "max_keepalive_connections": 20
 }

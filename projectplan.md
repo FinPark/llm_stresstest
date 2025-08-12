@@ -1,7 +1,7 @@
 # LLM Stresstest - Projektplan
 
 ## Projektziel
-Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur Bewertung von Performance und Hardware-Anforderungen mit vergleichbaren und analysierbaren Ergebnissen.
+Entwicklung einer robusten Test-Anwendung fï¿½r Large Language Models (LLMs) zur Bewertung von Performance und Hardware-Anforderungen mit vergleichbaren und analysierbaren Ergebnissen.
 
 ## Architektur
 
@@ -15,13 +15,13 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
 2. **Fragenmanagement**
    - Laden der Fragen aus `questions.json`
    - Sequenzielle Auswahl basierend auf `questions` Parameter
-   - Unterstützung für parallele Anfragen (`concurrent`)
+   - Unterstï¿½tzung fï¿½r parallele Anfragen (`concurrent`)
 
 3. **LLM-Kommunikation**
    - OpenAI-kompatible API Anbindung
    - Asynchrone Anfragen mit aiohttp
    - Timeout-Handling
-   - Connection Pooling für Performance
+   - Connection Pooling fï¿½r Performance
 
 4. **Ergebnisverarbeitung**
    - Strukturierte JSON-Ausgabe im `results/` Ordner
@@ -63,7 +63,17 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
       "answer": "Antwort vom LLM",
       "time": "Response Zeit in ms",
       "token": "Anzahl generierter Tokens",
-      "quality": 0.0
+      "quality": "Gesamtqualitï¿½tsbewertung (0-10)",
+      "quality_metrics": {
+        "structure": "Struktur-Bewertung (0-10)",
+        "readability": "Lesbarkeits-Bewertung (0-10)",
+        "completeness": "Vollstï¿½ndigkeits-Bewertung (0-10)",
+        "relevance": "Relevanz-Bewertung (0-10)",
+        "factual_consistency": "Faktische Konsistenz (0-10)",
+        "language_flow": "Sprachfluss-Bewertung (0-10)",
+        "coherence": "Kohï¿½renz-Bewertung (0-10)",
+        "overall_quality": "Gesamtqualitï¿½t (0-10)"
+      }
     }
   ],
   "aggregate": {
@@ -74,7 +84,11 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
     "token_sum": "Summe aller Tokens",
     "token_avg": "Durchschnitt",
     "token_min": "Minimum",
-    "token_max": "Maximum"
+    "token_max": "Maximum",
+    "quality_sum": "Summe aller Quality-Scores",
+    "quality_avg": "Durchschnittliche Qualitï¿½t",
+    "quality_min": "Minimale Qualitï¿½t",
+    "quality_max": "Maximale Qualitï¿½t"
   }
 }
 ```
@@ -82,15 +96,15 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
 ## Implementierungsschritte
 
 1. **Setup & Dependencies**
-   - uv add openai (für OpenAI-kompatible API)
-   - uv add aiohttp (für async HTTP)
-   - uv add asyncio (für concurrent requests)
+   - uv add openai (fï¿½r OpenAI-kompatible API)
+   - uv add aiohttp (fï¿½r async HTTP)
+   - uv add asyncio (fï¿½r concurrent requests)
    - Logging-Konfiguration
 
 2. **Core-Funktionen**
    - `load_config()`: Config laden und validieren
    - `load_questions()`: Fragen laden
-   - `test_connection()`: Verbindung prüfen
+   - `test_connection()`: Verbindung prï¿½fen
    - `send_question()`: Einzelne Frage senden
    - `process_questions()`: Batch-Verarbeitung
    - `calculate_aggregates()`: Statistiken berechnen
@@ -109,25 +123,25 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
    # Beispiel: python llm_stresstest.py results_PC_FIN_qwen13b
    ```
 
-## Robustheit-Maßnahmen
+## Robustheit-Maï¿½nahmen
 
 1. **Fehlertoleranz**
-   - Try-catch für alle kritischen Operationen
+   - Try-catch fï¿½r alle kritischen Operationen
    - Fallback-Werte bei Fehlern
    - Fortsetzung bei einzelnen fehlgeschlagenen Anfragen
 
 2. **Logging**
    - Strukturiertes Logging mit Zeitstempeln
    - Separate Log-Datei pro Run
-   - Error-Stack-Traces für Debugging
+   - Error-Stack-Traces fï¿½r Debugging
 
 3. **Validierung**
-   - Input-Validierung für Config und Questions
-   - Type-Checking für API-Responses
-   - Pfad-Validierung für Output-Dateien
+   - Input-Validierung fï¿½r Config und Questions
+   - Type-Checking fï¿½r API-Responses
+   - Pfad-Validierung fï¿½r Output-Dateien
 
 4. **Performance**
-   - Async/Await für parallele Anfragen
+   - Async/Await fï¿½r parallele Anfragen
    - Connection Pooling
    - Timeout-Management
 
@@ -148,11 +162,26 @@ Entwicklung einer robusten Test-Anwendung für Large Language Models (LLMs) zur B
    - Timeout-Szenarien
    - Falsche Konfiguration
 
-## Erweiterungsmöglichkeiten
+## Erweiterungen - Umgesetzt
 
-- Qualitätsbewertung der Antworten
+### Qualitï¿½tsbewertung der Antworten âœ… IMPLEMENTIERT
+- **Quality Evaluator** vollstï¿½ndig in `llm_stresstest.py` integriert
+- 8 Qualitï¿½tsmetriken: Struktur, Lesbarkeit, Vollstï¿½ndigkeit, Relevanz, faktische Konsistenz, Sprachfluss, Kohï¿½renz, Gesamtqualitï¿½t
+- 4 zusï¿½tzliche Kennzahlen: Wortanzahl, Satzanzahl, durchschnittliche Satzlï¿½nge, Wiederholungsrate
+- Automatische Bewertung bei jeder LLM-Antwort
+- Quality-Aggregation in Statistiken (sum, avg, min, max)
+- Erweiterte JSON-Struktur mit `quality` und `quality_metrics` Feldern
+
+### Architektur-ï¿½nderungen
+- Quality Evaluator als integrierte Klasse statt separates Modul
+- Neue Abhï¿½ngigkeiten (optional): spacy, sentence-transformers
+- Erweiterte Datenstrukturen fï¿½r Qualitï¿½tsmetriken
+- Robuste Fehlerbehandlung bei Quality-Bewertung (Fallback auf 0.0)
+
+## Erweiterungsmï¿½glichkeiten - Noch offen
+
 - Grafische Auswertung der Ergebnisse
-- Vergleichstool für mehrere Runs
+- Vergleichstool fï¿½r mehrere Runs
 - Export in verschiedene Formate (CSV, Excel)
-- Web-Interface für Monitoring
+- Web-Interface fï¿½r Monitoring
 - Echtzeit-Dashboard

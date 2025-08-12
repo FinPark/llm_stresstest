@@ -4,12 +4,32 @@ Ein robustes Python-Tool zum Testen der Performance und Hardware-Anforderungen v
 
 ## Features
 
--  Unterst�tzt OpenAI-kompatible APIs (Ollama, vLLM, etc.)
--  Parallele und sequenzielle Anfrageverarbeitung
--  Detaillierte Performance-Metriken (Zeit, Tokens)
--  Robuste Fehlerbehandlung ohne Abst�rze
--  Strukturierte JSON-Ausgabe f�r Analysen
--  Umfassendes Logging-System
+- Unterstützt OpenAI-kompatible APIs (Ollama, vLLM, etc.)
+- Parallele und sequenzielle Anfrageverarbeitung
+- Detaillierte Performance-Metriken (Zeit, Tokens)
+- **Automatische Qualitätsbewertung** mit 8 verschiedenen Metriken
+- Robuste Fehlerbehandlung ohne Abstürze
+- Strukturierte JSON-Ausgabe für Analysen
+- Umfassendes Logging-System
+
+## Qualitätsbewertung
+
+Das Tool bewertet automatisch jede LLM-Antwort anhand von 8 Qualitätsmetriken:
+
+- **Struktur**: Logische Gliederung und Organisation der Antwort
+- **Lesbarkeit**: Klarheit und Verständlichkeit der Sprache
+- **Vollständigkeit**: Wie vollständig die Frage beantwortet wurde
+- **Relevanz**: Relevanz der Antwort zur gestellten Frage
+- **Faktische Konsistenz**: Korrektheit der Fakten und Informationen
+- **Sprachfluss**: Natürlichkeit und Flüssigkeit der Sprache
+- **Kohärenz**: Innere Logik und Zusammenhang der Antwort
+- **Gesamtqualität**: Übergreifende Bewertung der Antwortqualität
+
+Zusätzlich werden folgende Kennzahlen erfasst:
+- Anzahl Wörter
+- Anzahl Sätze
+- Durchschnittliche Satzlänge
+- Wiederholungsrate (häufigste Wörter)
 
 ## Installation
 
@@ -37,7 +57,7 @@ Bearbeite `config.json`:
     "url": "http://localhost:11434",   // LLM API Endpoint
     "model": "llama2",                 // Modell-Name
     "timeout": 120.0,                  // Timeout in Sekunden
-    "max_keepalive_connections": 20    // Connection Pool Gr��e
+    "max_keepalive_connections": 20    // Connection Pool Größe
 }
 ```
 
@@ -55,11 +75,11 @@ Die Ergebnisse werden in `results/<output_filename>.json` gespeichert.
 
 ## Ausgabeformat
 
-Die Ergebnis-JSON enth�lt:
+Die Ergebnis-JSON enthält:
 
 - **meta**: Metadaten zum Testlauf (Zeitstempel, Server, Modell)
-- **results**: Einzelergebnisse f�r jede Frage
-- **aggregate**: Aggregierte Statistiken (Durchschnitt, Min, Max)
+- **results**: Einzelergebnisse für jede Frage mit Qualitätsbewertung
+- **aggregate**: Aggregierte Statistiken (Durchschnitt, Min, Max) inkl. Quality-Metriken
 
 Beispiel:
 ```json
@@ -80,7 +100,17 @@ Beispiel:
       "answer": "Die Hauptstadt von Deutschland ist Berlin.",
       "time": 1234.5,
       "token": 42,
-      "quality": 0.0
+      "quality": 8.5,
+      "quality_metrics": {
+        "structure": 9.0,
+        "readability": 8.0,
+        "completeness": 8.5,
+        "relevance": 9.0,
+        "factual_consistency": 9.0,
+        "language_flow": 8.0,
+        "coherence": 8.5,
+        "overall_quality": 8.5
+      }
     }
   ],
   "aggregate": {
@@ -91,33 +121,48 @@ Beispiel:
     "token_sum": 210,
     "token_avg": 42,
     "token_min": 35,
-    "token_max": 50
+    "token_max": 50,
+    "quality_sum": 42.5,
+    "quality_avg": 8.5,
+    "quality_min": 7.0,
+    "quality_max": 9.2
   }
 }
 ```
 
 ## Fragen
 
-Die Fragen werden aus `questions.json` geladen. Die Datei enth�lt 234 vordefinierte Fragen auf Deutsch zu verschiedenen IT- und Technologie-Themen.
+Die Fragen werden aus `questions.json` geladen. Die Datei enthält 234 vordefinierte Fragen auf Deutsch zu verschiedenen IT- und Technologie-Themen.
 
 ## Logging
 
 Log-Dateien werden automatisch mit Zeitstempel erstellt:
-- Konsolen-Ausgabe f�r Live-Monitoring
+- Konsolen-Ausgabe für Live-Monitoring
 - Detaillierte Log-Datei: `llm_stresstest_YYYYMMDD_HHMMSS.log`
 
 ## Fehlerbehandlung
 
-- Verbindungsfehler f�hren zum sofortigen Abbruch
+- Verbindungsfehler führen zum sofortigen Abbruch
 - Einzelne fehlgeschlagene Anfragen stoppen nicht den gesamten Test
-- Notfall-Speicherung bei Fehlern beim regul�ren Speichern
+- Notfall-Speicherung bei Fehlern beim regulären Speichern
 - Alle Fehler werden mit Stack-Traces geloggt
 
 ## Anforderungen
 
 - Python 3.8+
-- uv (f�r Dependency Management)
+- uv (für Dependency Management)
 - OpenAI-kompatibler LLM-Server
+
+## Optionale Dependencies für erweiterte NLP-Features
+
+```bash
+# Für erweiterte Sprachanalyse (optional)
+uv add spacy
+uv add sentence-transformers
+
+# spaCy Modell herunterladen
+python -m spacy download de_core_news_sm
+```
 
 ## Lizenz
 

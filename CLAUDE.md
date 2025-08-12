@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-LLM Stress Test Tool - A robust Python application for testing Large Language Models (LLMs) performance and hardware requirements. The tool sends configurable batches of questions to LLM APIs and collects detailed performance metrics.
+LLM Stress Test Tool - A robust Python application for testing Large Language Models (LLMs) performance and hardware requirements. The tool sends configurable batches of questions to LLM APIs and collects detailed performance metrics including automatic quality evaluation of responses.
 
 ## Development Commands
 
@@ -39,9 +39,10 @@ llm_stresstest/
 
 - **Async Processing**: Uses `asyncio` and `aiohttp` for concurrent request handling
 - **OpenAI-Compatible API**: Works with any OpenAI-compatible endpoint (Ollama, vLLM, etc.)
+- **Quality Evaluation**: Integrated automatic quality assessment with 8 metrics
 - **Robust Error Handling**: Comprehensive try-catch blocks, no crashes on errors
 - **Detailed Logging**: File and console logging with timestamps
-- **Structured Output**: JSON results with metadata, individual results, and aggregates
+- **Structured Output**: JSON results with metadata, individual results, quality metrics, and aggregates
 
 ## Configuration (config.json)
 
@@ -60,8 +61,8 @@ llm_stresstest/
 
 Results are saved in `results/<filename>.json` with:
 - **meta**: Test metadata (timestamps, server, model, duration)
-- **results**: Individual question results (question, answer, time, tokens)
-- **aggregate**: Statistics (sum, avg, min, max for runtime and tokens)
+- **results**: Individual question results (question, answer, time, tokens, quality, quality_metrics)
+- **aggregate**: Statistics (sum, avg, min, max for runtime, tokens, and quality)
 
 ## Error Handling
 
@@ -76,3 +77,25 @@ Results are saved in `results/<filename>.json` with:
 - Monitor log files for detailed execution info
 - Check results JSON for error messages in answers
 - Use concurrent > 1 for stress testing server capacity
+- Quality evaluation is automatic; check quality scores in results
+- Optional NLP dependencies: spacy, sentence-transformers for enhanced analysis
+
+## Quality Evaluation Features
+
+The integrated Quality Evaluator assesses each LLM response using:
+
+### 8 Quality Metrics (0-10 scale):
+- **Structure**: Logical organization and flow
+- **Readability**: Clarity and understandability
+- **Completeness**: How thoroughly the question is answered
+- **Relevance**: Relevance to the asked question
+- **Factual Consistency**: Accuracy of information
+- **Language Flow**: Natural and fluent language
+- **Coherence**: Internal logic and consistency
+- **Overall Quality**: Comprehensive quality assessment
+
+### Additional Metrics:
+- Word count
+- Sentence count  
+- Average sentence length
+- Repetition rate (most common words)
