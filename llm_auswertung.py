@@ -690,53 +690,54 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     
     st.markdown("---")
     
-    # Effizienz-Analyse (nur wenn Modell-Metadaten verfügbar)
-    if any(df['parameter_size'] != 'Unknown'):
-        st.subheader("⚡ Effizienz-Analyse")
-        st.caption("Performance pro Milliarde Parameter und Quantisierungs-Vergleiche")
+    # Performance-Kuchendiagramme
+    st.subheader("🥧 Performance-Verteilung")
+    st.caption("Anteil der verschiedenen Server und Modelle an der Gesamtperformance")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Server-Performance Kuchendiagramm
+        server_performance = df.groupby('server')['performance'].sum().reset_index()
+        server_performance = server_performance.sort_values('performance', ascending=False)
         
-        # Filter für Modelle mit verfügbaren Metadaten
-        df_with_params = df[df['parameter_size'] != 'Unknown'].copy()
+        fig_server_pie = px.pie(
+            server_performance,
+            values='performance',
+            names='server',
+            title='Server-Performance Anteil',
+            color_discrete_sequence=px.colors.qualitative.Set3
+        )
+        fig_server_pie.update_traces(
+            textposition='inside',
+            textinfo='percent+label',
+            hovertemplate='<b>%{label}</b><br>Performance: %{value:.1f} T/s<br>Anteil: %{percent}<extra></extra>'
+        )
+        st.plotly_chart(fig_server_pie, use_container_width=True)
+    
+    with col2:
+        # Modell-Performance Kuchendiagramm
+        model_performance = df.groupby('model')['performance'].sum().reset_index()
+        model_performance = model_performance.sort_values('performance', ascending=False)
         
-        if not df_with_params.empty:
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                # Performance pro Parameter
-                fig_efficiency = px.scatter(
-                    df_with_params,
-                    x='parameter_size',
-                    y='performance_per_billion_params',
-                    color='quantization_level',
-                    size='size_gb',
-                    hover_data=['model', 'server', 'performance'],
-                    title='Effizienz: Performance pro Milliarde Parameter',
-                    labels={'parameter_size': 'Parameter-Anzahl', 'performance_per_billion_params': 'Effizienz (T/s/B)'}
-                )
-                st.plotly_chart(fig_efficiency, use_container_width=True)
-            
-            with col2:
-                # Quantisierungs-Vergleich
-                if df_with_params['quantization_level'].nunique() > 1:
-                    quant_avg = df_with_params.groupby('quantization_level').agg({
-                        'performance': 'mean',
-                        'size_gb': 'mean',
-                        'performance_per_billion_params': 'mean'
-                    }).reset_index()
-                    
-                    fig_quant = px.bar(
-                        quant_avg,
-                        x='quantization_level',
-                        y='performance',
-                        color='size_gb',
-                        title='Performance nach Quantisierung',
-                        labels={'quantization_level': 'Quantisierung', 'performance': 'Ø Performance (T/s)'}
-                    )
-                    st.plotly_chart(fig_quant, use_container_width=True)
-                else:
-                    st.info("Nur eine Quantisierungsart verfügbar für Vergleich")
+        # Lange Modellnamen kürzen für bessere Anzeige
+        model_performance['model_short'] = model_performance['model'].str.replace(':latest', '').str.replace(':12b', '')
         
-        st.markdown("---")
+        fig_model_pie = px.pie(
+            model_performance,
+            values='performance',
+            names='model_short',
+            title='Modell-Performance Anteil',
+            color_discrete_sequence=px.colors.qualitative.Pastel
+        )
+        fig_model_pie.update_traces(
+            textposition='inside',
+            textinfo='percent+label',
+            hovertemplate='<b>%{label}</b><br>Performance: %{value:.1f} T/s<br>Anteil: %{percent}<extra></extra>'
+        )
+        st.plotly_chart(fig_model_pie, use_container_width=True)
+    
+    st.markdown("---")
     
     # Globale Performance-Analyse aller LLMs
     st.subheader("🚀 Globale Performance-Analyse")
@@ -952,132 +953,168 @@ def show_performance(df: pd.DataFrame, results: List[Dict]):
     """Zeigt Performance-Analyse"""
     st.header("⚡ Performance-Analyse")
     
-    # LLM Ladezeit-Analyse
-    st.subheader("🚀 LLM Ladezeit-Analyse")
+    # Hauptperformance-Ranking (wie bei Qualität)
+    st.subheader("🏆 Performance-Ranking")
+    st.caption("Performance aller getesteten LLMs nach Modell und Server")
     
-    col1, col2, col3, col4 = st.columns(4)
+    # Performance-Chart - Ein Eintrag je Modell+Server
+    df_perf = df.copy()
+    df_perf['model_short'] = df_perf['model'].str.replace(':latest', '').str.replace(':12b', '').str.replace(':14b', '').str.replace(':8b', '')
+    df_perf['server_short'] = df_perf['server'].str.replace('MacBook Pro ', 'MBP ').str.replace('localhost', 'Local')
+    df_perf['display_name'] = df_perf['model_short'] + '<br>' + df_perf['server_short']
     
-    with col1:
-        avg_load_time = df['llm_load_time'].mean()
-        st.metric("Ø Ladezeit", f"{avg_load_time:.1f} ms" if avg_load_time > 0 else "N/A")
-    
-    with col2:
-        max_load_time = df['llm_load_time'].max()
-        st.metric("Max Ladezeit", f"{max_load_time:.1f} ms" if max_load_time > 0 else "N/A")
-    
-    with col3:
-        avg_cold_start = df['cold_start_factor'].mean()
-        st.metric("Ø Cold Start Faktor", f"{avg_cold_start:.2f}x" if avg_cold_start > 0 else "N/A")
-    
-    with col4:
-        models_with_load_time = df[df['llm_load_time'] > 0]['model'].nunique()
-        st.metric("Modelle mit Ladezeit", models_with_load_time)
-    
-    # Ladezeit-Vergleich
-    if df['llm_load_time'].sum() > 0:
-        load_time_df = df[df['llm_load_time'] > 0].copy()
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            # Ladezeit nach Modell
-            fig_load_time = px.bar(
-                load_time_df,
-                x='model',
-                y='llm_load_time',
-                color='server',
-                title='LLM Ladezeit nach Modell',
-                labels={'llm_load_time': 'Ladezeit (ms)', 'model': 'Modell'}
-            )
-            st.plotly_chart(fig_load_time, use_container_width=True)
-        
-        with col2:
-            # Cold Start Faktor
-            fig_cold_start = px.bar(
-                load_time_df,
-                x='model',
-                y='cold_start_factor',
-                color='server',
-                title='Cold Start Faktor (Ladezeit/Avg Runtime)',
-                labels={'cold_start_factor': 'Faktor', 'model': 'Modell'}
-            )
-            st.plotly_chart(fig_cold_start, use_container_width=True)
-    
-    st.markdown("---")
-    
-    # Performance-Metriken mit Normalisierung
-    st.subheader("📊 Performance-Metriken")
-    
-    # Info über normalisierte Metriken
-    st.info("""
-    **Normalisierte Metriken für Vergleichbarkeit:**
-    - **Performance**: Tokens/Sekunde (unabhängig von Fragen-Anzahl)
-    - **Concurrent-Effizienz**: Performance pro parallelem Thread
-    - **Durchsatz**: Fragen pro Minute
-    - **Load-Effizienz**: Anteil der Netto-Inferenzzeit (ohne Ladezeit)
-    """)
-    
-    # Metriken in Spalten
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        avg_perf = df['performance'].mean()
-        st.metric("Ø Performance (T/s)", f"{avg_perf:.2f}")
-    with col2:
-        avg_throughput = df['throughput_per_min'].mean()
-        st.metric("Ø Durchsatz (/min)", f"{avg_throughput:.2f}")
-    with col3:
-        avg_concurrent_eff = df['concurrent_efficiency'].mean()
-        st.metric("Ø Concurrent-Effizienz", f"{avg_concurrent_eff:.2f}")
-    with col4:
-        avg_load_eff = df['load_efficiency'].mean()
-        st.metric("Ø Load-Effizienz (%)", f"{avg_load_eff:.1f}")
-    
-    # Scatter Plot: Runtime vs Tokens
-    fig_scatter = px.scatter(
-        df,
-        x='runtime_avg',
-        y='token_avg',
-        color='model',
-        size='questions',
-        hover_data=['server', 'quality_avg', 'concurrent', 'throughput_per_min'],
-        title='Runtime vs. Tokens (Größe = Anzahl Fragen)',
-        labels={'runtime_avg': 'Durchschnittliche Laufzeit (ms)', 'token_avg': 'Durchschnittliche Tokens'}
-    )
-    st.plotly_chart(fig_scatter, use_container_width=True)
-    
-    # Performance Ranking - normalisiert
-    st.subheader("🏆 Performance-Ranking (normalisiert)")
-    
-    perf_df = df[['model', 'server', 'questions', 'concurrent', 'performance', 'concurrent_efficiency', 'throughput_per_min', 'load_efficiency', 'quality_avg']].copy()
-    perf_df = perf_df.sort_values('performance', ascending=False)
-    
-    # Bar Chart
-    fig_bar = px.bar(
-        perf_df,
-        x='model',
+    fig_perf_main = px.bar(
+        df_perf.sort_values('performance', ascending=False),
+        x='display_name',
         y='performance',
         color='server',
         title='Performance nach Modell und Server',
-        labels={'performance': 'Tokens/Sekunde', 'model': 'Modell'}
+        labels={'performance': 'Performance (T/s)', 'display_name': 'Modell + Server'},
+        hover_data=['model', 'server', 'questions', 'concurrent', 'runtime_avg', 'token_avg']
     )
-    st.plotly_chart(fig_bar, use_container_width=True)
+    fig_perf_main.update_layout(
+        height=500,
+        xaxis_title="Modell + Server",
+        showlegend=True,
+        legend=dict(title="Server")
+    )
+    st.plotly_chart(fig_perf_main, use_container_width=True)
     
-    # Detaillierte Performance-Tabelle
+    # Performance-Details Tabelle
     st.subheader("📋 Performance-Details")
+    detail_cols = ['model', 'server', 'questions', 'concurrent', 'performance', 'runtime_avg', 'token_avg', 'concurrent_efficiency', 'throughput_per_min']
+    detail_df = df[detail_cols].copy().sort_values('performance', ascending=False)
+    
     st.dataframe(
-        perf_df,
+        detail_df,
         use_container_width=True,
         hide_index=True,
         column_config={
             'model': st.column_config.TextColumn('Modell'),
             'server': st.column_config.TextColumn('Server'),
+            'questions': st.column_config.NumberColumn('Fragen'),
+            'concurrent': st.column_config.NumberColumn('Parallel'),
             'performance': st.column_config.NumberColumn('Performance (T/s)', format="%.2f"),
             'runtime_avg': st.column_config.NumberColumn('Ø Zeit (ms)', format="%.1f"),
             'token_avg': st.column_config.NumberColumn('Ø Tokens'),
-            'quality_avg': st.column_config.NumberColumn('Ø Qualität', format="%.3f")
+            'concurrent_efficiency': st.column_config.NumberColumn('Concurrent-Eff.', format="%.2f"),
+            'throughput_per_min': st.column_config.NumberColumn('Durchsatz (/min)', format="%.2f")
         }
     )
+    
+    st.markdown("---")
+    
+    # LLM Load Time Analyse (separate Sektion)
+    st.subheader("🚀 LLM Load Time Analyse")
+    st.caption("Startup-Performance und Cold Start Faktoren")
+    
+    if df['llm_load_time'].sum() > 0:
+        load_time_df = df[df['llm_load_time'] > 0].copy()
+        
+        # Metriken
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            avg_load_time = load_time_df['llm_load_time'].mean()
+            st.metric("Ø Ladezeit", f"{avg_load_time:.1f} ms")
+        
+        with col2:
+            max_load_time = load_time_df['llm_load_time'].max()
+            st.metric("Max Ladezeit", f"{max_load_time:.1f} ms")
+        
+        with col3:
+            avg_cold_start = load_time_df['cold_start_factor'].mean()
+            st.metric("Ø Cold Start Faktor", f"{avg_cold_start:.2f}x")
+        
+        with col4:
+            avg_load_eff = load_time_df['load_efficiency'].mean()
+            st.metric("Ø Load-Effizienz (%)", f"{avg_load_eff:.1f}")
+        
+        # Load Time vs Runtime Vergleich
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # Load Time Balkendiagramm
+            load_time_df['display_name'] = load_time_df['model'].str.replace(':latest', '').str.replace(':12b', '').str.replace(':14b', '').str.replace(':8b', '') + '<br>(' + load_time_df['server'].str.replace('MacBook Pro ', 'MBP ') + ')'
+            
+            fig_load_time = px.bar(
+                load_time_df.sort_values('llm_load_time', ascending=False),
+                x='display_name',
+                y='llm_load_time',
+                color='server',
+                title='LLM Ladezeit Ranking',
+                labels={'llm_load_time': 'Ladezeit (ms)', 'display_name': 'Modell + Server'}
+            )
+            fig_load_time.update_layout(height=400, showlegend=False)
+            st.plotly_chart(fig_load_time, use_container_width=True)
+        
+        with col2:
+            # Load Time vs Runtime Scatter
+            fig_load_scatter = px.scatter(
+                load_time_df,
+                x='runtime_avg',
+                y='llm_load_time',
+                color='model',
+                size='performance',
+                hover_data=['server', 'cold_start_factor'],
+                title='Load Time vs. Runtime',
+                labels={'runtime_avg': 'Ø Runtime (ms)', 'llm_load_time': 'Load Time (ms)'}
+            )
+            fig_load_scatter.update_layout(height=400)
+            st.plotly_chart(fig_load_scatter, use_container_width=True)
+    else:
+        st.info("Keine Load Time Daten verfügbar. Führe Tests mit der aktuellen Version durch.")
+    
+    st.markdown("---")
+    
+    # Effizienz-Empfehlungen
+    st.subheader("💡 Performance-Empfehlungen")
+    
+    if not df.empty:
+        # Beste Performance
+        best_perf = df.loc[df['performance'].idxmax()]
+        
+        # Bester Durchsatz
+        best_throughput = df.loc[df['throughput_per_min'].idxmax()]
+        
+        # Beste Load Time (wenn verfügbar)
+        if df['llm_load_time'].sum() > 0:
+            best_load = df[df['llm_load_time'] > 0].loc[df[df['llm_load_time'] > 0]['llm_load_time'].idxmin()]
+        else:
+            best_load = None
+        
+        col1, col2, col3 = st.columns(3)
+        
+        with col1:
+            st.success(f"""
+            **🏆 Höchste Performance**
+            - **Modell**: {best_perf['model']}
+            - **Server**: {best_perf['server']}
+            - **Performance**: {best_perf['performance']:.2f} T/s
+            - **Empfehlung**: Für maximale Token/s
+            """)
+        
+        with col2:
+            st.info(f"""
+            **⚡ Bester Durchsatz**
+            - **Modell**: {best_throughput['model']}
+            - **Server**: {best_throughput['server']}
+            - **Durchsatz**: {best_throughput['throughput_per_min']:.1f} /min
+            - **Empfehlung**: Für viele kurze Anfragen
+            """)
+        
+        with col3:
+            if best_load is not None:
+                st.warning(f"""
+                **🚀 Schnellster Start**
+                - **Modell**: {best_load['model']}
+                - **Server**: {best_load['server']}
+                - **Load Time**: {best_load['llm_load_time']:.1f} ms
+                - **Empfehlung**: Für schnelle Initialisierung
+                """)
+            else:
+                st.info("**Load Time Daten**\n\nKeine Daten verfügbar. Führe Tests mit aktueller Version durch.")
+    
     
     # Efficiency Matrix
     st.subheader("🎯 Effizienz-Matrix")
@@ -1110,14 +1147,76 @@ def show_performance(df: pd.DataFrame, results: List[Dict]):
         
         if time_data:
             time_df = pd.DataFrame(time_data)
-            fig_box = px.box(
-                time_df,
-                x='model',
-                y='time',
-                title='Zeitverteilung nach Modell',
-                labels={'time': 'Zeit (ms)', 'model': 'Modell'}
+            
+            # Statistiken berechnen
+            time_stats = time_df.groupby('model')['time'].agg([
+                'mean', 'median', 'std', 'min', 'max', 'count'
+            ]).round(1)
+            
+            # Anzeigeart auswählen
+            chart_type = st.selectbox(
+                "Anzeigeart wählen:",
+                ["Balkendiagramm (Durchschnitt)", "Violin-Plot", "Histogram", "Statistik-Tabelle"],
+                index=0
             )
-            st.plotly_chart(fig_box, use_container_width=True)
+            
+            if chart_type == "Balkendiagramm (Durchschnitt)":
+                fig = px.bar(
+                    time_stats.reset_index(),
+                    x='model',
+                    y='mean',
+                    title='Durchschnittliche Antwortzeit nach Modell',
+                    labels={'mean': 'Ø Zeit (ms)', 'model': 'Modell'},
+                    text='mean'
+                )
+                fig.update_traces(texttemplate='%{text:.1f}ms', textposition='outside')
+                fig.update_layout(showlegend=False)
+                st.plotly_chart(fig, use_container_width=True)
+                
+            elif chart_type == "Violin-Plot":
+                fig = px.violin(
+                    time_df,
+                    x='model',
+                    y='time',
+                    title='Zeitverteilung nach Modell (Violin-Plot)',
+                    labels={'time': 'Zeit (ms)', 'model': 'Modell'},
+                    box=True
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                
+            elif chart_type == "Histogram":
+                selected_models = st.multiselect(
+                    "Modelle für Vergleich auswählen:",
+                    time_df['model'].unique(),
+                    default=time_df['model'].unique()[:3]
+                )
+                
+                filtered_data = time_df[time_df['model'].isin(selected_models)]
+                fig = px.histogram(
+                    filtered_data,
+                    x='time',
+                    color='model',
+                    title='Zeitverteilung Histogram',
+                    labels={'time': 'Zeit (ms)', 'count': 'Anzahl'},
+                    marginal='box',
+                    opacity=0.7
+                )
+                st.plotly_chart(fig, use_container_width=True)
+                
+            elif chart_type == "Statistik-Tabelle":
+                st.subheader("📊 Detaillierte Zeitstatistiken")
+                st.dataframe(
+                    time_stats,
+                    use_container_width=True,
+                    column_config={
+                        'mean': st.column_config.NumberColumn('Durchschnitt (ms)', format="%.1f"),
+                        'median': st.column_config.NumberColumn('Median (ms)', format="%.1f"),
+                        'std': st.column_config.NumberColumn('Standardabw. (ms)', format="%.1f"),
+                        'min': st.column_config.NumberColumn('Minimum (ms)', format="%.1f"),
+                        'max': st.column_config.NumberColumn('Maximum (ms)', format="%.1f"),
+                        'count': st.column_config.NumberColumn('Anzahl Tests')
+                    }
+                )
 
 
 def show_comparisons(df: pd.DataFrame, results: List[Dict]):

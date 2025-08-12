@@ -208,6 +208,7 @@ streamlit run llm_auswertung.py --server.port 8502
 - **📊 Übersicht**: 
   - Gesamtstatistiken und Tabellenansicht aller Tests mit Modell-Metadaten
   - **Effizienz-Analyse**: Performance pro Milliarde Parameter für objektive Modell-Vergleiche
+    - Performance-Kuchendiagramme für Server- und Modell-Performance-Anteile
     - Scatter-Plot: Effizienz vs. Parameter-Anzahl mit Quantisierungs-Farbkodierung
     - Quantisierungs-Vergleich: Performance-Unterschiede verschiedener Quantisierungen
   - **Globale Performance-Analyse**: Aggregierte Performance-Metriken pro Modell über alle Server
@@ -218,9 +219,14 @@ streamlit run llm_auswertung.py --server.port 8502
     - Qualitäts-Ranking Tabelle
 - **📝 Log-Analyse**: Durchsuchen und Filtern von Logs, automatische Fehleranzeige
 - **⚡ Performance**: 
-  - Token/Zeit-Analyse mit normalisierten Metriken
-  - Performance-Rankings und Effizienz-Matrix
-  - Normalisierte Vergleichsmetriken für faire Bewertungen
+  - Strukturiertes Performance-Ranking mit LLM Load Time Analyse
+  - Performance-Empfehlungen basierend auf Hardware-Optimierung
+  - Effizienz-Matrix für detaillierte Performance-Vergleiche
+  - Zeitverteilung nach Modell mit flexiblen Visualisierungsoptionen:
+    - Balkendiagramm (Durchschnitt)
+    - Violin-Plot für Verteilungsanalyse
+    - Histogram für Häufigkeitsverteilung
+    - Detaillierte Statistik-Tabelle
 - **🔄 Vergleiche**: 
   - Gleiche Modelle auf verschiedenen Servern
   - Verschiedene Modelle auf gleichem Server
