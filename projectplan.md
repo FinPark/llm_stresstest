@@ -209,6 +209,27 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
 - **Elegante Animationen**: Smooth Transitions und Schatten-Effekte
 - **Responsive Design**: Optimiert für verschiedene Bildschirmgrößen
 
+### Vergleichbarkeits-Features ✅ IMPLEMENTIERT
+- **Normalisierte Metriken** in get_dataframe() für faire Vergleiche:
+  - `concurrent_efficiency`: Performance pro Thread (Performance ÷ concurrent)
+  - `throughput_per_min`: Fragen pro Minute basierend auf durchschnittlicher Antwortzeit
+  - `load_efficiency`: Anteil Netto-Inferenzzeit in Prozent (ohne LLM-Ladezeit)
+  - `performance_normalized` und `quality_normalized`: Bestehende Metriken beibehalten
+- **Erweiterte Übersichtsseite**:
+  - Vergleichbarkeits-Hinweis bei unterschiedlichen Konfigurationen
+  - Tabelle mit `concurrent` und `throughput_per_min` Spalten
+  - Fix für numpy.int64 Darstellung in Listen
+- **Performance-Bereich überarbeitet**:
+  - Info-Box über normalisierte Metriken
+  - Neue Metrik-Tiles für alle normalisierten Werte
+  - Scatter-Plot mit erweiterten Hover-Daten
+- **Vergleichsbereich aktualisiert**:
+  - Hinweis auf normalisierte Metriken in beiden Vergleichsmodi
+  - Detailtabellen mit allen relevanten Spalten
+  - Multi-Metrik Balkendiagramm nutzt normalisierte Werte
+- **Plotly Dependency hinzugefügt** für erweiterte Visualisierungen
+- **Faire Vergleiche** zwischen Tests mit unterschiedlichen `questions` und `concurrent` Einstellungen
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen
