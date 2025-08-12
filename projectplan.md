@@ -248,6 +248,31 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
 - **Plotly Dependency hinzugefügt** für erweiterte Visualisierungen
 - **Faire Vergleiche** zwischen Tests mit unterschiedlichen `questions` und `concurrent` Einstellungen
 
+### Modell-Metadaten Integration ✅ IMPLEMENTIERT
+- **Automatischer Metadaten-Abruf** in `llm_stresstest.py`:
+  - `get_model_metadata()` Methode für Ollama API-Abfrage
+  - Abruf von `parameter_size`, `quantization_level`, `size_bytes`, `family`
+  - Integration in `test_connection()` für frühen Metadaten-Abruf
+  - Robuste Fallbacks für nicht-Ollama APIs mit graceful degradation
+- **Erweiterte Datenstrukturen**:
+  - Meta-Daten in JSON-Output mit Modell-Metadaten
+  - Parser für verschiedene Parameter-Formate (B, M)
+  - Error-Handling für API-Calls mit Debug-Logging
+- **Dashboard-Erweiterungen** in `llm_auswertung.py`:
+  - Erweiterte DataFrame-Spalten: `parameter_size`, `quantization_level`, `size_gb`
+  - Neue Effizienz-Metrik: `performance_per_billion_params`
+  - Modellgröße in GB für bessere Lesbarkeit
+  - Erweiterte Übersichtstabelle mit Modell-Metadaten
+- **Neue Effizienz-Analyse-Sektion**:
+  - Scatter-Plot: Performance pro Parameter vs. Parameter-Anzahl
+  - Farbkodierung nach Quantisierung, Größe als Bubble-Size
+  - Quantisierungs-Vergleich mit Performance-Balkendiagramm
+  - Conditional display basierend auf verfügbaren Metadaten
+- **Robuste Implementierung**:
+  - Graceful degradation bei fehlenden Metadaten
+  - Logging für erfolgreiche Metadaten-Abrufe
+  - Performance-Berechnung pro Milliarde Parameter
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen

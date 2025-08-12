@@ -360,6 +360,7 @@ class LLMStressTest:
         self.client = None
         self.quality_evaluator = QualityEvaluator()
         self.llm_load_time = 0
+        self.model_metadata = {}
     
     def sanitize_filename(self, text: str) -> str:
         """Bereinigt Text für Dateinamen - Leerzeichen zu -, Sonderzeichen zu _"""
@@ -439,6 +440,38 @@ class LLMStressTest:
             logger.error(f"Error loading questions: {e}")
             return False
     
+    async def get_model_metadata(self) -> Dict[str, Any]:
+        """Get detailed model metadata from Ollama API (if available)"""
+        metadata = {
+            "parameter_size": None,
+            "quantization_level": None,
+            "size_bytes": None,
+            "family": None
+        }
+        
+        try:
+            # Try Ollama native API for detailed model info
+            import aiohttp
+            async with aiohttp.ClientSession() as session:
+                async with session.get(f"{self.config['url']}/api/tags") as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        for model in data.get('models', []):
+                            if model.get('name') == self.config['model']:
+                                details = model.get('details', {})
+                                metadata.update({
+                                    "parameter_size": details.get('parameter_size'),
+                                    "quantization_level": details.get('quantization_level'),
+                                    "size_bytes": model.get('size'),
+                                    "family": details.get('family')
+                                })
+                                logger.info(f"Model metadata retrieved: {metadata}")
+                                break
+        except Exception as e:
+            logger.debug(f"Could not retrieve model metadata: {e}")
+        
+        return metadata
+
     async def test_connection(self) -> bool:
         """Test connection to LLM server"""
         try:
@@ -457,6 +490,10 @@ class LLMStressTest:
             
             response = await self.client.models.list()
             logger.info(f"Connection successful. Available models: {[m.id for m in response.data]}")
+            
+            # Get model metadata
+            self.model_metadata = await self.get_model_metadata()
+            
             return True
             
         except Exception as e:
@@ -676,20 +713,32 @@ class LLMStressTest:
                 logger.info(f"Using alternative filename: {output_path}")
                 print(f"✅ Speichere unter alternativem Namen: {output_path}")
         
+        # Meta-Daten zusammenstellen
+        meta_data = {
+            "start_date": self.start_time.strftime("%Y-%m-%d"),
+            "start_time": self.start_time.strftime("%H:%M:%S.%f")[:-3],
+            "end_date": self.end_time.strftime("%Y-%m-%d"),
+            "end_time": self.end_time.strftime("%H:%M:%S.%f")[:-3],
+            "server": self.config['url'],
+            "server_name": self.config.get('server_name', self.config['url']),  # Fallback auf URL wenn nicht gesetzt
+            "model": self.config['model'],
+            "concurrent": self.config['concurrent'],
+            "questions": self.config['questions'],
+            "timeout": self.config['timeout'],
+            "total_duration_ms": round(total_duration_ms, 1)
+        }
+        
+        # Modell-Metadaten hinzufügen (falls verfügbar)
+        if self.model_metadata:
+            meta_data.update({
+                "parameter_size": self.model_metadata.get('parameter_size'),
+                "quantization_level": self.model_metadata.get('quantization_level'),
+                "size_bytes": self.model_metadata.get('size_bytes'),
+                "family": self.model_metadata.get('family')
+            })
+        
         output_data = {
-            "meta": {
-                "start_date": self.start_time.strftime("%Y-%m-%d"),
-                "start_time": self.start_time.strftime("%H:%M:%S.%f")[:-3],
-                "end_date": self.end_time.strftime("%Y-%m-%d"),
-                "end_time": self.end_time.strftime("%H:%M:%S.%f")[:-3],
-                "server": self.config['url'],
-                "server_name": self.config.get('server_name', self.config['url']),  # Fallback auf URL wenn nicht gesetzt
-                "model": self.config['model'],
-                "concurrent": self.config['concurrent'],
-                "questions": self.config['questions'],
-                "timeout": self.config['timeout'],
-                "total_duration_ms": round(total_duration_ms, 1)
-            },
+            "meta": meta_data,
             "results": self.results,
             "aggregate": self.calculate_aggregates()
         }

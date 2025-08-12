@@ -464,7 +464,12 @@ class LLMAnalyzer:
                 'llm_load_time': aggregate.get('llm_load_time', 0),
                 'cold_start_factor': aggregate.get('cold_start_factor', 0),
                 'start_time': meta.get('start_time', ''),
-                'start_date': meta.get('start_date', '')
+                'start_date': meta.get('start_date', ''),
+                # Modell-Metadaten (falls verfügbar)
+                'parameter_size': meta.get('parameter_size', 'Unknown'),
+                'quantization_level': meta.get('quantization_level', 'Unknown'),
+                'size_bytes': meta.get('size_bytes', 0),
+                'family': meta.get('family', 'Unknown')
             }
             
             # Performance berechnen (Token/Zeit)
@@ -498,6 +503,30 @@ class LLMAnalyzer:
             else:
                 row['load_efficiency'] = 0
             
+            # Performance pro Parameter (falls Parameter-Info verfügbar)
+            row['performance_per_billion_params'] = 0
+            if row['parameter_size'] != 'Unknown' and row['parameter_size']:
+                try:
+                    # Parse Parameter-Größe (z.B. "14.8B" -> 14.8)
+                    param_str = str(row['parameter_size']).upper()
+                    if param_str.endswith('B'):
+                        param_billions = float(param_str[:-1])
+                        if param_billions > 0:
+                            row['performance_per_billion_params'] = round(row['performance'] / param_billions, 2)
+                    elif param_str.endswith('M'):
+                        # Für kleinere Modelle in Millionen
+                        param_millions = float(param_str[:-1])
+                        param_billions = param_millions / 1000
+                        if param_billions > 0:
+                            row['performance_per_billion_params'] = round(row['performance'] / param_billions, 2)
+                except (ValueError, ZeroDivisionError):
+                    pass
+            
+            # Modellgröße in GB (falls verfügbar)
+            row['size_gb'] = 0
+            if row['size_bytes'] > 0:
+                row['size_gb'] = round(row['size_bytes'] / (1024**3), 1)
+            
             rows.append(row)
         
         return pd.DataFrame(rows)
@@ -524,7 +553,7 @@ class LLMAnalyzer:
 
 
 def main():
-    st.title("🔬 LLM Stresstest Auswertung Dashboard")
+    st.title("🔬 Finken's LLM Stresstest Dashboard")
     st.markdown("---")
     
     # Analyzer initialisieren
@@ -630,8 +659,8 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     # Übersichtstabelle
     st.subheader("📋 Alle Tests")
     
-    # Spalten auswählen - erweitert um normalisierte Metriken
-    display_cols = ['filename', 'server', 'model', 'questions', 'concurrent', 'runtime_avg', 'token_avg', 'quality_avg', 'performance', 'throughput_per_min']
+    # Spalten auswählen - erweitert um Modell-Metadaten und normalisierte Metriken
+    display_cols = ['filename', 'server', 'model', 'parameter_size', 'quantization_level', 'size_gb', 'questions', 'concurrent', 'runtime_avg', 'token_avg', 'quality_avg', 'performance', 'performance_per_billion_params']
     display_df = df[display_cols].copy()
     
     # Formatierung
@@ -646,17 +675,68 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
             'filename': st.column_config.TextColumn('Datei'),
             'server': st.column_config.TextColumn('Server'),
             'model': st.column_config.TextColumn('Modell'),
+            'parameter_size': st.column_config.TextColumn('Parameter'),
+            'quantization_level': st.column_config.TextColumn('Quantisierung'),
+            'size_gb': st.column_config.NumberColumn('Größe (GB)', format="%.1f"),
             'questions': st.column_config.NumberColumn('Fragen'),
             'concurrent': st.column_config.NumberColumn('Parallel'),
             'runtime_avg': st.column_config.NumberColumn('Ø Zeit (ms)', format="%.1f"),
             'token_avg': st.column_config.NumberColumn('Ø Tokens'),
             'quality_avg': st.column_config.NumberColumn('Ø Qualität', format="%.3f"),
             'performance': st.column_config.NumberColumn('Performance (T/s)', format="%.2f"),
-            'throughput_per_min': st.column_config.NumberColumn('Durchsatz (/min)', format="%.2f")
+            'performance_per_billion_params': st.column_config.NumberColumn('Effizienz (T/s/B)', format="%.2f")
         }
     )
     
     st.markdown("---")
+    
+    # Effizienz-Analyse (nur wenn Modell-Metadaten verfügbar)
+    if any(df['parameter_size'] != 'Unknown'):
+        st.subheader("⚡ Effizienz-Analyse")
+        st.caption("Performance pro Milliarde Parameter und Quantisierungs-Vergleiche")
+        
+        # Filter für Modelle mit verfügbaren Metadaten
+        df_with_params = df[df['parameter_size'] != 'Unknown'].copy()
+        
+        if not df_with_params.empty:
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Performance pro Parameter
+                fig_efficiency = px.scatter(
+                    df_with_params,
+                    x='parameter_size',
+                    y='performance_per_billion_params',
+                    color='quantization_level',
+                    size='size_gb',
+                    hover_data=['model', 'server', 'performance'],
+                    title='Effizienz: Performance pro Milliarde Parameter',
+                    labels={'parameter_size': 'Parameter-Anzahl', 'performance_per_billion_params': 'Effizienz (T/s/B)'}
+                )
+                st.plotly_chart(fig_efficiency, use_container_width=True)
+            
+            with col2:
+                # Quantisierungs-Vergleich
+                if df_with_params['quantization_level'].nunique() > 1:
+                    quant_avg = df_with_params.groupby('quantization_level').agg({
+                        'performance': 'mean',
+                        'size_gb': 'mean',
+                        'performance_per_billion_params': 'mean'
+                    }).reset_index()
+                    
+                    fig_quant = px.bar(
+                        quant_avg,
+                        x='quantization_level',
+                        y='performance',
+                        color='size_gb',
+                        title='Performance nach Quantisierung',
+                        labels={'quantization_level': 'Quantisierung', 'performance': 'Ø Performance (T/s)'}
+                    )
+                    st.plotly_chart(fig_quant, use_container_width=True)
+                else:
+                    st.info("Nur eine Quantisierungsart verfügbar für Vergleich")
+        
+        st.markdown("---")
     
     # Globale Performance-Analyse aller LLMs
     st.subheader("🚀 Globale Performance-Analyse")
@@ -1198,34 +1278,25 @@ def show_quality_metrics(analyzer: LLMAnalyzer, results: List[Dict]):
         # Durchschnittswerte berechnen
         avg_metrics = filtered_quality.groupby('model')[metrics].mean()
         
-        # Radar Chart
-        st.subheader("🎯 Qualitäts-Radar")
+        # Gesamtqualität Balkendiagramm
+        st.subheader("🎯 Gesamtqualität nach Modell")
         
-        fig = go.Figure()
+        # Berechne Gesamtqualität als Durchschnitt aller Metriken
+        overall_quality = filtered_quality.groupby('model')[metrics].mean()
+        overall_quality['overall_avg'] = overall_quality.mean(axis=1)
+        overall_quality_sorted = overall_quality.reset_index().sort_values('overall_avg', ascending=False)
         
-        for model in selected_models:
-            if model in avg_metrics.index:
-                values = avg_metrics.loc[model].values.tolist()
-                values.append(values[0])  # Schließe den Kreis
-                
-                fig.add_trace(go.Scatterpolar(
-                    r=values,
-                    theta=metrics + [metrics[0]],
-                    fill='toself',
-                    name=model
-                ))
-        
-        fig.update_layout(
-            polar=dict(
-                radialaxis=dict(
-                    visible=True,
-                    range=[0, 1]
-                )),
-            showlegend=True,
-            title="Qualitätsmetriken-Vergleich"
+        fig_overall = px.bar(
+            overall_quality_sorted,
+            x='model',
+            y='overall_avg',
+            title='Gesamtqualität - Durchschnitt aller Metriken',
+            labels={'model': 'Modell', 'overall_avg': 'Gesamtqualität'},
+            color='overall_avg',
+            color_continuous_scale='RdYlGn'
         )
-        
-        st.plotly_chart(fig, use_container_width=True)
+        fig_overall.update_layout(height=400)
+        st.plotly_chart(fig_overall, use_container_width=True)
         
         # Detaillierte Metrik-Tabelle
         st.subheader("📊 Durchschnittliche Qualitätsmetriken")
@@ -1248,7 +1319,7 @@ def show_quality_metrics(analyzer: LLMAnalyzer, results: List[Dict]):
             }
         )
         
-        # Box Plots für einzelne Metriken
+        # Balkendiagramm für einzelne Metriken
         st.subheader("📈 Metrik-Verteilungen")
         
         selected_metric = st.selectbox(
@@ -1257,14 +1328,84 @@ def show_quality_metrics(analyzer: LLMAnalyzer, results: List[Dict]):
             format_func=lambda x: x.replace('_', ' ').title()
         )
         
-        fig_box = px.box(
-            filtered_quality,
+        # Metrik-Beschreibungen
+        metric_descriptions = {
+            'structure_score': {
+                'name': 'Struktur-Score',
+                'description': """**Was es misst:** Strukturelle Organisation und Formatierung der Antwort
+- Verwendung von Absätzen, Listen, Aufzählungen
+- Hervorhebungen (fett, kursiv)
+- Angemessene Textlänge (50-1000 Wörter ideal)
+- Verwendung von Beispielen"""
+            },
+            'readability_score': {
+                'name': 'Lesbarkeits-Score',
+                'description': """**Was es misst:** Wie leicht verständlich der Text ist
+- Durchschnittliche Satzlänge (15-20 Wörter ideal)
+- Durchschnittliche Wortlänge (4-6 Zeichen ideal)
+- Komplexität der Sprache"""
+            },
+            'completeness_score': {
+                'name': 'Vollständigkeits-Score',
+                'description': """**Was es misst:** Wie vollständig die Frage beantwortet wird
+- Mindestlänge erreicht (30+ Wörter)
+- Bezug zu Schlüsselwörtern der Frage
+- Hat Einleitung/Erklärung
+- Hat Abschluss/Zusammenfassung"""
+            },
+            'relevance_score': {
+                'name': 'Relevanz-Score',
+                'description': """**Was es misst:** Wie gut die Antwort zur gestellten Frage passt
+- Semantische Ähnlichkeit zwischen Frage und Antwort
+- Verwendung relevanter Schlüsselwörter
+- Thematischer Bezug"""
+            },
+            'factual_consistency': {
+                'name': 'Faktische Konsistenz',
+                'description': """**Was es misst:** Widerspruchsfreiheit innerhalb der Antwort
+- Keine sich widersprechenden Aussagen
+- Konsistente Zahlenangaben
+- Keine logischen Brüche"""
+            },
+            'fluency_score': {
+                'name': 'Sprachfluss-Score',
+                'description': """**Was es misst:** Sprachliche Qualität und Natürlichkeit
+- Grammatikalische Korrektheit
+- Natürlicher Sprachfluss
+- Abwechslungsreiche Satzstrukturen
+- Verwendung von Verbindungswörtern"""
+            },
+            'coherence_score': {
+                'name': 'Kohärenz-Score',
+                'description': """**Was es misst:** Logischer Zusammenhang und Gedankenführung
+- Verwendung von Verbindungswörtern (deshalb, außerdem, jedoch)
+- Thematische Konsistenz durch wiederkehrende Begriffe
+- Erkennbare Struktur/Progression"""
+            }
+        }
+        
+        # Beschreibung der gewählten Metrik anzeigen
+        if selected_metric in metric_descriptions:
+            metric_info = metric_descriptions[selected_metric]
+            st.info(f"#### {metric_info['name']}\n{metric_info['description']}")
+        
+        st.markdown("---")
+        
+        # Durchschnittswerte für die ausgewählte Metrik
+        metric_avg = filtered_quality.groupby('model')[selected_metric].mean().reset_index()
+        metric_avg = metric_avg.sort_values(selected_metric, ascending=False)
+        
+        fig_bar = px.bar(
+            metric_avg,
             x='model',
             y=selected_metric,
-            title=f'{selected_metric.replace("_", " ").title()} Verteilung',
-            labels={'model': 'Modell', selected_metric: 'Score'}
+            title=f'{selected_metric.replace("_", " ").title()} - Durchschnittswerte',
+            labels={'model': 'Modell', selected_metric: 'Score'},
+            color=selected_metric,
+            color_continuous_scale='RdYlGn'
         )
-        st.plotly_chart(fig_box, use_container_width=True)
+        fig_bar.update_layout(height=400)
+        st.plotly_chart(fig_bar, use_container_width=True)
         
         # Zusätzliche Statistiken
         col1, col2, col3 = st.columns(3)

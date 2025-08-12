@@ -8,6 +8,7 @@ Ein robustes Python-Tool zum Testen der Performance und Hardware-Anforderungen v
 - Parallele und sequenzielle Anfrageverarbeitung
 - Detaillierte Performance-Metriken (Zeit, Tokens)
 - **Automatische Qualitätsbewertung** mit 8 verschiedenen Metriken
+- **Modell-Metadaten Integration** für Effizienz-Analysen
 - Robuste Fehlerbehandlung ohne Abstürze
 - Strukturierte JSON-Ausgabe für Analysen
 - Umfassendes Logging-System
@@ -88,11 +89,22 @@ Der Dateiname wird automatisch aus `server_name` und `model` aus der Konfigurati
 
 Die Ergebnisse werden in `results/` gespeichert.
 
+## Modell-Metadaten Integration
+
+Das Tool ruft automatisch detaillierte Modell-Metadaten ab (bei Ollama-kompatiblen APIs):
+
+- **Parameter-Größe**: Anzahl Parameter (z.B. "14.8B")
+- **Quantisierung**: Quantisierungsart (z.B. "q4_0", "q8_0")
+- **Dateigröße**: Größe in Bytes für Performance-Analysen
+- **Modell-Familie**: Architektur-Familie (z.B. "llama", "gemma")
+
+Diese Metadaten ermöglichen erweiterte Effizienz-Analysen im Dashboard.
+
 ## Ausgabeformat
 
 Die Ergebnis-JSON enthält:
 
-- **meta**: Metadaten zum Testlauf (Zeitstempel, Server, Modell)
+- **meta**: Metadaten zum Testlauf (Zeitstempel, Server, Modell, Modell-Metadaten)
 - **results**: Einzelergebnisse für jede Frage mit Qualitätsbewertung
 - **aggregate**: Aggregierte Statistiken (Durchschnitt, Min, Max) inkl. Quality-Metriken
 
@@ -194,7 +206,10 @@ streamlit run llm_auswertung.py --server.port 8502
 ### Dashboard-Features
 
 - **📊 Übersicht**: 
-  - Gesamtstatistiken und Tabellenansicht aller Tests mit Vergleichbarkeits-Hinweisen
+  - Gesamtstatistiken und Tabellenansicht aller Tests mit Modell-Metadaten
+  - **Effizienz-Analyse**: Performance pro Milliarde Parameter für objektive Modell-Vergleiche
+    - Scatter-Plot: Effizienz vs. Parameter-Anzahl mit Quantisierungs-Farbkodierung
+    - Quantisierungs-Vergleich: Performance-Unterschiede verschiedener Quantisierungen
   - **Globale Performance-Analyse**: Aggregierte Performance-Metriken pro Modell über alle Server
     - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels, Farbkodierung nach Server)
     - Performance-Ranking Tabelle mit Min/Max/Durchschnitt
