@@ -1,0 +1,36 @@
+2025-08-12 22:48:32,268 - __main__ - INFO - Starting LLM Stress Test
+2025-08-12 22:48:32,277 - __main__ - INFO - Configuration loaded: {'questions': 10, 'concurrent': 2, 'url': 'http://localhost:11434', 'server_name': 'PC-FIN', 'model': 'deepseek-r1:14b', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 22:48:32,277 - __main__ - INFO - Generated filename: result_PC-FIN_deepseek-r1_14b
+2025-08-12 22:48:32,277 - __main__ - INFO - Loaded 10 questions
+2025-08-12 22:48:32,447 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-12 22:48:32,619 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 22:48:32,619 - __main__ - INFO - Connection successful. Available models: ['deepseek-r1:14b', 'mistral-small:latest', 'mxbai-embed-large:latest', 'nomic-embed-text:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'yxchia/paraphrase-multilingual-minilm-l12-v2:Q4_K_M', 'llama3.2:latest']
+2025-08-12 22:48:32,619 - __main__ - INFO - Starting warmup phase to measure LLM loading time...
+2025-08-12 22:50:31,602 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:50:31,605 - __main__ - INFO - [WARMUP] Model loading completed in 118985.8ms
+2025-08-12 22:50:31,605 - __main__ - INFO - Running first question again without loading time...
+2025-08-12 22:50:34,050 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:50:34,050 - __main__ - INFO - Question processed in 2445.4ms, 92 tokens, quality: 0.448
+2025-08-12 22:50:34,050 - __main__ - INFO - LLM load time calculated: 116540.4ms (warmup: 118985.8ms, real: 2445.4ms)
+2025-08-12 22:50:34,050 - __main__ - INFO - Processing remaining questions with concurrency: 2
+2025-08-12 22:50:49,480 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:50:49,480 - __main__ - INFO - Question processed in 15429.3ms, 500 tokens, quality: 0.456
+2025-08-12 22:50:49,545 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:50:49,551 - __main__ - INFO - Question processed in 15500.8ms, 500 tokens, quality: 0.442
+2025-08-12 22:51:03,460 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:03,465 - __main__ - INFO - Question processed in 13909.1ms, 453 tokens, quality: 0.572
+2025-08-12 22:51:04,711 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:04,711 - __main__ - INFO - Question processed in 15159.5ms, 500 tokens, quality: 0.519
+2025-08-12 22:51:20,109 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:20,109 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:20,109 - __main__ - INFO - Question processed in 15398.0ms, 500 tokens, quality: 0.492
+2025-08-12 22:51:20,111 - __main__ - INFO - Question processed in 15400.6ms, 500 tokens, quality: 0.553
+2025-08-12 22:51:35,524 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:35,524 - __main__ - INFO - Question processed in 15413.1ms, 500 tokens, quality: 0.527
+2025-08-12 22:51:35,582 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:35,582 - __main__ - INFO - Question processed in 15470.9ms, 500 tokens, quality: 0.519
+2025-08-12 22:51:49,044 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:51:49,047 - __main__ - INFO - Question processed in 13460.9ms, 500 tokens, quality: 0.439
+2025-08-12 22:51:49,047 - __main__ - INFO - Results saved to results\result_PC-FIN_deepseek-r1_14b.json
+2025-08-12 22:51:49,047 - __main__ - INFO - Test completed successfully. Results saved to results/result_PC-FIN_deepseek-r1_14b.json
+2025-08-12 22:51:49,047 - __main__ - INFO - Test completed successfully
