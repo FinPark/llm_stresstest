@@ -2,43 +2,77 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Status
+## Project Overview
 
-This is currently an empty project directory. This CLAUDE.md file will be updated as the project develops.
+LLM Stress Test Tool - A robust Python application for testing Large Language Models (LLMs) performance and hardware requirements. The tool sends configurable batches of questions to LLM APIs and collects detailed performance metrics.
 
-## Development Setup
+## Development Commands
 
-Since this appears to be a new project, consider the following based on the project name "llm_stresstest":
+```bash
+# Activate virtual environment
+source .venv/bin/activate
 
-### For Python Projects
-- Use virtual environments: `python -m venv venv` and `source venv/bin/activate`
-- Install dependencies: `pip install -r requirements.txt` (once created)
-- Run tests: `pytest` or `python -m unittest`
+# Install/update dependencies
+uv sync
 
-### For JavaScript/TypeScript Projects  
-- Install dependencies: `npm install` or `yarn install`
-- Run development server: `npm run dev` or `yarn dev`
-- Run tests: `npm test` or `yarn test`
-- Build for production: `npm run build` or `yarn build`
+# Run the stress test
+python llm_stresstest.py <output_filename>
+# Example: python llm_stresstest.py results_PC_FIN_qwen13b
+
+# Add new dependencies
+uv add <package_name>
+```
 
 ## Project Structure
 
-As this project develops, update this section with:
-- Main directories and their purposes
-- Key architectural decisions
-- Important patterns and conventions
+```
+llm_stresstest/
+├── config.json          # Test configuration (questions count, concurrency, timeout, etc.)
+├── questions.json       # Question bank (234 questions in German)
+├── llm_stresstest.py   # Main application with async processing
+├── results/            # Output directory for test results
+├── projectplan.md      # Detailed project planning and architecture
+└── *.log              # Log files with timestamps
+```
 
-## Testing Guidelines
+## Architecture
 
-Given the project name suggests stress testing for LLMs:
-- Focus on creating comprehensive test suites
-- Document test scenarios and expected behaviors
-- Consider edge cases and performance metrics
+- **Async Processing**: Uses `asyncio` and `aiohttp` for concurrent request handling
+- **OpenAI-Compatible API**: Works with any OpenAI-compatible endpoint (Ollama, vLLM, etc.)
+- **Robust Error Handling**: Comprehensive try-catch blocks, no crashes on errors
+- **Detailed Logging**: File and console logging with timestamps
+- **Structured Output**: JSON results with metadata, individual results, and aggregates
 
-## Notes
+## Configuration (config.json)
 
-This file should be updated as the project develops to include:
-- Specific build and test commands
-- Architecture documentation
-- Technology stack details
-- Development workflow specifics
+```json
+{
+    "questions": 5,           // Number of questions to process
+    "concurrent": 1,          // Parallel requests (1 = sequential)
+    "url": "http://...",     // LLM API endpoint
+    "model": "model_name",   // Model identifier
+    "timeout": 120.0,        // Request timeout in seconds
+    "max_keepalive_connections": 20  // Connection pool size
+}
+```
+
+## Output Format
+
+Results are saved in `results/<filename>.json` with:
+- **meta**: Test metadata (timestamps, server, model, duration)
+- **results**: Individual question results (question, answer, time, tokens)
+- **aggregate**: Statistics (sum, avg, min, max for runtime and tokens)
+
+## Error Handling
+
+- Connection failures abort immediately with clear error messages
+- Individual question failures don't stop the test
+- Emergency result saving if primary save fails
+- All errors logged with stack traces in debug mode
+
+## Testing Considerations
+
+- Always verify connection before running tests
+- Monitor log files for detailed execution info
+- Check results JSON for error messages in answers
+- Use concurrent > 1 for stress testing server capacity
