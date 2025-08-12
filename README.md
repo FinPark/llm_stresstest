@@ -193,17 +193,33 @@ streamlit run llm_auswertung.py --server.port 8502
 
 ### Dashboard-Features
 
-- **📊 Übersicht**: Gesamtstatistiken und Tabellenansicht aller Tests
+- **📊 Übersicht**: Gesamtstatistiken und Tabellenansicht aller Tests mit Vergleichbarkeits-Hinweisen
 - **📝 Log-Analyse**: Durchsuchen und Filtern von Logs, automatische Fehleranzeige
-- **⚡ Performance**: Token/Zeit-Analyse, Performance-Rankings, Effizienz-Matrix
+- **⚡ Performance**: 
+  - Token/Zeit-Analyse mit normalisierten Metriken
+  - Performance-Rankings und Effizienz-Matrix
+  - Normalisierte Vergleichsmetriken für faire Bewertungen
 - **🔄 Vergleiche**: 
   - Gleiche Modelle auf verschiedenen Servern
   - Verschiedene Modelle auf gleichem Server
-  - Interaktive Balkengrafiken
+  - Interaktive Balkengrafiken mit normalisierten Werten
+  - Detailtabellen mit allen relevanten Spalten
 - **📈 Qualitätsmetriken**: 
   - Radar-Charts für Metrik-Vergleiche
   - Box-Plots für Verteilungen
   - Detaillierte Statistiken
+
+### Normalisierte Metriken für Vergleichbarkeit
+
+Das Dashboard bietet normalisierte Metriken für faire Vergleiche zwischen Tests mit unterschiedlichen Konfigurationen:
+
+- **Performance Normalized**: Token/s (bleibt unverändert, da bereits normalisiert)
+- **Quality Normalized**: Durchschnittliche Qualitätsbewertung (bleibt unverändert)
+- **Concurrent Efficiency**: Performance pro parallel Thread (Performance ÷ concurrent)
+- **Throughput per Minute**: Fragen pro Minute basierend auf durchschnittlicher Antwortzeit
+- **Load Efficiency**: Anteil der Netto-Inferenzzeit (ohne LLM-Ladezeit) in Prozent
+
+Diese Metriken ermöglichen faire Vergleiche zwischen Tests mit unterschiedlichen `questions` und `concurrent` Einstellungen.
 
 ### Unterstützte Plattformen
 

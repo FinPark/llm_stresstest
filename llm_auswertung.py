@@ -473,6 +473,31 @@ class LLMAnalyzer:
             else:
                 row['performance'] = 0
             
+            # Normalisierte Metriken für Vergleichbarkeit
+            questions_count = row['questions'] if row['questions'] > 0 else 1
+            concurrent_factor = row['concurrent'] if row['concurrent'] > 0 else 1
+            
+            # Normalisierte Performance (pro Frage, sequential)
+            row['performance_normalized'] = row['performance']  # Token/s bleibt gleich
+            
+            # Normalisierte Qualität (bleibt gleich, da durchschnittlich)
+            row['quality_normalized'] = row['quality_avg']
+            
+            # Concurrent-Effizienz (Performance pro concurrent thread)
+            row['concurrent_efficiency'] = round(row['performance'] / concurrent_factor, 2) if concurrent_factor > 0 else 0
+            
+            # Durchsatz pro Minute (normalisiert)
+            if row['runtime_avg'] > 0:
+                row['throughput_per_min'] = round((60 * 1000) / row['runtime_avg'], 2)  # Fragen pro Minute
+            else:
+                row['throughput_per_min'] = 0
+            
+            # Load time efficiency (Load time vs Runtime)
+            if row['runtime_avg'] > 0:
+                row['load_efficiency'] = round((row['runtime_avg'] - row['llm_load_time']) / row['runtime_avg'] * 100, 1)
+            else:
+                row['load_efficiency'] = 0
+            
             rows.append(row)
         
         return pd.DataFrame(rows)
@@ -586,11 +611,27 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     
     st.markdown("---")
     
+    # Vergleichbarkeits-Hinweis
+    questions_variance = df['questions'].nunique()
+    concurrent_variance = df['concurrent'].nunique()
+    
+    if questions_variance > 1 or concurrent_variance > 1:
+        questions_list = [int(x) for x in sorted(df['questions'].unique())]
+        concurrent_list = [int(x) for x in sorted(df['concurrent'].unique())]
+        
+        st.info(f"""
+        ℹ️ **Vergleichbarkeit**: Die Tests verwenden unterschiedliche Konfigurationen:
+        - {questions_variance} verschiedene Fragen-Anzahlen: {questions_list}
+        - {concurrent_variance} verschiedene Concurrent-Einstellungen: {concurrent_list}
+        
+        Für faire Vergleiche werden normalisierte Metriken verwendet (siehe Performance-Bereich).
+        """)
+    
     # Übersichtstabelle
     st.subheader("📋 Alle Tests")
     
-    # Spalten auswählen
-    display_cols = ['filename', 'server', 'model', 'questions', 'runtime_avg', 'token_avg', 'quality_avg', 'performance']
+    # Spalten auswählen - erweitert um normalisierte Metriken
+    display_cols = ['filename', 'server', 'model', 'questions', 'concurrent', 'runtime_avg', 'token_avg', 'quality_avg', 'performance', 'throughput_per_min']
     display_df = df[display_cols].copy()
     
     # Formatierung
@@ -606,10 +647,12 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
             'server': st.column_config.TextColumn('Server'),
             'model': st.column_config.TextColumn('Modell'),
             'questions': st.column_config.NumberColumn('Fragen'),
+            'concurrent': st.column_config.NumberColumn('Parallel'),
             'runtime_avg': st.column_config.NumberColumn('Ø Zeit (ms)', format="%.1f"),
             'token_avg': st.column_config.NumberColumn('Ø Tokens'),
             'quality_avg': st.column_config.NumberColumn('Ø Qualität', format="%.3f"),
-            'performance': st.column_config.NumberColumn('Performance (T/s)', format="%.2f")
+            'performance': st.column_config.NumberColumn('Performance (T/s)', format="%.2f"),
+            'throughput_per_min': st.column_config.NumberColumn('Durchsatz (/min)', format="%.2f")
         }
     )
     
@@ -766,8 +809,33 @@ def show_performance(df: pd.DataFrame, results: List[Dict]):
     
     st.markdown("---")
     
-    # Performance-Metriken
-    st.subheader("📊 Performance-Metriken (Tokens/Sekunde)")
+    # Performance-Metriken mit Normalisierung
+    st.subheader("📊 Performance-Metriken")
+    
+    # Info über normalisierte Metriken
+    st.info("""
+    **Normalisierte Metriken für Vergleichbarkeit:**
+    - **Performance**: Tokens/Sekunde (unabhängig von Fragen-Anzahl)
+    - **Concurrent-Effizienz**: Performance pro parallelem Thread
+    - **Durchsatz**: Fragen pro Minute
+    - **Load-Effizienz**: Anteil der Netto-Inferenzzeit (ohne Ladezeit)
+    """)
+    
+    # Metriken in Spalten
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        avg_perf = df['performance'].mean()
+        st.metric("Ø Performance (T/s)", f"{avg_perf:.2f}")
+    with col2:
+        avg_throughput = df['throughput_per_min'].mean()
+        st.metric("Ø Durchsatz (/min)", f"{avg_throughput:.2f}")
+    with col3:
+        avg_concurrent_eff = df['concurrent_efficiency'].mean()
+        st.metric("Ø Concurrent-Effizienz", f"{avg_concurrent_eff:.2f}")
+    with col4:
+        avg_load_eff = df['load_efficiency'].mean()
+        st.metric("Ø Load-Effizienz (%)", f"{avg_load_eff:.1f}")
     
     # Scatter Plot: Runtime vs Tokens
     fig_scatter = px.scatter(
@@ -776,16 +844,16 @@ def show_performance(df: pd.DataFrame, results: List[Dict]):
         y='token_avg',
         color='model',
         size='questions',
-        hover_data=['server', 'quality_avg', 'llm_load_time'],
-        title='Runtime vs. Tokens',
+        hover_data=['server', 'quality_avg', 'concurrent', 'throughput_per_min'],
+        title='Runtime vs. Tokens (Größe = Anzahl Fragen)',
         labels={'runtime_avg': 'Durchschnittliche Laufzeit (ms)', 'token_avg': 'Durchschnittliche Tokens'}
     )
     st.plotly_chart(fig_scatter, use_container_width=True)
     
-    # Performance Ranking
-    st.subheader("🏆 Performance-Ranking")
+    # Performance Ranking - normalisiert
+    st.subheader("🏆 Performance-Ranking (normalisiert)")
     
-    perf_df = df[['model', 'server', 'performance', 'runtime_avg', 'token_avg', 'quality_avg']].copy()
+    perf_df = df[['model', 'server', 'questions', 'concurrent', 'performance', 'concurrent_efficiency', 'throughput_per_min', 'load_efficiency', 'quality_avg']].copy()
     perf_df = perf_df.sort_values('performance', ascending=False)
     
     # Bar Chart
@@ -860,6 +928,11 @@ def show_comparisons(df: pd.DataFrame, results: List[Dict]):
     """Zeigt Vergleichsanalysen"""
     st.header("🔄 Modell- und Server-Vergleiche")
     
+    # Hinweis auf Normalisierung
+    st.info("""
+    📊 **Alle Vergleiche verwenden normalisierte Metriken** für faire Bewertung trotz unterschiedlicher Test-Konfigurationen.
+    """)
+    
     # Vergleichstyp auswählen
     comparison_type = st.radio(
         "Vergleichstyp wählen:",
@@ -900,10 +973,11 @@ def show_comparisons(df: pd.DataFrame, results: List[Dict]):
                 )
                 st.plotly_chart(fig_quality, use_container_width=True)
             
-            # Detailtabelle
+            # Detailtabelle mit normalisierten Metriken
             st.subheader(f"📋 Details für {selected_model}")
+            detail_cols = ['server', 'questions', 'concurrent', 'runtime_avg', 'performance', 'concurrent_efficiency', 'throughput_per_min', 'quality_avg']
             st.dataframe(
-                model_df[['server', 'runtime_avg', 'token_avg', 'quality_avg', 'performance']],
+                model_df[detail_cols],
                 use_container_width=True,
                 hide_index=True
             )
@@ -922,45 +996,44 @@ def show_comparisons(df: pd.DataFrame, results: List[Dict]):
             # Balkengrafik mit allen Modellen
             st.subheader(f"📊 Modell-Vergleich auf {selected_server}")
             
-            # Multi-Metrik Balkendiagramm
-            metrics = ['runtime_avg', 'token_avg', 'quality_avg', 'performance']
-            
+            # Multi-Metrik Balkendiagramm mit normalisierten Metriken
             fig = make_subplots(
                 rows=2, cols=2,
-                subplot_titles=('Durchschnittliche Laufzeit (ms)', 'Durchschnittliche Tokens',
-                               'Durchschnittliche Qualität', 'Performance (T/s)')
-            )
-            
-            # Runtime
-            fig.add_trace(
-                go.Bar(x=server_df['model'], y=server_df['runtime_avg'], name='Runtime'),
-                row=1, col=1
-            )
-            
-            # Tokens
-            fig.add_trace(
-                go.Bar(x=server_df['model'], y=server_df['token_avg'], name='Tokens'),
-                row=1, col=2
-            )
-            
-            # Quality
-            fig.add_trace(
-                go.Bar(x=server_df['model'], y=server_df['quality_avg'], name='Quality'),
-                row=2, col=1
+                subplot_titles=('Performance (T/s)', 'Concurrent-Effizienz',
+                               'Durchsatz (/min)', 'Qualität (normalisiert)')
             )
             
             # Performance
             fig.add_trace(
                 go.Bar(x=server_df['model'], y=server_df['performance'], name='Performance'),
+                row=1, col=1
+            )
+            
+            # Concurrent Efficiency
+            fig.add_trace(
+                go.Bar(x=server_df['model'], y=server_df['concurrent_efficiency'], name='Concurrent Eff.'),
+                row=1, col=2
+            )
+            
+            # Throughput
+            fig.add_trace(
+                go.Bar(x=server_df['model'], y=server_df['throughput_per_min'], name='Durchsatz'),
+                row=2, col=1
+            )
+            
+            # Quality (normalized)
+            fig.add_trace(
+                go.Bar(x=server_df['model'], y=server_df['quality_normalized'], name='Quality'),
                 row=2, col=2
             )
             
             fig.update_layout(height=600, showlegend=False)
             st.plotly_chart(fig, use_container_width=True)
             
-            # Ranking-Tabelle
-            st.subheader("🏆 Modell-Ranking")
-            ranking_df = server_df[['model', 'runtime_avg', 'token_avg', 'quality_avg', 'performance']].copy()
+            # Ranking-Tabelle mit normalisierten Metriken
+            st.subheader("🏆 Modell-Ranking (normalisiert)")
+            ranking_cols = ['model', 'questions', 'concurrent', 'performance', 'concurrent_efficiency', 'throughput_per_min', 'quality_normalized']
+            ranking_df = server_df[ranking_cols].copy()
             ranking_df = ranking_df.sort_values('performance', ascending=False)
             
             st.dataframe(
