@@ -581,9 +581,30 @@ class LLMStressTest:
         tasks = [self.send_question(q, session) for q in questions_batch]
         return await asyncio.gather(*tasks)
     
+    def check_output_file(self):
+        """Check if output file already exists and handle accordingly"""
+        output_path = Path('results') / f"{self.output_filename}.json"
+        
+        # Prüfe ob Datei bereits existiert
+        if output_path.exists():
+            logger.warning(f"Output file {output_path} already exists!")
+            print(f"\n⚠️  Die Datei '{output_path}' existiert bereits.")
+            response = input("Möchten Sie die Datei überschreiben? (j/n): ").strip().lower()
+            
+            if response not in ['j', 'ja', 'y', 'yes']:
+                # Generiere alternativen Dateinamen mit Timestamp
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                alternative_name = f"{self.output_filename}_{timestamp}"
+                self.output_filename = alternative_name
+                logger.info(f"Using alternative filename: {alternative_name}")
+                print(f"✅ Speichere unter alternativem Namen: {alternative_name}.json")
+
     async def run_test(self) -> bool:
         """Run the complete stress test"""
         try:
+            # Prüfe Output-Datei gleich zu Beginn
+            self.check_output_file()
+            
             if not await self.test_connection():
                 logger.error("Connection test failed. Aborting.")
                 return False
@@ -698,20 +719,6 @@ class LLMStressTest:
     def save_results(self, total_duration_ms: float):
         """Save test results to JSON file"""
         output_path = Path('results') / f"{self.output_filename}.json"
-        
-        # Prüfe ob Datei bereits existiert
-        if output_path.exists():
-            logger.warning(f"Output file {output_path} already exists!")
-            print(f"\n⚠️  Die Datei '{output_path}' existiert bereits.")
-            response = input("Möchten Sie die Datei überschreiben? (j/n): ").strip().lower()
-            
-            if response not in ['j', 'ja', 'y', 'yes']:
-                # Generiere alternativen Dateinamen mit Timestamp
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                alternative_name = f"{self.output_filename}_{timestamp}"
-                output_path = Path('results') / f"{alternative_name}.json"
-                logger.info(f"Using alternative filename: {output_path}")
-                print(f"✅ Speichere unter alternativem Namen: {output_path}")
         
         # Meta-Daten zusammenstellen
         meta_data = {
