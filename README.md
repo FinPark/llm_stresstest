@@ -193,7 +193,14 @@ streamlit run llm_auswertung.py --server.port 8502
 
 ### Dashboard-Features
 
-- **📊 Übersicht**: Gesamtstatistiken und Tabellenansicht aller Tests mit Vergleichbarkeits-Hinweisen
+- **📊 Übersicht**: 
+  - Gesamtstatistiken und Tabellenansicht aller Tests mit Vergleichbarkeits-Hinweisen
+  - **Globale Performance-Analyse**: Aggregierte Performance-Metriken pro Modell über alle Server
+    - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels, Farbkodierung nach Server)
+    - Performance-Ranking Tabelle mit Min/Max/Durchschnitt
+  - **Globale Qualitäts-Analyse**: Aggregierte Qualitäts-Metriken pro Modell über alle Server
+    - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels, Farbkodierung nach Server)
+    - Qualitäts-Ranking Tabelle
 - **📝 Log-Analyse**: Durchsuchen und Filtern von Logs, automatische Fehleranzeige
 - **⚡ Performance**: 
   - Token/Zeit-Analyse mit normalisierten Metriken

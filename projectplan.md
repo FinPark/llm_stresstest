@@ -209,6 +209,24 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
 - **Elegante Animationen**: Smooth Transitions und Schatten-Effekte
 - **Responsive Design**: Optimiert für verschiedene Bildschirmgrößen
 
+### Globale Analyse-Features ✅ IMPLEMENTIERT
+- **Globale Performance-Analyse** in der Übersichtsseite:
+  - Aggregierte Performance-Metriken pro Modell über alle Server hinweg
+  - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels)
+  - Farbkodierung nach Server mit Legende für bessere Übersicht
+  - Performance-Ranking Tabelle mit Min/Max/Durchschnitt und Anzahl Tests
+  - Gekürzte Modell- und Server-Namen für bessere Lesbarkeit
+- **Globale Qualitäts-Analyse** in der Übersichtsseite:
+  - Aggregierte Qualitäts-Metriken pro Modell über alle Server hinweg
+  - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels)
+  - Farbkodierung nach Server mit Legende
+  - Qualitäts-Ranking Tabelle mit Min/Max/Durchschnitt
+  - Hover-Details mit vollständigen Informationen
+- **Visualisierungs-Verbesserungen**:
+  - Mehrzeilige Labels (Modell + Server in separaten Zeilen)
+  - Gekürzte Namen für bessere Darstellung in Diagrammen
+  - Entfernung der Performance-Verteilungs-Box-Plots (durch bessere globale Analyse ersetzt)
+
 ### Vergleichbarkeits-Features ✅ IMPLEMENTIERT
 - **Normalisierte Metriken** in get_dataframe() für faire Vergleiche:
   - `concurrent_efficiency`: Performance pro Thread (Performance ÷ concurrent)

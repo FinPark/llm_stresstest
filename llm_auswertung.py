@@ -656,6 +656,122 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
         }
     )
     
+    st.markdown("---")
+    
+    # Globale Performance-Analyse aller LLMs
+    st.subheader("🚀 Globale Performance-Analyse")
+    st.caption("Performance aller getesteten LLMs über alle Server hinweg")
+    
+    # Performance-Ranking aller LLMs (normalisiert)
+    perf_ranking = df.groupby('model').agg({
+        'performance': ['mean', 'max', 'min', 'count'],
+        'concurrent_efficiency': 'mean',
+        'throughput_per_min': 'mean',
+        'quality_avg': 'mean'
+    }).round(2)
+    
+    # Flatten column names
+    perf_ranking.columns = ['_'.join(col).strip() for col in perf_ranking.columns]
+    perf_ranking = perf_ranking.reset_index()
+    perf_ranking = perf_ranking.sort_values('performance_mean', ascending=False)
+    
+    # Performance-Chart - Ein Eintrag je Modell+Server
+    df_perf = df.copy()
+    df_perf['model_short'] = df_perf['model'].str.replace(':latest', '').str.replace(':12b', '').str.replace(':14b', '').str.replace(':8b', '')
+    df_perf['server_short'] = df_perf['server'].str.replace('MacBook Pro ', 'MBP ').str.replace('localhost', 'Local')
+    df_perf['display_name'] = df_perf['model_short'] + '<br>' + df_perf['server_short']
+    
+    fig_perf_global = px.bar(
+        df_perf.sort_values('performance', ascending=False),
+        x='display_name',
+        y='performance',
+        color='server',
+        title='Performance nach Modell und Server',
+        labels={'performance': 'Performance (T/s)', 'display_name': 'Modell + Server'},
+        hover_data=['model', 'server', 'questions', 'concurrent']
+    )
+    fig_perf_global.update_layout(
+        height=500,
+        xaxis_title="Modell + Server",
+        showlegend=True,
+        legend=dict(title="Server")
+    )
+    st.plotly_chart(fig_perf_global, use_container_width=True)
+    
+    # Performance-Ranking Tabelle
+    st.dataframe(
+        perf_ranking,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            'model': st.column_config.TextColumn('Modell'),
+            'performance_mean': st.column_config.NumberColumn('Ø Performance (T/s)', format="%.2f"),
+            'performance_max': st.column_config.NumberColumn('Max Performance', format="%.2f"),
+            'performance_min': st.column_config.NumberColumn('Min Performance', format="%.2f"),
+            'performance_count': st.column_config.NumberColumn('Tests'),
+            'concurrent_efficiency_mean': st.column_config.NumberColumn('Ø Concurrent-Eff.', format="%.2f"),
+            'throughput_per_min_mean': st.column_config.NumberColumn('Ø Durchsatz (/min)', format="%.2f"),
+            'quality_avg_mean': st.column_config.NumberColumn('Ø Qualität', format="%.3f")
+        }
+    )
+    
+    st.markdown("---")
+    
+    # Globale Qualitäts-Analyse aller LLMs
+    st.subheader("⭐ Globale Qualitäts-Analyse")
+    st.caption("Qualität aller getesteten LLMs über alle Server hinweg")
+    
+    # Qualitäts-Ranking aller LLMs
+    quality_ranking = df.groupby('model').agg({
+        'quality_avg': ['mean', 'max', 'min', 'count'],
+        'performance': 'mean',
+        'concurrent_efficiency': 'mean'
+    }).round(3)
+    
+    # Flatten column names
+    quality_ranking.columns = ['_'.join(col).strip() for col in quality_ranking.columns]
+    quality_ranking = quality_ranking.reset_index()
+    quality_ranking = quality_ranking.sort_values('quality_avg_mean', ascending=False)
+    
+    # Qualitäts-Chart - Ein Eintrag je Modell+Server
+    df_quality = df.copy()
+    df_quality['model_short'] = df_quality['model'].str.replace(':latest', '').str.replace(':12b', '').str.replace(':14b', '').str.replace(':8b', '')
+    df_quality['server_short'] = df_quality['server'].str.replace('MacBook Pro ', 'MBP ').str.replace('localhost', 'Local')
+    df_quality['display_name'] = df_quality['model_short'] + '<br>' + df_quality['server_short']
+    
+    fig_quality_global = px.bar(
+        df_quality.sort_values('quality_avg', ascending=False),
+        x='display_name',
+        y='quality_avg',
+        color='server',
+        title='Qualität nach Modell und Server',
+        labels={'quality_avg': 'Qualität', 'display_name': 'Modell + Server'},
+        hover_data=['model', 'server', 'questions', 'concurrent']
+    )
+    fig_quality_global.update_layout(
+        height=500,
+        xaxis_title="Modell + Server",
+        showlegend=True,
+        legend=dict(title="Server")
+    )
+    st.plotly_chart(fig_quality_global, use_container_width=True)
+    
+    # Qualitäts-Ranking Tabelle
+    st.dataframe(
+        quality_ranking,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            'model': st.column_config.TextColumn('Modell'),
+            'quality_avg_mean': st.column_config.NumberColumn('Ø Qualität', format="%.3f"),
+            'quality_avg_max': st.column_config.NumberColumn('Max Qualität', format="%.3f"),
+            'quality_avg_min': st.column_config.NumberColumn('Min Qualität', format="%.3f"),
+            'quality_avg_count': st.column_config.NumberColumn('Tests'),
+            'performance_mean': st.column_config.NumberColumn('Ø Performance (T/s)', format="%.2f"),
+            'concurrent_efficiency_mean': st.column_config.NumberColumn('Ø Concurrent-Eff.', format="%.2f")
+        }
+    )
+    
     # Download-Option
     csv = df.to_csv(index=False)
     st.download_button(

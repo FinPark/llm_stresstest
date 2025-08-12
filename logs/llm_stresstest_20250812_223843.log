@@ -1,0 +1,36 @@
+2025-08-12 22:38:43,436 - __main__ - INFO - Starting LLM Stress Test
+2025-08-12 22:38:43,436 - __main__ - INFO - Configuration loaded: {'questions': 10, 'concurrent': 2, 'url': 'http://localhost:11434', 'server_name': 'MacBook Pro M1', 'model': 'deepseek-r1:14b', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-12 22:38:43,436 - __main__ - INFO - Generated filename: result_MacBook-Pro-M1_deepseek-r1_14b
+2025-08-12 22:38:43,437 - __main__ - INFO - Loaded 10 questions
+2025-08-12 22:38:43,472 - __main__ - INFO - Testing connection to http://localhost:11434/v1
+2025-08-12 22:38:43,592 - httpx - INFO - HTTP Request: GET http://localhost:11434/v1/models "HTTP/1.1 200 OK"
+2025-08-12 22:38:43,594 - __main__ - INFO - Connection successful. Available models: ['deepseek-r1:14b', 'gemma3n:e4b', 'Qwen2.5:14b-instruct', 'llama3-groq-tool-use:8b', 'gemma3:12b', 'mistral:latest', 'bge-m3:latest', 'mxbai-embed-large:latest', 'bge-large:latest', 'gemma2:latest', 'jina/jina-embeddings-v2-base-de:latest', 'jeffh/intfloat-multilingual-e5-large:f16', 'nomic-embed-text:latest', 'paraphrase-multilingual:latest']
+2025-08-12 22:38:43,594 - __main__ - INFO - Starting warmup phase to measure LLM loading time...
+2025-08-12 22:38:59,215 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:38:59,225 - __main__ - INFO - [WARMUP] Model loading completed in 15631.1ms
+2025-08-12 22:38:59,225 - __main__ - INFO - Running first question again without loading time...
+2025-08-12 22:39:04,174 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:39:04,178 - __main__ - INFO - Question processed in 4951.3ms, 110 tokens, quality: 0.541
+2025-08-12 22:39:04,179 - __main__ - INFO - LLM load time calculated: 10679.8ms (warmup: 15631.1ms, real: 4951.3ms)
+2025-08-12 22:39:04,179 - __main__ - INFO - Processing remaining questions with concurrency: 2
+2025-08-12 22:39:47,052 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:39:47,064 - __main__ - INFO - Question processed in 42874.8ms, 500 tokens, quality: 0.446
+2025-08-12 22:39:47,155 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:39:47,158 - __main__ - INFO - Question processed in 42977.0ms, 500 tokens, quality: 0.496
+2025-08-12 22:40:29,827 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:40:29,831 - __main__ - INFO - Question processed in 42672.1ms, 500 tokens, quality: 0.527
+2025-08-12 22:40:29,832 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:40:29,834 - __main__ - INFO - Question processed in 42674.2ms, 500 tokens, quality: 0.45
+2025-08-12 22:41:12,658 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:41:12,660 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:41:12,665 - __main__ - INFO - Question processed in 42827.8ms, 500 tokens, quality: 0.432
+2025-08-12 22:41:12,668 - __main__ - INFO - Question processed in 42829.4ms, 500 tokens, quality: 0.575
+2025-08-12 22:41:55,084 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:41:55,096 - __main__ - INFO - Question processed in 42424.1ms, 500 tokens, quality: 0.513
+2025-08-12 22:41:55,097 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:41:55,098 - __main__ - INFO - Question processed in 42428.8ms, 500 tokens, quality: 0.504
+2025-08-12 22:42:20,515 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:42:20,522 - __main__ - INFO - Question processed in 25422.8ms, 500 tokens, quality: 0.5
+2025-08-12 22:42:20,524 - __main__ - INFO - Results saved to results/result_MacBook-Pro-M1_deepseek-r1_14b.json
+2025-08-12 22:42:20,524 - __main__ - INFO - Test completed successfully. Results saved to results/result_MacBook-Pro-M1_deepseek-r1_14b.json
+2025-08-12 22:42:20,525 - __main__ - INFO - Test completed successfully

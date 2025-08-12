@@ -25,3 +25,12 @@
 2025-08-12 22:27:24,602 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
 2025-08-12 22:27:24,603 - __main__ - INFO - Question processed in 39801.3ms, 500 tokens, quality: 0.594
 2025-08-12 22:27:24,605 - __main__ - INFO - Question processed in 39803.5ms, 500 tokens, quality: 0.54
+2025-08-12 22:28:04,102 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:28:04,106 - __main__ - INFO - Question processed in 39499.3ms, 500 tokens, quality: 0.577
+2025-08-12 22:28:04,196 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:28:04,199 - __main__ - INFO - Question processed in 39592.1ms, 500 tokens, quality: 0.508
+2025-08-12 22:28:26,851 - httpx - INFO - HTTP Request: POST http://localhost:11434/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-12 22:28:26,856 - __main__ - INFO - Question processed in 22656.2ms, 500 tokens, quality: 0.594
+2025-08-12 22:28:26,858 - __main__ - INFO - Results saved to results/result_MacBook-Pro-M1_gemma3_12b.json
+2025-08-12 22:28:26,858 - __main__ - INFO - Test completed successfully. Results saved to results/result_MacBook-Pro-M1_gemma3_12b.json
+2025-08-12 22:28:26,858 - __main__ - INFO - Test completed successfully
