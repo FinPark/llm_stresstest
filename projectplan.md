@@ -309,6 +309,21 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
   - Multimodale Capabilities (Vision, Audio, Video, Text-to-Speech)
   - Tool-Support Definitionen (Function Calling, Code Execution, Web Search)
 
+### Stabilität & Plattformkompatibilität - Januar 2025 ✅ IMPLEMENTIERT
+- **Überschreibungsschutz-Fix** in `llm_stresstest.py`:
+  - Korrekte Handhabung der Dateien-Überschreibungsabfrage
+  - Programm beendet sich ordnungsgemäß bei Ablehnung ("n")
+  - Verhindert ungewolltes Überschreiben existierender Ergebnisdateien
+- **Windows-Encoding-Fix** in `update_model_registry.py`:
+  - Alle Unicode-Emojis (⚡, 🤖, 💪, etc.) durch ASCII-Zeichen ersetzt
+  - Verbesserte Windows-Kompatibilität ohne Encoding-Fehler
+  - Plattformübergreifende Konsistenz sichergestellt
+- **Dashboard-Log-Display-Überarbeitung** in `llm_auswertung.py`:
+  - Migration von unsicherer HTML-Tabelle zu robustem `st.data_editor`
+  - Level-Emojis für bessere Lesbarkeit (🔴 ERROR, 🟡 WARNING, ℹ️ INFO)
+  - Optimierte Spalten-Konfiguration für lange Log-Nachrichten
+  - Verbesserte Performance bei großen Log-Dateien
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen

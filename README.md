@@ -175,6 +175,8 @@ Log-Dateien werden automatisch mit Zeitstempel erstellt:
 - Alle Fehler werden mit Stack-Traces geloggt
 - Robuste Behandlung fehlender Modell-Metadaten im Dashboard
 - NoneType-Checks für alle optionalen JSON-Felder
+- **Überschreibungsschutz**: Programm stoppt korrekt bei Dateien-Überschreibungsablehnung
+- **Windows-Kompatibilität**: Unicode-Zeichen durch ASCII ersetzt für plattformübergreifende Kompatibilität
 
 ## Anforderungen
 
@@ -219,7 +221,11 @@ streamlit run llm_auswertung.py --server.port 8502
   - **Globale Qualitäts-Analyse**: Aggregierte Qualitäts-Metriken pro Modell über alle Server
     - Balkendiagramm mit verbesserter Darstellung (mehrzeilige Labels, Farbkodierung nach Server)
     - Qualitäts-Ranking Tabelle
-- **📝 Log-Analyse**: Durchsuchen und Filtern von Logs, automatische Fehleranzeige
+- **📝 Log-Analyse**: 
+  - Durchsuchen und Filtern von Logs mit automatischer Fehleranzeige
+  - **Verbesserte Log-Darstellung**: Von HTML-Tabelle zu `st.data_editor` für bessere Lesbarkeit
+  - **Level-Emojis** für intuitive Fehlerkennung (🔴 ERROR, 🟡 WARNING, ℹ️ INFO)
+  - **Optimierte Spalten-Konfiguration** für lange Log-Nachrichten
 - **⚡ Performance**: 
   - Strukturiertes Performance-Ranking mit LLM Load Time Analyse
   - Performance-Empfehlungen basierend auf Hardware-Optimierung

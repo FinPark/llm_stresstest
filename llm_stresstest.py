@@ -582,7 +582,7 @@ class LLMStressTest:
         tasks = [self.send_question(q, session) for q in questions_batch]
         return await asyncio.gather(*tasks)
     
-    def check_output_file(self):
+    def check_output_file(self) -> bool:
         """Check if output file already exists and handle accordingly"""
         output_path = Path('results') / f"{self.output_filename}.json"
         
@@ -593,18 +593,18 @@ class LLMStressTest:
             response = input("Möchten Sie die Datei überschreiben? (j/n): ").strip().lower()
             
             if response not in ['j', 'ja', 'y', 'yes']:
-                # Generiere alternativen Dateinamen mit Timestamp
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                alternative_name = f"{self.output_filename}_{timestamp}"
-                self.output_filename = alternative_name
-                logger.info(f"Using alternative filename: {alternative_name}")
-                print(f"✅ Speichere unter alternativem Namen: {alternative_name}.json")
+                print("❌ Test abgebrochen. Datei wird nicht überschrieben.")
+                logger.info("Test cancelled by user - file not overwritten")
+                return False
+        
+        return True
 
     async def run_test(self) -> bool:
         """Run the complete stress test"""
         try:
             # Prüfe Output-Datei gleich zu Beginn
-            self.check_output_file()
+            if not self.check_output_file():
+                return False
             
             if not await self.test_connection():
                 logger.error("Connection test failed. Aborting.")

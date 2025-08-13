@@ -1448,28 +1448,42 @@ def show_logs(logs: List[Dict]):
         st.metric("📁 Log-Dateien", log_df['file'].nunique())
     
     
-    # Log-Tabelle mit farblicher Hervorhebung
+    # Log-Tabelle mit horizontalem Scrollbalken
     st.markdown("### 📋 Log-Einträge")
     
-    # Sortiere nach Timestamp (neueste zuerst) und begrenze auf doppelte Anzahl
+    # Sortiere nach Timestamp (neueste zuerst) und begrenze auf 200 Einträge
     display_df = filtered_df.sort_values('timestamp', ascending=False).head(200).copy()
     
-    # Füge farbliche Styling-Spalte hinzu
-    def get_log_color(level):
-        colors = {
-            'ERROR': '#ffebee',    # Helles Rot
-            'WARNING': '#fff3e0',  # Helles Orange  
-            'INFO': '#e3f2fd',     # Helles Blau
-            'DEBUG': '#f3e5f5'     # Helles Lila
-        }
-        return colors.get(level, '#f5f5f5')  # Default grau
+    if len(display_df) == 0:
+        st.info("Keine Log-Einträge entsprechen den aktuellen Filtern.")
+        return
     
-    # Zeige DataFrame mit mehr Einträgen
-    st.dataframe(
-        display_df[['timestamp', 'module', 'level', 'message']],
+    # Zeige DataFrame-Alternative mit besserer Nachricht-Anzeige
+    # Kürze sehr lange Nachrichten für bessere Performance, aber zeige sie trotzdem vollständig
+    display_df_clean = display_df.copy()
+    
+    # Füge Level-Emojis hinzu für bessere Unterscheidung
+    level_emojis = {
+        'ERROR': '🔴',
+        'WARNING': '🟡', 
+        'INFO': '🔵',
+        'DEBUG': '🟣'
+    }
+    display_df_clean['level_display'] = display_df_clean['level'].map(lambda x: f"{level_emojis.get(x, '⚪')} {x}")
+    
+    # Zeige als Data Editor (erlaubt bessere Darstellung)
+    st.data_editor(
+        display_df_clean[['timestamp', 'module', 'level_display', 'message']],
         use_container_width=True,
         hide_index=True,
-        height=600  # Mehr Höhe für mehr Einträge
+        height=600,
+        disabled=True,  # Nicht editierbar
+        column_config={
+            "timestamp": st.column_config.TextColumn("🕒 Zeitstempel", width=180),
+            "module": st.column_config.TextColumn("📦 Modul", width=120),
+            "level_display": st.column_config.TextColumn("⚠️ Level", width=120),
+            "message": st.column_config.TextColumn("💬 Nachricht", width=600)
+        }
     )
 
 

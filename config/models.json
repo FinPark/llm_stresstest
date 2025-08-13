@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-08-13T11:27:37.008684",
+  "last_updated": "2025-08-13T12:28:36.527915",
   "models": {
     "llama3.2:latest": {
       "name": "llama3.2:latest",
@@ -102,27 +102,65 @@
       "sources": [],
       "provider": "unknown",
       "info_quality": "minimal"
+    },
+    "Qwen2.5:14b-instruct": {
+      "name": "Qwen2.5:14b-instruct",
+      "added_date": "2025-08-13T12:28:35.659394",
+      "model_type": "instruct",
+      "sources": [
+        "ollama_local",
+        "huggingface"
+      ],
+      "parameter_size": "14.8B",
+      "quantization_level": "Q4_K_M",
+      "family": "qwen2",
+      "format": "gguf",
+      "size_bytes": 8988124069,
+      "modified_at": "2025-06-29T12:37:22.749610609+02:00",
+      "source": "ollama_local",
+      "provider": "alibaba",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen2",
+        "text-generation",
+        "chat",
+        "conversational",
+        "en",
+        "arxiv:2309.00071",
+        "arxiv:2407.10671",
+        "base_model:Qwen/Qwen2.5-14B"
+      ],
+      "parameters": 14000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "large",
+      "info_quality": "good"
     }
   },
   "statistics": {
-    "total_models": 4,
-    "models_with_full_info": 3,
+    "total_models": 5,
+    "models_with_full_info": 4,
     "models_with_partial_info": 0,
     "models_without_info": 1,
     "by_provider": {
       "diluksha": 1,
       "google": 1,
       "deepseek-ai": 1,
-      "unknown": 1
+      "unknown": 1,
+      "alibaba": 1
     },
     "by_size_category": {
       "medium": 1,
-      "large": 2,
+      "large": 3,
       "unknown": 1
     },
     "by_model_type": {
       "chat": 3,
-      "reasoning": 1
+      "reasoning": 1,
+      "instruct": 1
     }
   }
 }

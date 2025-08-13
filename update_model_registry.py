@@ -32,10 +32,10 @@ class ModelRegistryUpdater:
             try:
                 with open(self.models_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    print(f"✅ Geladen: {self.models_file} mit {len(data.get('models', {}))} Modellen")
+                    print(f"[OK] Geladen: {self.models_file} mit {len(data.get('models', {}))} Modellen")
                     return data
             except Exception as e:
-                print(f"⚠️ Fehler beim Laden von {self.models_file}: {e}")
+                print(f"[WARN] Fehler beim Laden von {self.models_file}: {e}")
         
         # Neue Struktur erstellen
         return {
@@ -55,7 +55,7 @@ class ModelRegistryUpdater:
         pattern = os.path.join(self.results_dir, "*.json")
         result_files = glob.glob(pattern)
         
-        print(f"\n🔍 Scanne {len(result_files)} Result-Dateien...")
+        print(f"\n[SCAN] Scanne {len(result_files)} Result-Dateien...")
         
         for file_path in result_files:
             try:
@@ -64,11 +64,11 @@ class ModelRegistryUpdater:
                     if 'meta' in data and 'model' in data['meta']:
                         model_name = data['meta']['model']
                         models.add(model_name)
-                        print(f"   📄 {os.path.basename(file_path)}: {model_name}")
+                        print(f"   [FILE] {os.path.basename(file_path)}: {model_name}")
             except Exception as e:
-                print(f"   ⚠️ Fehler beim Lesen von {file_path}: {e}")
+                print(f"   [WARN] Fehler beim Lesen von {file_path}: {e}")
         
-        print(f"\n📊 Gefundene eindeutige Modelle: {len(models)}")
+        print(f"\n[INFO] Gefundene eindeutige Modelle: {len(models)}")
         return models
     
     def get_missing_models(self, found_models: Set[str]) -> List[str]:
@@ -77,11 +77,11 @@ class ModelRegistryUpdater:
         missing = list(found_models - existing_models)
         
         if missing:
-            print(f"\n🆕 Neue Modelle gefunden: {len(missing)}")
+            print(f"\n[NEW] Neue Modelle gefunden: {len(missing)}")
             for model in missing:
                 print(f"   - {model}")
         else:
-            print(f"\n✅ Alle Modelle bereits in Registry vorhanden")
+            print(f"\n[OK] Alle Modelle bereits in Registry vorhanden")
         
         return missing
     
@@ -132,7 +132,7 @@ class ModelRegistryUpdater:
                     return self.parse_huggingface_data(models[0])
                     
         except Exception as e:
-            print(f"      ⚠️ HF-Fehler: {e}")
+            print(f"      [WARN] HF-Fehler: {e}")
         
         return None
     
@@ -257,7 +257,7 @@ class ModelRegistryUpdater:
         if ollama_info:
             info.update(ollama_info)
             info['sources'].append('ollama_local')
-            print(f"   ✅ Ollama-Infos gefunden")
+            print(f"   [OK] Ollama-Infos gefunden")
         
         # 2. Hugging Face Infos
         time.sleep(0.5)  # Rate limiting
@@ -269,7 +269,7 @@ class ModelRegistryUpdater:
                     info[key] = value
             if 'huggingface' not in info['sources']:
                 info['sources'].append('huggingface')
-            print(f"   ✅ Hugging Face-Infos gefunden")
+            print(f"   [OK] Hugging Face-Infos gefunden")
         
         # 3. Aus Modellname extrahieren (Fallback)
         if 'parameters' not in info:
@@ -277,7 +277,7 @@ class ModelRegistryUpdater:
             if params:
                 info['parameters'] = params
                 info['parameter_estimate'] = True
-                print(f"   ℹ️ Parameter aus Name geschätzt: {params:,}")
+                print(f"   [INFO] Parameter aus Name geschätzt: {params:,}")
         
         # 4. Provider bestimmen
         if 'provider' not in info:
@@ -304,7 +304,7 @@ class ModelRegistryUpdater:
         else:
             info['info_quality'] = 'minimal'
         
-        print(f"   📊 Info-Qualität: {info['info_quality']}")
+        print(f"   [INFO] Info-Qualität: {info['info_quality']}")
         
         return info
     
@@ -353,25 +353,25 @@ class ModelRegistryUpdater:
         try:
             with open(self.models_file, 'w', encoding='utf-8') as f:
                 json.dump(self.models_data, f, indent=2, ensure_ascii=False)
-            print(f"\n✅ Gespeichert: {self.models_file}")
-            print(f"   📊 {self.models_data['statistics']['total_models']} Modelle insgesamt")
-            print(f"   ✅ {self.models_data['statistics']['models_with_full_info']} mit vollständigen Infos")
-            print(f"   ⚠️ {self.models_data['statistics']['models_with_partial_info']} mit teilweisen Infos")
-            print(f"   ❌ {self.models_data['statistics']['models_without_info']} ohne Infos")
+            print(f"\n[OK] Gespeichert: {self.models_file}")
+            print(f"   [INFO] {self.models_data['statistics']['total_models']} Modelle insgesamt")
+            print(f"   [OK] {self.models_data['statistics']['models_with_full_info']} mit vollständigen Infos")
+            print(f"   [WARN] {self.models_data['statistics']['models_with_partial_info']} mit teilweisen Infos")
+            print(f"   [ERROR] {self.models_data['statistics']['models_without_info']} ohne Infos")
         except Exception as e:
-            print(f"\n❌ Fehler beim Speichern: {e}")
+            print(f"\n[ERROR] Fehler beim Speichern: {e}")
     
     def run(self):
         """Hauptprozess: Scannt Results und aktualisiert Model Registry"""
         print("=" * 60)
-        print("🚀 LLM Model Registry Updater")
+        print("[START] LLM Model Registry Updater")
         print("=" * 60)
         
         # 1. Scan result files
         found_models = self.scan_result_files()
         
         if not found_models:
-            print("\n❌ Keine Modelle in Result-Dateien gefunden")
+            print("\n[ERROR] Keine Modelle in Result-Dateien gefunden")
             return
         
         # 2. Find missing models
@@ -379,14 +379,14 @@ class ModelRegistryUpdater:
         
         # 3. Fetch info for missing models
         if missing_models:
-            print(f"\n📡 Hole Informationen für {len(missing_models)} neue Modelle...")
+            print(f"\n[FETCH] Hole Informationen für {len(missing_models)} neue Modelle...")
             
             for model_name in missing_models:
                 try:
                     model_info = self.collect_model_info(model_name)
                     self.models_data['models'][model_name] = model_info
                 except Exception as e:
-                    print(f"\n❌ Fehler bei {model_name}: {e}")
+                    print(f"\n[ERROR] Fehler bei {model_name}: {e}")
                     # Minimale Info speichern
                     self.models_data['models'][model_name] = {
                         'name': model_name,
@@ -403,23 +403,23 @@ class ModelRegistryUpdater:
         
         # 6. Summary
         print("\n" + "=" * 60)
-        print("📈 ZUSAMMENFASSUNG")
+        print("[SUMMARY] ZUSAMMENFASSUNG")
         print("=" * 60)
         
         if missing_models:
-            print(f"✅ {len(missing_models)} neue Modelle zur Registry hinzugefügt")
+            print(f"[OK] {len(missing_models)} neue Modelle zur Registry hinzugefügt")
         else:
-            print("ℹ️ Keine neuen Modelle hinzugefügt")
+            print("[INFO] Keine neuen Modelle hinzugefügt")
         
         # Provider-Übersicht
         if self.models_data['statistics'].get('by_provider'):
-            print(f"\n📦 Modelle nach Provider:")
+            print(f"\n[PACKAGE] Modelle nach Provider:")
             for provider, count in sorted(self.models_data['statistics']['by_provider'].items()):
                 print(f"   {provider}: {count}")
         
         # Größen-Übersicht
         if self.models_data['statistics'].get('by_size_category'):
-            print(f"\n📏 Modelle nach Größe:")
+            print(f"\n[SIZE] Modelle nach Größe:")
             size_order = ['tiny', 'small', 'medium', 'large', 'xlarge', 'xxlarge', 'unknown']
             for size in size_order:
                 if size in self.models_data['statistics']['by_size_category']:
