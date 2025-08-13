@@ -1,0 +1,128 @@
+{
+  "last_updated": "2025-08-13T11:27:37.008684",
+  "models": {
+    "llama3.2:latest": {
+      "name": "llama3.2:latest",
+      "added_date": "2025-08-13T11:22:16.026852",
+      "model_type": "chat",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "diluksha",
+      "license": "unknown",
+      "tags": [
+        "tensorboard",
+        "safetensors",
+        "region:us"
+      ],
+      "source": "huggingface",
+      "parameters": 3000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "medium",
+      "info_quality": "good"
+    },
+    "gemma3:12b": {
+      "name": "gemma3:12b",
+      "added_date": "2025-08-13T11:22:16.891617",
+      "model_type": "chat",
+      "sources": [
+        "ollama_local",
+        "huggingface"
+      ],
+      "parameter_size": "12.2B",
+      "quantization_level": "Q4_K_M",
+      "family": "gemma3",
+      "format": "gguf",
+      "size_bytes": 8149190253,
+      "modified_at": "2025-05-29T20:32:42.893257463+02:00",
+      "source": "ollama_local",
+      "provider": "google",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "gemma3",
+        "image-text-to-text",
+        "conversational",
+        "arxiv:1905.07830",
+        "arxiv:1905.10044",
+        "arxiv:1911.11641",
+        "arxiv:1904.09728",
+        "arxiv:1705.03551"
+      ],
+      "parameters": 12000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "deepseek-r1:14b": {
+      "name": "deepseek-r1:14b",
+      "added_date": "2025-08-13T11:22:17.676315",
+      "model_type": "reasoning",
+      "sources": [
+        "ollama_local",
+        "huggingface"
+      ],
+      "parameter_size": "14.8B",
+      "quantization_level": "Q4_K_M",
+      "family": "qwen2",
+      "format": "gguf",
+      "size_bytes": 8988112209,
+      "modified_at": "2025-08-12T22:37:59.835713947+02:00",
+      "source": "ollama_local",
+      "provider": "deepseek-ai",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen2",
+        "text-generation",
+        "conversational",
+        "arxiv:2501.12948",
+        "license:mit",
+        "autotrain_compatible",
+        "text-generation-inference",
+        "endpoints_compatible"
+      ],
+      "parameters": 14000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": true,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "mistral-small:latest": {
+      "name": "mistral-small:latest",
+      "added_date": "2025-08-13T11:27:36.162696",
+      "model_type": "chat",
+      "sources": [],
+      "provider": "unknown",
+      "info_quality": "minimal"
+    }
+  },
+  "statistics": {
+    "total_models": 4,
+    "models_with_full_info": 3,
+    "models_with_partial_info": 0,
+    "models_without_info": 1,
+    "by_provider": {
+      "diluksha": 1,
+      "google": 1,
+      "deepseek-ai": 1,
+      "unknown": 1
+    },
+    "by_size_category": {
+      "medium": 1,
+      "large": 2,
+      "unknown": 1
+    },
+    "by_model_type": {
+      "chat": 3,
+      "reasoning": 1
+    }
+  }
+}

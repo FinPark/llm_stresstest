@@ -294,6 +294,21 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
   - Robuste Behandlung von fehlenden Modell-Metadaten in JSON-Dateien
   - Fehler verhinderte Dashboard-Start bei Dateien ohne vollständige Metadaten
 
+### Dashboard UX-Verbesserungen ✅ IMPLEMENTIERT
+- **Interaktive Info-Features** für bessere Benutzerführung:
+  - Info-Kreise (ℹ️) bei speziellen Features (Reasoning, Multimodal, Tool-Support)
+  - Navigation von Info-Buttons zur Modell-Information Seite
+  - Detaillierte Feature-Definitionen auf der Modell-Information Seite
+  - Automatisches Ausklappen der entsprechenden Info-Bereiche basierend auf URL-Parameter
+- **Session State Management**:
+  - Saubere Navigation zwischen Dashboard-Bereichen
+  - Persistenz von erweiterten Info-Bereichen während der Session
+  - Intuitive Benutzerführung zu relevanten Informationen
+- **Feature-Dokumentation erweitert**:
+  - Umfassende Erklärungen für Reasoning (CoT, ToT, ReAct, Self-Reflection)
+  - Multimodale Capabilities (Vision, Audio, Video, Text-to-Speech)
+  - Tool-Support Definitionen (Function Calling, Code Execution, Web Search)
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen

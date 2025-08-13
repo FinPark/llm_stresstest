@@ -238,6 +238,11 @@ streamlit run llm_auswertung.py --server.port 8502
   - Radar-Charts für Metrik-Vergleiche
   - Box-Plots für Verteilungen
   - Detaillierte Statistiken
+- **🏷️ Modell-Information**: 
+  - Interaktive Info-Buttons (ℹ️) bei speziellen Features
+  - Navigation zu detaillierten Feature-Erklärungen
+  - Automatisches Ausklappen relevanter Info-Bereiche
+  - Umfassende Definitionen für Reasoning, Multimodal und Tool-Support Features
 
 ### Normalisierte Metriken für Vergleichbarkeit
 

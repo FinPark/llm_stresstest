@@ -17,6 +17,7 @@ from typing import Dict, List, Any, Optional
 from openai import AsyncOpenAI
 import traceback
 from dataclasses import dataclass
+import subprocess
 
 # Optional: Für erweiterte NLP-Features
 try:
@@ -754,11 +755,46 @@ class LLMStressTest:
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(output_data, f, indent=2, ensure_ascii=False)
             logger.info(f"Results saved to {output_path}")
+            
+            # Nach erfolgreichem Speichern: Model Registry aktualisieren
+            self.update_model_registry()
+            
         except Exception as e:
             logger.error(f"Failed to save results: {e}")
             
             with open(f"emergency_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json", 'w') as f:
                 json.dump(output_data, f, indent=2, ensure_ascii=False)
+    
+    def update_model_registry(self):
+        """Update the model registry with information about the tested model"""
+        try:
+            logger.info("Updating model registry...")
+            
+            # Führe das update_model_registry.py Skript aus
+            result = subprocess.run(
+                [sys.executable, "update_model_registry.py"],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            
+            if result.returncode == 0:
+                # Parse die Ausgabe für relevante Informationen
+                output_lines = result.stdout.strip().split('\n')
+                for line in output_lines:
+                    if "neue Modelle zur Registry hinzugefügt" in line:
+                        logger.info(f"Model registry: {line.strip()}")
+                    elif "Alle Modelle bereits in Registry vorhanden" in line:
+                        logger.info("Model registry: Already up to date")
+                    elif "Info-Qualität:" in line:
+                        logger.info(f"Model registry: {line.strip()}")
+            else:
+                logger.warning(f"Model registry update failed: {result.stderr}")
+                
+        except subprocess.TimeoutExpired:
+            logger.warning("Model registry update timed out")
+        except Exception as e:
+            logger.warning(f"Could not update model registry: {e}")
 
 
 async def main():

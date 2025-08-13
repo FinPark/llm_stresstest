@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "11:27:20.845",
+    "end_date": "2025-08-13",
+    "end_time": "11:27:20.852",
+    "server": "http://localhost:11434",
+    "server_name": "TEST-MAC",
+    "model": "llama3.2:latest",
+    "concurrent": 1,
+    "questions": 1,
+    "timeout": 120.0,
+    "total_duration_ms": 7.6,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "ERROR: Error code: 404 - {'error': {'message': 'model \"llama3.2:latest\" not found, try pulling it first', 'type': 'api_error', 'param': None, 'code': None}}",
+      "time": 0.0,
+      "token": 0,
+      "quality": 0.0
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 0,
+    "runtime_avg": 0,
+    "runtime_min": 0,
+    "runtime_max": 0,
+    "token_sum": 0,
+    "token_avg": 0,
+    "token_min": 0,
+    "token_max": 0,
+    "quality_sum": 0,
+    "quality_avg": 0,
+    "quality_min": 0,
+    "quality_max": 0,
+    "llm_load_time": 0.0,
+    "cold_start_factor": 0
+  }
+}

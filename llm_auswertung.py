@@ -401,8 +401,23 @@ class LLMAnalyzer:
     def __init__(self):
         self.results_path = Path('./results')
         self.log_path = Path('logs')
+        self.config_path = Path('./config')
         self.data = []
         self.logs = []
+        self.models_info = {}
+        self.load_models_info()
+    
+    def load_models_info(self):
+        """Lädt Model-Informationen aus config/models.json"""
+        models_file = self.config_path / 'models.json'
+        if models_file.exists():
+            try:
+                with open(models_file, 'r', encoding='utf-8') as f:
+                    models_data = json.load(f)
+                    self.models_info = models_data.get('models', {})
+            except Exception as e:
+                print(f"Warning: Could not load models.json: {e}")
+                self.models_info = {}
         
     def load_all_results(self) -> List[Dict]:
         """Lädt alle JSON-Dateien aus dem results Verzeichnis"""
@@ -450,11 +465,13 @@ class LLMAnalyzer:
             meta = result.get('meta', {})
             aggregate = result.get('aggregate', {})
             
+            model_name = meta.get('model', 'Unknown')
+            
             row = {
                 'filename': result['filename'],
                 'server': meta.get('server_name', meta.get('server', 'Unknown')),  # Nutze server_name, fallback auf server/URL
                 'server_url': meta.get('server', 'Unknown'),
-                'model': meta.get('model', 'Unknown'),
+                'model': model_name,
                 'questions': meta.get('questions', 0),
                 'concurrent': meta.get('concurrent', 1),
                 'total_duration_ms': meta.get('total_duration_ms', 0),
@@ -471,6 +488,24 @@ class LLMAnalyzer:
                 'size_bytes': meta.get('size_bytes', 0),
                 'family': meta.get('family', 'Unknown')
             }
+            
+            # Model-Eigenschaften aus models.json hinzufügen
+            if model_name in self.models_info:
+                model_info = self.models_info[model_name]
+                row['multimodal'] = model_info.get('multimodal', False)
+                row['tools_support'] = model_info.get('tools_support', False)
+                row['reasoning_optimized'] = model_info.get('reasoning_optimized', False)
+                row['size_category'] = model_info.get('size_category', 'unknown')
+                row['model_type'] = model_info.get('model_type', 'unknown')
+                row['provider'] = model_info.get('provider', 'unknown')
+            else:
+                # Defaults wenn nicht in models.json
+                row['multimodal'] = False
+                row['tools_support'] = False
+                row['reasoning_optimized'] = False
+                row['size_category'] = 'unknown'
+                row['model_type'] = 'unknown'
+                row['provider'] = 'unknown'
             
             # Performance berechnen (Token/Zeit)
             if row['runtime_avg'] > 0:
@@ -553,7 +588,16 @@ class LLMAnalyzer:
 
 
 def main():
-    st.title("🔬 Finken's LLM Stresstest Dashboard")
+    # Header mit Filter-Status
+    header_col1, header_col2 = st.columns([3, 1])
+    
+    with header_col1:
+        st.title("🔬 Finken's LLM Stresstest Dashboard")
+    
+    with header_col2:
+        # Platzhalter für Filter-Status (wird später gesetzt)
+        filter_placeholder = st.empty()
+    
     st.markdown("---")
     
     # Analyzer initialisieren
@@ -569,6 +613,7 @@ def main():
     # Navigation mit custom styling
     nav_options = {
         "📊 Übersicht": {"icon": "📊", "desc": "Gesamtstatistiken & Übersicht"},
+        "🤖 Model-Information": {"icon": "🤖", "desc": "Detaillierte Model-Eigenschaften"},
         "📝 Logs": {"icon": "📝", "desc": "Log-Analyse & Fehlersuche"},
         "⚡ Performance": {"icon": "⚡", "desc": "Performance & Ladezeiten"},
         "🔄 Vergleiche": {"icon": "🔄", "desc": "Server & Modell-Vergleiche"},
@@ -603,6 +648,134 @@ def main():
     
     df = analyzer.get_dataframe()
     
+    # Model Registry Info in Sidebar
+    st.sidebar.markdown("---")
+    if analyzer.models_info:
+        st.sidebar.success(f"✅ {len(analyzer.models_info)} Modelle in Registry")
+    else:
+        st.sidebar.warning("⚠️ Keine models.json gefunden")
+        st.sidebar.info("Führe `python update_model_registry.py` aus")
+    
+    # Filter-Optionen für Model-Eigenschaften
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("🔍 Filter nach Model-Eigenschaften")
+    
+    # Size Category Filter
+    size_categories = ['all'] + sorted(df['size_category'].unique().tolist())
+    selected_size = st.sidebar.selectbox(
+        "Modellgröße:",
+        size_categories,
+        index=0,
+        help="Filtere nach Modellgröße (tiny < 1B, small 1-3B, medium 3-10B, large 10-30B, xlarge 30-100B)"
+    )
+    
+    # Model Type Filter  
+    model_types = ['all'] + sorted(df['model_type'].unique().tolist())
+    selected_type = st.sidebar.selectbox(
+        "Modell-Typ:",
+        model_types,
+        index=0,
+        help="Filtere nach Modell-Typ (chat, instruct, base, reasoning, code)"
+    )
+    
+    # Feature Toggles
+    st.sidebar.markdown("**Spezielle Features:**")
+    
+    # Feature Toggles mit Info-Buttons
+    col1, col2 = st.sidebar.columns([0.85, 0.15])
+    with col1:
+        filter_reasoning = st.checkbox(
+            "Nur Reasoning-optimierte",
+            value=False,
+            key="reasoning_filter"
+        )
+    with col2:
+        if st.button("ℹ️", key="reasoning_info", help="Info zu Reasoning-Optimierung"):
+            st.session_state.current_page = "🤖 Model-Information"
+            st.session_state.show_reasoning_info = True
+            st.rerun()
+    
+    col1, col2 = st.sidebar.columns([0.85, 0.15])
+    with col1:
+        filter_multimodal = st.checkbox(
+            "Nur Multimodale",
+            value=False,
+            key="multimodal_filter"
+        )
+    with col2:
+        if st.button("ℹ️", key="multimodal_info", help="Info zu Multimodalen Modellen"):
+            st.session_state.current_page = "🤖 Model-Information"
+            st.session_state.show_multimodal_info = True
+            st.rerun()
+    
+    col1, col2 = st.sidebar.columns([0.85, 0.15])
+    with col1:
+        filter_tools = st.checkbox(
+            "Nur mit Tool-Support",
+            value=False,
+            key="tools_filter"
+        )
+    with col2:
+        if st.button("ℹ️", key="tools_info", help="Info zu Tool-Support"):
+            st.session_state.current_page = "🤖 Model-Information"
+            st.session_state.show_tools_info = True
+            st.rerun()
+    
+    st.sidebar.markdown("---")
+    
+    # Daten filtern basierend auf Auswahl
+    filtered_df = df.copy()
+    active_filters = []
+    
+    if selected_size != 'all':
+        filtered_df = filtered_df[filtered_df['size_category'] == selected_size]
+        active_filters.append(f"Größe: {selected_size.upper()}")
+    
+    if selected_type != 'all':
+        filtered_df = filtered_df[filtered_df['model_type'] == selected_type]
+        active_filters.append(f"Typ: {selected_type.upper()}")
+    
+    if filter_reasoning:
+        filtered_df = filtered_df[filtered_df['reasoning_optimized'] == True]
+        active_filters.append("🧠 Reasoning")
+    
+    if filter_multimodal:
+        filtered_df = filtered_df[filtered_df['multimodal'] == True]
+        active_filters.append("🖼️ Multimodal")
+    
+    if filter_tools:
+        filtered_df = filtered_df[filtered_df['tools_support'] == True]
+        active_filters.append("🔧 Tools")
+    
+    # Zeige Filter-Status
+    filters_active = len(filtered_df) < len(df)
+    st.session_state.filters_active = filters_active
+    st.session_state.active_filters = active_filters
+    
+    # Filter-Status oben rechts anzeigen
+    if filters_active and active_filters:
+        filter_text = " | ".join(active_filters)
+        filter_placeholder.markdown(f"""
+        <div style="
+            background-color: #ff4b4b;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        ">
+        🔍 GEFILTERT: {filter_text}
+        </div>
+        """, unsafe_allow_html=True)
+    
+    if filters_active:
+        st.sidebar.info(f"📊 {len(filtered_df)} von {len(df)} Tests angezeigt")
+    
+    # Verwende filtered_df statt df für alle Visualisierungen
+    df = filtered_df
+    
     # Sidebar Info
     st.sidebar.markdown("---")
     st.sidebar.info(f"📁 {len(results)} Result-Dateien geladen")
@@ -611,6 +784,8 @@ def main():
     # Hauptinhalt basierend auf Auswahl
     if page == "📊 Übersicht":
         show_overview(df, results)
+    elif page == "🤖 Model-Information":
+        show_model_information(analyzer, df, results)
     elif page == "📝 Logs":
         show_logs(logs)
     elif page == "⚡ Performance":
@@ -619,6 +794,321 @@ def main():
         show_comparisons(df, results)
     elif page == "📈 Qualitätsmetriken":
         show_quality_metrics(analyzer, results)
+
+
+def show_model_information(analyzer: LLMAnalyzer, df: pd.DataFrame, results: List[Dict]):
+    """Zeigt detaillierte Model-Informationen"""
+    st.header("🤖 Model-Information")
+    
+    # Info-Bereiche für Feature-Erklärungen
+    st.subheader("📚 Feature-Definitionen")
+    
+    # Reasoning-optimierte Modelle Info
+    reasoning_expanded = st.session_state.get('show_reasoning_info', False)
+    with st.expander("🧠 **Reasoning-optimierte Modelle**", expanded=reasoning_expanded):
+        st.markdown("""
+        **Reasoning-optimierte Modelle:**
+        
+        Diese Modelle sind speziell darauf trainiert, komplexe logische Denkprozesse durchzuführen. Sie können:
+        
+        • **Schrittweise Problemlösung**: Komplexe Aufgaben in kleinere Schritte zerlegen  
+        • **Mathematische Beweisführung**: Logische Schlussfolgerungen und Beweise erstellen  
+        • **Kausale Zusammenhänge**: Ursache-Wirkungs-Beziehungen besser verstehen  
+        • **Selbstreflexion**: Eigene Antworten hinterfragen und korrigieren  
+        
+        **Beispiele:** DeepSeek-R1, OpenAI o1, Claude-3.5-Sonnet mit Chain-of-Thought
+        
+        Diese Modelle sind besonders gut für wissenschaftliche Analysen, Programmierung und komplexe Entscheidungsfindung geeignet.
+        """)
+        if reasoning_expanded:
+            st.session_state.show_reasoning_info = False  # Reset nach dem Anzeigen
+    
+    # Multimodale Modelle Info  
+    multimodal_expanded = st.session_state.get('show_multimodal_info', False)
+    with st.expander("👁️ **Multimodale Modelle**", expanded=multimodal_expanded):
+        st.markdown("""
+        **Multimodale Modelle:**
+        
+        Diese Modelle können verschiedene Eingabetypen verarbeiten und verstehen:
+        
+        • **Bilder verstehen**: Fotos, Diagramme, Screenshots analysieren  
+        • **Dokumente lesen**: PDFs, Tabellen, Charts interpretieren  
+        • **Vision + Text**: Bildbeschreibungen, OCR, visuelle Fragen beantworten  
+        • **Grafiken erstellen**: Teilweise auch Bildsynthese möglich  
+        
+        **Beispiele:** GPT-4V, Claude-3-Vision, Gemini-Pro-Vision, LLaVA
+        
+        **Anwendungen:**  
+        - Dokumentenanalyse  
+        - Medizinische Bildauswertung  
+        - UI/UX Design-Feedback  
+        - Barrierefreiheit (Alt-Text Generierung)
+        """)
+        if multimodal_expanded:
+            st.session_state.show_multimodal_info = False  # Reset nach dem Anzeigen
+    
+    # Tool-Support Info
+    tools_expanded = st.session_state.get('show_tools_info', False)
+    with st.expander("🔧 **Tool-Support (Function Calling)**", expanded=tools_expanded):
+        st.markdown("""
+        **Tool-Support (Function Calling):**
+        
+        Diese Modelle können externe Tools und APIs aufrufen:
+        
+        • **API-Integration**: REST APIs, Datenbanken, Web-Services nutzen  
+        • **Code-Ausführung**: Python-Scripts, Shell-Commands ausführen  
+        • **Berechnungen**: Mathematische Operationen über externe Tools  
+        • **Real-time Daten**: Aktuelle Informationen abrufen (Wetter, Börse, etc.)  
+        
+        **Technische Details:**  
+        - Strukturierte JSON-Funktionsaufrufe  
+        - Parameter-Validierung und -Mapping  
+        - Fehlerbehandlung bei Tool-Fehlern  
+        - Verkettung mehrerer Tool-Aufrufe  
+        
+        **Beispiele:** GPT-4-Turbo, Claude-3-Sonnet, Mistral-Large
+        
+        **Anwendungen:**  
+        - Automatisierte Workflows  
+        - Datenanalyse und Reporting  
+        - Smart Home Integration  
+        - Business Process Automation
+        """)
+        if tools_expanded:
+            st.session_state.show_tools_info = False  # Reset nach dem Anzeigen
+        
+    st.markdown("---")
+    
+    # Model-Auswahl
+    tested_models = sorted(df['model'].unique())
+    
+    if not tested_models:
+        st.warning("Keine Modelle in den Test-Ergebnissen gefunden!")
+        return
+    
+    selected_model = st.selectbox(
+        "📌 Wähle ein Modell für Details:",
+        tested_models,
+        index=0
+    )
+    
+    # Filtere Daten für das gewählte Modell
+    model_df = df[df['model'] == selected_model]
+    
+    # Model-Info aus Registry
+    model_info = analyzer.models_info.get(selected_model, {})
+    
+    # Layout mit zwei Spalten
+    col1, col2 = st.columns([2, 3])
+    
+    with col1:
+        st.subheader("📋 Model-Eigenschaften")
+        
+        if model_info:
+            # Badge-Style Properties
+            st.markdown("**Features:**")
+            features = []
+            if model_info.get('reasoning_optimized', False):
+                features.append("🧠 Reasoning")
+            if model_info.get('multimodal', False):
+                features.append("🖼️ Multimodal")
+            if model_info.get('tools_support', False):
+                features.append("🔧 Tools")
+            
+            if features:
+                st.markdown(" | ".join(features))
+            else:
+                st.markdown("*Keine speziellen Features*")
+            
+            st.markdown("---")
+            
+            # Detaillierte Eigenschaften
+            props_data = {
+                "Provider": model_info.get('provider', 'unknown'),
+                "Model Type": model_info.get('model_type', 'unknown'),
+                "Size Category": model_info.get('size_category', 'unknown'),
+                "Parameters": f"{model_info.get('parameters', 0):,}" if model_info.get('parameters') else 'unknown',
+                "Info Quality": model_info.get('info_quality', 'unknown'),
+                "Sources": ", ".join(model_info.get('sources', [])) if model_info.get('sources') else 'none'
+            }
+            
+            for key, value in props_data.items():
+                st.markdown(f"**{key}:** {value}")
+            
+            # Zusätzliche Metadaten wenn verfügbar
+            if 'tags' in model_info and model_info['tags']:
+                st.markdown("**Tags:**")
+                tags_str = ", ".join(model_info['tags'][:5])
+                st.markdown(f"*{tags_str}*")
+        else:
+            st.info("ℹ️ Keine detaillierten Informationen in der Model Registry")
+            st.markdown("Führe `python update_model_registry.py` aus")
+    
+    with col2:
+        st.subheader("📊 Performance nach Server")
+        
+        # Performance-Vergleich über Server
+        server_perf = model_df.groupby('server').agg({
+            'performance': 'mean',
+            'runtime_avg': 'mean',
+            'quality_avg': 'mean',
+            'token_avg': 'mean'
+        }).round(2)
+        
+        if not server_perf.empty:
+            # Bar Chart für Performance
+            fig_perf = px.bar(
+                server_perf.reset_index(),
+                x='server',
+                y='performance',
+                title=f'Performance von {selected_model} auf verschiedenen Servern',
+                labels={'performance': 'Tokens/Sekunde', 'server': 'Server'},
+                color='performance',
+                color_continuous_scale='Viridis',
+                text='performance'
+            )
+            fig_perf.update_traces(texttemplate='%{text:.1f} T/s', textposition='outside')
+            fig_perf.update_layout(height=400)
+            st.plotly_chart(fig_perf, use_container_width=True)
+    
+    # Qualitäts-Übersicht
+    st.markdown("---")
+    st.subheader("🎯 Qualitäts-Analyse")
+    
+    col3, col4, col5, col6 = st.columns(4)
+    
+    avg_quality = model_df['quality_avg'].mean()
+    avg_runtime = model_df['runtime_avg'].mean()
+    avg_tokens = model_df['token_avg'].mean()
+    test_count = len(model_df)
+    
+    with col3:
+        st.metric("Ø Qualität", f"{avg_quality:.3f}", 
+                 help="Durchschnittliche Qualität über alle Tests")
+    with col4:
+        st.metric("Ø Laufzeit", f"{avg_runtime:.1f} ms",
+                 help="Durchschnittliche Antwortzeit")
+    with col5:
+        st.metric("Ø Tokens", f"{avg_tokens:.0f}",
+                 help="Durchschnittliche Token-Anzahl")
+    with col6:
+        st.metric("Tests", test_count,
+                 help="Anzahl durchgeführter Tests")
+    
+    # Detaillierte Test-Ergebnisse
+    st.markdown("---")
+    st.subheader("📈 Test-Ergebnisse im Detail")
+    
+    # Zeige alle Tests für dieses Modell
+    detail_cols = ['server', 'questions', 'concurrent', 'runtime_avg', 'token_avg', 
+                   'quality_avg', 'performance', 'start_date', 'start_time']
+    detail_df = model_df[detail_cols].copy()
+    detail_df = detail_df.sort_values('start_date', ascending=False)
+    
+    st.dataframe(
+        detail_df,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            'server': st.column_config.TextColumn('Server'),
+            'questions': st.column_config.NumberColumn('Fragen'),
+            'concurrent': st.column_config.NumberColumn('Concurrent'),
+            'runtime_avg': st.column_config.NumberColumn('Ø Zeit (ms)', format="%.1f"),
+            'token_avg': st.column_config.NumberColumn('Ø Tokens'),
+            'quality_avg': st.column_config.NumberColumn('Ø Qualität', format="%.3f"),
+            'performance': st.column_config.NumberColumn('Performance (T/s)', format="%.2f"),
+            'start_date': st.column_config.TextColumn('Datum'),
+            'start_time': st.column_config.TextColumn('Zeit')
+        }
+    )
+    
+    # Ähnliche/Vergleichbare Modelle
+    st.markdown("---")
+    st.subheader("🔗 Ähnliche & Vergleichbare Modelle")
+    
+    similar_models = find_similar_models(selected_model, analyzer.models_info, df)
+    
+    if similar_models:
+        col7, col8 = st.columns(2)
+        
+        with col7:
+            st.markdown("**🎯 Gleiche Größenkategorie:**")
+            size_similar = similar_models.get('same_size', [])
+            if size_similar:
+                for model in size_similar[:5]:
+                    st.markdown(f"• {model}")
+            else:
+                st.markdown("*Keine gefunden*")
+        
+        with col8:
+            st.markdown("**🏷️ Gleicher Typ:**")
+            type_similar = similar_models.get('same_type', [])
+            if type_similar:
+                for model in type_similar[:5]:
+                    st.markdown(f"• {model}")
+            else:
+                st.markdown("*Keine gefunden*")
+        
+        # Empfehlungen
+        if similar_models.get('recommendations'):
+            st.info("💡 **Empfohlene Vergleiche:** " + ", ".join(similar_models['recommendations'][:3]))
+    else:
+        st.info("Keine ähnlichen Modelle in den Tests gefunden")
+
+
+def find_similar_models(selected_model: str, models_info: Dict, df: pd.DataFrame) -> Dict:
+    """Findet ähnliche und vergleichbare Modelle"""
+    if selected_model not in models_info:
+        return {}
+    
+    model_info = models_info[selected_model]
+    tested_models = df['model'].unique()
+    
+    similar = {
+        'same_size': [],
+        'same_type': [],
+        'same_provider': [],
+        'recommendations': []
+    }
+    
+    for other_model in tested_models:
+        if other_model == selected_model:
+            continue
+        
+        if other_model in models_info:
+            other_info = models_info[other_model]
+            
+            # Gleiche Größenkategorie
+            if other_info.get('size_category') == model_info.get('size_category'):
+                similar['same_size'].append(other_model)
+            
+            # Gleicher Typ
+            if other_info.get('model_type') == model_info.get('model_type'):
+                similar['same_type'].append(other_model)
+            
+            # Gleicher Provider
+            if other_info.get('provider') == model_info.get('provider'):
+                similar['same_provider'].append(other_model)
+    
+    # Empfehlungen generieren
+    recommendations = []
+    
+    # Beste Vergleiche: Gleiche Größe UND gleicher Typ
+    best_matches = set(similar['same_size']) & set(similar['same_type'])
+    if best_matches:
+        recommendations.extend(list(best_matches)[:2])
+    
+    # Alternativ: Gleiche Größe
+    if len(recommendations) < 3 and similar['same_size']:
+        for model in similar['same_size']:
+            if model not in recommendations:
+                recommendations.append(model)
+                if len(recommendations) >= 3:
+                    break
+    
+    similar['recommendations'] = recommendations
+    
+    return similar
 
 
 def show_overview(df: pd.DataFrame, results: List[Dict]):
@@ -637,6 +1127,35 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     with col4:
         avg_quality = df['quality_avg'].mean()
         st.metric("Ø Qualität", f"{avg_quality:.3f}" if not pd.isna(avg_quality) else "N/A")
+    
+    st.markdown("---")
+    
+    # Model-Eigenschaften Zusammenfassung
+    st.subheader("🤖 Model-Eigenschaften Übersicht")
+    
+    prop_col1, prop_col2, prop_col3, prop_col4 = st.columns(4)
+    
+    with prop_col1:
+        reasoning_models = df[df['reasoning_optimized'] == True]['model'].nunique()
+        st.metric("Reasoning-Modelle", reasoning_models, 
+                 help="Modelle mit Reasoning-Optimierung (z.B. o1, DeepSeek-R1)")
+    
+    with prop_col2:
+        multimodal_models = df[df['multimodal'] == True]['model'].nunique()
+        st.metric("Multimodale Modelle", multimodal_models,
+                 help="Modelle mit Bildverarbeitung")
+    
+    with prop_col3:
+        tools_models = df[df['tools_support'] == True]['model'].nunique()
+        st.metric("Mit Tool-Support", tools_models,
+                 help="Modelle mit Function-Calling")
+    
+    with prop_col4:
+        # Größenverteilung
+        size_dist = df.groupby('size_category')['model'].nunique()
+        most_common_size = size_dist.idxmax() if not size_dist.empty else "unknown"
+        st.metric("Häufigste Größe", most_common_size.upper(),
+                 help=f"Verteilung: {dict(size_dist)}")
     
     st.markdown("---")
     
@@ -659,9 +1178,15 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     # Übersichtstabelle
     st.subheader("📋 Alle Tests")
     
-    # Spalten auswählen - erweitert um Modell-Metadaten und normalisierte Metriken
-    display_cols = ['filename', 'server', 'model', 'parameter_size', 'quantization_level', 'size_gb', 'questions', 'concurrent', 'runtime_avg', 'token_avg', 'quality_avg', 'performance', 'performance_per_billion_params']
-    display_df = df[display_cols].copy()
+    # Spalten auswählen - erweitert um Model-Eigenschaften
+    display_cols = ['filename', 'server', 'model', 'size_category', 'model_type', 
+                    'reasoning_optimized', 'multimodal', 'tools_support',
+                    'parameter_size', 'quantization_level', 'questions', 'concurrent', 
+                    'runtime_avg', 'token_avg', 'quality_avg', 'performance']
+    
+    # Prüfe welche Spalten existieren
+    available_cols = [col for col in display_cols if col in df.columns]
+    display_df = df[available_cols].copy()
     
     # Formatierung
     display_df['runtime_avg'] = display_df['runtime_avg'].round(1)
@@ -737,7 +1262,6 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
         )
         st.plotly_chart(fig_model_pie, use_container_width=True)
     
-    st.markdown("---")
     
     # Globale Performance-Analyse aller LLMs
     st.subheader("🚀 Globale Performance-Analyse")
@@ -952,6 +1476,12 @@ def show_logs(logs: List[Dict]):
 def show_performance(df: pd.DataFrame, results: List[Dict]):
     """Zeigt Performance-Analyse"""
     st.header("⚡ Performance-Analyse")
+    
+    # Filter-Status anzeigen
+    if 'filters_active' in st.session_state and st.session_state.get('filters_active', False):
+        active_filters = st.session_state.get('active_filters', [])
+        filter_text = " | ".join(active_filters) if active_filters else "unbekannt"
+        st.warning(f"🔍 **Filter sind aktiv** ({filter_text}) - Nur gefilterte Modelle werden in der Analyse berücksichtigt!")
     
     # Hauptperformance-Ranking (wie bei Qualität)
     st.subheader("🏆 Performance-Ranking")
@@ -1223,6 +1753,12 @@ def show_comparisons(df: pd.DataFrame, results: List[Dict]):
     """Zeigt Vergleichsanalysen"""
     st.header("🔄 Modell- und Server-Vergleiche")
     
+    # Filter-Status anzeigen
+    if 'filters_active' in st.session_state and st.session_state.get('filters_active', False):
+        active_filters = st.session_state.get('active_filters', [])
+        filter_text = " | ".join(active_filters) if active_filters else "unbekannt"
+        st.warning(f"🔍 **Filter sind aktiv** ({filter_text}) - Nur gefilterte Modelle werden in den Vergleichen berücksichtigt!")
+    
     # Hinweis auf Normalisierung
     st.info("""
     📊 **Alle Vergleiche verwenden normalisierte Metriken** für faire Bewertung trotz unterschiedlicher Test-Konfigurationen.
@@ -1350,6 +1886,12 @@ def show_comparisons(df: pd.DataFrame, results: List[Dict]):
 def show_quality_metrics(analyzer: LLMAnalyzer, results: List[Dict]):
     """Zeigt detaillierte Qualitätsmetriken"""
     st.header("📈 Qualitätsmetriken-Analyse")
+    
+    # Filter-Status anzeigen  
+    if 'filters_active' in st.session_state and st.session_state.get('filters_active', False):
+        active_filters = st.session_state.get('active_filters', [])
+        filter_text = " | ".join(active_filters) if active_filters else "unbekannt"
+        st.warning(f"🔍 **Filter sind aktiv** ({filter_text}) - Nur gefilterte Modelle werden in der Qualitätsanalyse berücksichtigt!")
     
     # Lade detaillierte Qualitätsmetriken
     quality_df = analyzer.get_detailed_quality_metrics()
