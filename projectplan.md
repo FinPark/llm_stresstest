@@ -324,6 +324,31 @@ Entwicklung einer robusten Test-Anwendung f�r Large Language Models (LLMs) zur
   - Optimierte Spalten-Konfiguration für lange Log-Nachrichten
   - Verbesserte Performance bei großen Log-Dateien
 
+### Dashboard & Stresstest Integration - August 2025 ✅ IMPLEMENTIERT
+- **Stresstest-Dashboard Integration** in `llm_auswertung.py`:
+  - Neue Stresstest-Seite mit vollständiger Konfigurationsoberfläche
+  - Server-Historie aus vorhandenen Results für einfache Auswahl
+  - API-basierte Modell-Erkennung (Ollama, OpenAI-kompatibel, LM Studio)
+  - URL-Validierung mit Sicherheitschecks gegen Code-Injection
+  - Sicherheitslimits für Parameter (max. 100 Fragen, 20 parallele Anfragen)
+  - Automatische Konfigurationsspeicherung und Überschreibungsschutz
+- **Log-Bereich Verbesserungen**:
+  - Refresh-Button zum Nachladen aktueller Logs mit Cache-Management
+  - Log-Löschfunktion mit Bestätigungsdialog für Bereinigung alter Dateien
+  - Verbesserte Performance durch intelligentes Log-Caching
+- **CLI-Erweiterungen** in `llm_stresstest.py`:
+  - `--force` Flag für automatisches Überschreiben ohne Benutzerabfrage
+  - Argparse-Integration für erweiterte Kommandozeilenoptionen
+  - Robuste Fehlerbehandlung bei UnboundLocalError für Path-Variable
+- **Token-Zählung Optimierung**:
+  - Verbesserte Token-Erfassung mit completion_tokens statt total_tokens
+  - Debug-Logging für detaillierte Token-Analyse
+  - Korrekte Warmup-Behandlung ohne Token-Speicherung
+- **Code-Bereinigung**:
+  - Entfernung chaotischer Stresstest-Bereiche aus dem Dashboard
+  - Strukturierung der Stresstest-Funktionalität in separate Seite
+  - Verbesserte Button-Styles mit globalen CSS-Overrides
+
 ## Erweiterungsmöglichkeiten - Noch offen
 
 - A/B Testing zwischen verschiedenen Modellen

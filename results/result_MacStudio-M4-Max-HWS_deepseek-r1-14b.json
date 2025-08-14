@@ -1,0 +1,219 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "13:53:05.887",
+    "end_date": "2025-08-13",
+    "end_time": "13:55:09.918",
+    "server": "http://localhost:1234",
+    "server_name": "MacStudio M4 Max HWS",
+    "model": "deepseek-r1:14b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 124031.1,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "\n\nDie Hauptstadt von Deutschland ist **Berlin**.",
+      "time": 5078.3,
+      "token": 200,
+      "quality": 0.547,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 0.917,
+        "completeness_score": 0.25,
+        "relevance_score": 0.75,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.333,
+        "overall_quality": 0.547,
+        "word_count": 6,
+        "sentence_count": 1,
+        "avg_sentence_length": 6.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "\n\nMachine Learning ist ein Bereich der Informatik, bei demComputer Systeme lernen, ohne explizit programmiert zu werden. Stattdessen analysieren sie Daten und entdecken Muster, um Vorhersagen oder Entscheidungen treffen zu können.\n\n**Beispiel:** Stell dich vor, du hast eine Schale mit Apfel und Birnen. Zuerst kommst du nicht so recht zurecht, aber nach mehreren Versuchen lernst du, sie voneinander zu unterscheiden – je länger du es machst, desto besser wirst du darin.\n\nMachine Learning ist also wie das Lernen von einem Computer, der anstatt von Regeln vertraut gemacht zu werden, von Beispielen lernt und Muster entdeckt.",
+      "time": 9346.2,
+      "token": 361,
+      "quality": 0.522,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.35,
+        "relevance_score": 0.031,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.7,
+        "coherence_score": 0.392,
+        "overall_quality": 0.522,
+        "word_count": 94,
+        "sentence_count": 5,
+        "avg_sentence_length": 18.8,
+        "unique_words_ratio": 0.84
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "\n\nEin neuronales Netzwerk ist ein computergestütztes Modell, das sich an die Struktur des menschlichen neuronalen Systems orientiert. Es besteht aus mehreren Schichten von künstlichen Neuronen (auch als Knoten oder Units bezeichnet), die miteinander verbunden sind und zusammenarbeiten, um Muster in Daten zu erkennen oder Vorhersagen zu treffen.\n\n### Grundlegende Komponenten eines neuronalen Netzwerks:\n\n1. **Eingabeschicht (Input Layer):**\n   - Die Eingabeschicht ist die erste Schicht des Netzwerks und dient dazu, die Eingabedaten ins System zu übermitteln.\n   - Jeder Knoten in der Eingabeschicht repräsentiert eine Eigenschaft der Daten. Zum Beispiel bei einer Bilderkennung könnte jeder Knoten für einen bestimmten Pixel stehen.\n\n2. **Versteckte Schichten (Hidden Layers):**\n   - Die versteckten Schichten sind die Schichten zwischen der Eingabeschicht und der Ausgabeschicht.\n   - Diese Schichten sind zuständig für die Verarbeitung der Daten und die Extraktion von abstrakten Merkmalern. Sie transformieren die Eingaben in eine Format, das für die nächste Schicht nützlich ist.\n\n3. **Aktivierung (Activation Function):**\n   - Jeder Knoten in einem neuronalen Netzwerk verwendet eine Aktivierungsfunktion, um die Summe der Eingaben in eine Ausgabe zu transformieren.\n   - Die Aktivierung fungiert als_gate_ und bestimmt, ob",
+      "time": 22247.5,
+      "token": 497,
+      "quality": 0.546,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.969,
+        "completeness_score": 0.417,
+        "relevance_score": 0.033,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.454,
+        "overall_quality": 0.546,
+        "word_count": 179,
+        "sentence_count": 13,
+        "avg_sentence_length": 13.8,
+        "unique_words_ratio": 0.642
+      }
+    },
+    {
+      "question": "Was sind die Vor- und Nachteile von Cloud Computing?",
+      "answer": "",
+      "time": 12932.1,
+      "token": 498,
+      "quality": 0.0
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen HTTP und HTTPS.",
+      "answer": "\n\nHTTP (Hypertext Transfer Protocol) und HTTPS (Hypertext Transfer Protocol Secure) sind Protokolle, die zum Kommunizieren zwischen einem Browser und einem Webserver verwendet werden. Der Hauptunterschied zwischen den beiden besteht darin, dass HTTPS eine sichere Verbindung herstellt, während HTTP keine Sicherheit bietet.\n\n### 1. **Sicherheit:**\n   - **HTTP:** Dieses Protokoll ist nicht verschlüsselt. Daten, die über HTTP transferiert werden, sind anfällig für Lauscher und Man-in-the-Middle-Angriffe. Das bedeutet, dass persönliche Informationen wie Benutzernamen, Passwörter oder Kreditkarteninformationen im Internet sichtbar sein können.\n   - **HTTPS:** Dieses Protokoll ist sicher, da es SSL/TLS (Secure Sockets Layer/Transport Layer Security) verwendet, um die Verbindung zwischen dem Browser und dem Server zu verschlüsseln. Mit HTTPS werden Daten geschützt vor unbefugten Zugriffen.\n\n### 2. **URL:**\n   - Websites, die HTTP verwenden, haben URLs, die mit `http://` beginnen.\n   - Websites, die HTTPS verwenden, haben URLs, die mit `https://` beginnen.\n\n### 3. **Datentransfer:",
+      "time": 25820.1,
+      "token": 497,
+      "quality": 0.557,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.934,
+        "completeness_score": 0.4,
+        "relevance_score": 0.053,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.576,
+        "overall_quality": 0.557,
+        "word_count": 140,
+        "sentence_count": 13,
+        "avg_sentence_length": 10.8,
+        "unique_words_ratio": 0.714
+      }
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Liste und einem Tupel in Python?",
+      "answer": "\n\nIn Python, **lists** and **tuples** are both used to store collections of items, but they have distinct characteristics:\n\n1. **Mutability**:\n   - **Lists**: Mutable (can be changed after creation).\n     ```python\n     my_list = [1, 2, 3]\n     my_list[1] = 4  # Changes the list; output: [1,4,3]\n     ```\n   - **Tuples**: Immutable (cannot be altered after creation).\n     ```python\n     my_tuple = (1, 2, 3)\n",
+      "time": 12864.3,
+      "token": 497,
+      "quality": 0.482,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 1.0,
+        "completeness_score": 0.286,
+        "relevance_score": 0.028,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.688,
+        "coherence_score": 0.493,
+        "overall_quality": 0.482,
+        "word_count": 58,
+        "sentence_count": 4,
+        "avg_sentence_length": 14.5,
+        "unique_words_ratio": 0.862
+      }
+    },
+    {
+      "question": "Erkläre das Konzept der Vererbung in der objektorientierten Programmierung.",
+      "answer": "\n\nIn object-oriented programming (OOP), **inheritance** is a fundamental concept that allows a new class (called a subclass or derived class) to inherit properties and behaviors from an existing class (called a superclass or base class). This promotes code reusability, reduces redundancy, and improves the maintainability of software.\n\n### Key Points:\n\n1. **Single-Level Inheritance**: A subclass inherits directly from one parent class.\n2. **Multi-Level Inheritance**: A subclass can inherit from another subclass, which in turn inherits from a superclass.\n3. **Hierarchical Inheritance**: Multiple subclasses can inherit from a single superclass.\n4. **Hybrid Inheritance**: Combines different types of inheritance.\n\n### Advantages:\n- Encourages code reuse.\n- Reduces redundancy.\n- Improves maintainability and modularity.\n- Aligns with real-world modeling.\n\n### Example in Java:\n\n```java\nclass",
+      "time": 25638.9,
+      "token": 497,
+      "quality": 0.482,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.97,
+        "completeness_score": 0.25,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.524,
+        "overall_quality": 0.482,
+        "word_count": 122,
+        "sentence_count": 15,
+        "avg_sentence_length": 8.1,
+        "unique_words_ratio": 0.68
+      }
+    },
+    {
+      "question": "Was ist ein REST-API und wie funktioniert es?",
+      "answer": "\n\n### Was ist ein REST-API?\n\nEin **REST-API** (Representational State Transfer Application Programming Interface) ist eine Schnittstelle, die entwickelt, um verschiedene Systeme miteinander zu kommunizieren. Es ist ein architekturschichtendes Konzept für webservicebasierte Anwendungen und wird hauptsächlich im World Wide Web eingesetzt.\n\n**Grundlegende Prinzipien von REST:**\n1. **Client-Server:** Die Verantwortung für die Benutzeroberfläche (Client) ist get",
+      "time": 12768.9,
+      "token": 497,
+      "quality": 0.501,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.852,
+        "completeness_score": 0.375,
+        "relevance_score": 0.083,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.379,
+        "overall_quality": 0.501,
+        "word_count": 54,
+        "sentence_count": 5,
+        "avg_sentence_length": 10.8,
+        "unique_words_ratio": 0.852
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen SQL und NoSQL-Datenbanken.",
+      "answer": "\n\n### Unterschiede zwischen SQL und NoSQL-Datenbanken:\n\n**1. Datenschema (Data Schema):**\n- **SQL-Datenbanken:**  \n  - Verwenden ein relationaleres Schema.  \n  - Jeder Datensatz hat eine fixierte Struktur, definiert durch Tabellen mit Spaltennamen und Typen.  \n  - Beispiele: MySQL, PostgreSQL.\n\n- **NoSQL-Datenbanken:**  \n  - Flexible oder dynamische Schemas.  \n  - Daten können in verschiedenen Formaten gespeichert werden (z.B., Dokumente, Schlüssel-Wert-Paare).  \n  - Beispiele: MongoDB, Redis.\n\n**2. Skalierung (Scalability):**\n- **SQL-Datenbanken:**  \n  - Gut für vertikale Skalierung (mehr leistungsfähiges Hardware).  \n  - weniger gut für horizontale Skalierung (Hinzufügung von Servern zu Lastenausgleich).\n\n- **NoSQL-Datenbanken:**  \n  - Gut für horizontale Skalierung.  \n  - Eignet sich besser für große Datenvolumes und hohen Traffic.\n\n**3. Abfragen (Query Language):**\n- **SQL-Datenbanken:**  \n  - Verwenden SQL (Structured Query Language) als AbfrageSprache.  \n  - Prüfen oft die Genauigkeit der Abfrage, da die Struktur klar ist.\n\n- **NoSQL-Datenbanken:**  \n  - Verwenden meist spezifische Abfragesprachen oder APIs.  \n  - Flexible und schnelle Abfragen, aber manchmal weniger präzise.\n\n**4. Transaktionen (Transactions):**\n- **SQL-Datenbanken:**  \n  - Stärke im Umgang",
+      "time": 25487.9,
+      "token": 497,
+      "quality": 0.515,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.895,
+        "completeness_score": 0.4,
+        "relevance_score": 0.047,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.589,
+        "coherence_score": 0.455,
+        "overall_quality": 0.515,
+        "word_count": 151,
+        "sentence_count": 21,
+        "avg_sentence_length": 7.2,
+        "unique_words_ratio": 0.702
+      }
+    },
+    {
+      "question": "Was ist Docker und wofür wird es verwendet?",
+      "answer": "",
+      "time": 12751.9,
+      "token": 498,
+      "quality": 0.0
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 164936.1,
+    "runtime_avg": 16493.6,
+    "runtime_min": 5078.3,
+    "runtime_max": 25820.1,
+    "token_sum": 4539,
+    "token_avg": 454,
+    "token_min": 200,
+    "token_max": 498,
+    "quality_sum": 4.152,
+    "quality_avg": 0.519,
+    "quality_min": 0.482,
+    "quality_max": 0.557,
+    "llm_load_time": 1903.7,
+    "cold_start_factor": 0.12
+  }
+}

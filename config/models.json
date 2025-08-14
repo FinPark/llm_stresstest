@@ -1,5 +1,5 @@
 {
-  "last_updated": "2025-08-13T12:28:36.527915",
+  "last_updated": "2025-08-14T23:35:06.354445",
   "models": {
     "llama3.2:latest": {
       "name": "llama3.2:latest",
@@ -138,29 +138,210 @@
       "reasoning_optimized": false,
       "size_category": "large",
       "info_quality": "good"
+    },
+    "dolphin-2.9.4-llama3.1-8b": {
+      "name": "dolphin-2.9.4-llama3.1-8b",
+      "added_date": "2025-08-13T13:34:03.278836",
+      "model_type": "chat",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "ehartford",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "llama",
+        "text-generation",
+        "conversational",
+        "license:apache-2.0",
+        "autotrain_compatible",
+        "text-generation-inference",
+        "endpoints_compatible",
+        "region:us"
+      ],
+      "source": "huggingface",
+      "parameters": 8000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "medium",
+      "info_quality": "good"
+    },
+    "deepseek-r1-14b": {
+      "name": "deepseek-r1-14b",
+      "added_date": "2025-08-13T13:55:10.046694",
+      "model_type": "reasoning",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "deepseek-ai",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen2",
+        "text-generation",
+        "conversational",
+        "arxiv:2501.12948",
+        "license:mit",
+        "autotrain_compatible",
+        "text-generation-inference",
+        "endpoints_compatible"
+      ],
+      "source": "huggingface",
+      "parameters": 14000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": true,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "openai/gpt-oss-20b": {
+      "name": "openai/gpt-oss-20b",
+      "added_date": "2025-08-13T16:01:37.569248",
+      "model_type": "chat",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "openai",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "gpt_oss",
+        "text-generation",
+        "vllm",
+        "conversational",
+        "license:apache-2.0",
+        "autotrain_compatible",
+        "endpoints_compatible",
+        "8-bit"
+      ],
+      "source": "huggingface",
+      "parameters": 20000000000,
+      "architecture": "gpt_oss",
+      "context_length": null,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "Qwen3:14b": {
+      "name": "Qwen3:14b",
+      "added_date": "2025-08-13T16:07:40.434305",
+      "model_type": "chat",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "alibaba",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen3",
+        "text-generation",
+        "conversational",
+        "arxiv:2309.00071",
+        "arxiv:2505.09388",
+        "base_model:Qwen/Qwen3-14B-Base",
+        "base_model:finetune:Qwen/Qwen3-14B-Base",
+        "license:apache-2.0"
+      ],
+      "source": "huggingface",
+      "parameters": 14000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "qwen/qwen3-14b": {
+      "name": "qwen/qwen3-14b",
+      "added_date": "2025-08-14T11:25:20.201712",
+      "model_type": "chat",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "alibaba",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "qwen3",
+        "text-generation",
+        "conversational",
+        "arxiv:2309.00071",
+        "arxiv:2505.09388",
+        "base_model:Qwen/Qwen3-14B-Base",
+        "base_model:finetune:Qwen/Qwen3-14B-Base",
+        "license:apache-2.0"
+      ],
+      "source": "huggingface",
+      "parameters": 14000000000,
+      "architecture": "qwen3",
+      "context_length": null,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "large",
+      "info_quality": "good"
+    },
+    "meta-llama-3.1-8b-instruct": {
+      "name": "meta-llama-3.1-8b-instruct",
+      "added_date": "2025-08-14T16:33:31.870500",
+      "model_type": "instruct",
+      "sources": [
+        "huggingface"
+      ],
+      "provider": "meta",
+      "license": "unknown",
+      "tags": [
+        "transformers",
+        "safetensors",
+        "llama",
+        "text-generation",
+        "facebook",
+        "meta",
+        "pytorch",
+        "llama-3",
+        "conversational",
+        "en"
+      ],
+      "source": "huggingface",
+      "parameters": 8000000000,
+      "multimodal": false,
+      "tools_support": false,
+      "reasoning_optimized": false,
+      "size_category": "medium",
+      "info_quality": "good"
     }
   },
   "statistics": {
-    "total_models": 5,
-    "models_with_full_info": 4,
+    "total_models": 11,
+    "models_with_full_info": 10,
     "models_with_partial_info": 0,
     "models_without_info": 1,
     "by_provider": {
       "diluksha": 1,
       "google": 1,
-      "deepseek-ai": 1,
+      "deepseek-ai": 2,
       "unknown": 1,
-      "alibaba": 1
+      "alibaba": 3,
+      "ehartford": 1,
+      "openai": 1,
+      "meta": 1
     },
     "by_size_category": {
-      "medium": 1,
-      "large": 3,
+      "medium": 3,
+      "large": 7,
       "unknown": 1
     },
     "by_model_type": {
-      "chat": 3,
-      "reasoning": 1,
-      "instruct": 1
+      "chat": 7,
+      "reasoning": 2,
+      "instruct": 2
     }
   }
 }

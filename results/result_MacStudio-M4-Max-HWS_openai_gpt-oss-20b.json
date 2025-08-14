@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "16:00:48.942",
+    "end_date": "2025-08-13",
+    "end_time": "16:01:37.442",
+    "server": "http://localhost:1234",
+    "server_name": "MacStudio M4 Max HWS",
+    "model": "openai/gpt-oss-20b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 48499.5,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "Die Hauptstadt Deutschlands ist **Berlin**.",
+      "time": 239.2,
+      "token": 12,
+      "quality": 0.312,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 0.82,
+        "completeness_score": 0.125,
+        "relevance_score": 0.2,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.0,
+        "overall_quality": 0.312,
+        "word_count": 5,
+        "sentence_count": 1,
+        "avg_sentence_length": 5.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "**Maschinelles Lernen (ML) – kurz erklärt**\n\nStell dir vor, du hast einen sehr schlauen Computer, der lernen soll, wie man etwas erkennt oder entscheidet – zum Beispiel: „Ist das ein Bild von einer Katze?“ oder „Welches Wort passt am besten in den Satz?“.  \nDer Computer kann nicht einfach so eine Regel schreiben. Stattdessen bekommt er viele Beispiele und lernt daraus selbst.\n\n1. **Daten sammeln**  \n   Du sammelst viele Bilder (oder Texte, Zahlen, etc.). Für jedes Bild sagst du dem Computer: „Das ist eine Katze“ oder „Das ist kein Hund“.\n\n2. **Modell wählen**  \n   Das Modell ist wie ein Rezept – es sagt, welche Schritte der Computer ausführen soll. Ein häufiges Beispiel ist ein *Neuronales Netzwerk*, das an die Funktionsweise des menschlichen Gehirns angelehnt ist.\n\n3. **Training (Üben)**  \n   Der Computer schaut sich jedes Bild an und versucht zunächst zufällig zu raten. Dann vergleicht er seine Vorhersage mit der richtigen Antwort („Katze“).  \n   - Wenn er falsch liegt, ändert er ein wenig die „Gewichte“ in seinem Modell (wie man kleine Anpassungen vornimmt), damit es beim nächsten Mal besser rät.\n   - Dieser Vorgang wiederholt sich Millionen von Malen. Der Computer lernt dadurch, welche Merkmale wichtig sind: Fellfarbe, Form der Ohren, etc.\n\n4. **Testen**  \n   Nach dem Training zeigt man ihm neue Bilder, die er noch nie gesehen hat. Wenn er damit gut zurechtkommt, bedeutet das, dass er wirklich gelernt hat, eine Katze zu erkennen – nicht nur die Bilder auswendig gespeichert hat.\n\n5. **Anwendung**  \n   Jetzt kann der Computer in einer App eingesetzt werden: Du lädst ein Foto hoch und er sagt dir, ob es eine Katze ist oder nicht. Oder du nutzt ihn zum Vorhersagen von Aktienkursen, zur Spracherkennung usw.\n\n---\n\n### Was macht ML besonders?\n\n- **Lernen aus Daten** – Statt dass Menschen jede Regel schreiben, lernt der Computer selbst daraus.\n- **Anpassungsfähig** – Wenn neue Daten kommen, kann er sein Modell weiter verbessern (Fortbildung).\n- **Vielfältig einsetzbar** – Bilderkennung, Textverarbeitung, Empfehlung",
+      "time": 5473.9,
+      "token": 489,
+      "quality": 0.548,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.5,
+        "relevance_score": 0.0,
+        "factual_consistency": 0.8,
+        "fluency_score": 0.741,
+        "coherence_score": 0.469,
+        "overall_quality": 0.548,
+        "word_count": 316,
+        "sentence_count": 28,
+        "avg_sentence_length": 11.3,
+        "unique_words_ratio": 0.696
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "## Was ist ein neuronales Netzwerk?\n\nEin neuronales Netzwerk (NN) ist ein rechnerisches Modell, das von der Funktionsweise des menschlichen Gehirns inspiriert wurde. Es besteht aus vielen „Neuronen“ (oder Knoten), die miteinander verbunden sind und Informationen verarbeiten können.\n\n---\n\n## 1. Grundstruktur\n\n| Ebene | Beschreibung |\n|-------|--------------|\n| **Eingabeschicht** | Neuronen, die die Rohdaten aufnehmen (z.B. Pixelwerte eines Bildes). |\n| **Verdeckte Schichten** | Eine oder mehrere Ebenen von Neuronen, die das Muster in den Daten erkennen und abstrahieren. |\n| **Ausgabeschicht** | Neuronen, die das Ergebnis liefern (z.B. Klassifikation: Katze/​Hund). |\n\nJede Verbindung zwischen zwei Neuronen trägt einen **Gewichtungswert** (*Weight*), der angibt, wie stark ein Signal von einem Knoten zum nächsten übertragen wird.\n\n---\n\n## 2. Funktionsweise – Schritt für Schritt\n\n1. **Initialisierung**  \n   - Gewichte werden zufällig gesetzt (oder durch vortrainierte Werte initialisiert).  \n   - Bias‑Termme (kleine additive Konstante) können ebenfalls vorhanden sein.\n\n2. **Vorwärtspropagation (Forward Pass)**  \n   Für jedes Neuron in einer Schicht:\n   1. **Gewichtete Summe** berechnen:  \n      \\[\n      z = \\sum_{i} w_i \\cdot x_i + b\n      \\]\n      wobei \\(x_i\\) die Eingaben des vorherigen Layers, \\(w_i\\) die Gewichte und \\(b\\) der Bias sind.  \n   2. **Aktivierungsfunktion** anwenden:  \n      \\[\n      a = f(z)\n      \\]\n      Typische Aktivierungen: ReLU (Rectified Linear Unit), Sigmoid, Tanh usw.  \n   3. Das Ergebnis \\(a\\) wird als Eingabe an die nächste Schicht weitergereicht.\n\n3. **Berechnung der Verlustfunktion**  \n   - Nach dem Durchlaufen aller Ebenen erhält man eine Vorhersage.  \n   - Diese Vorhersage wird mit den wahren Labels verglichen, z.B. mittels Mean Squared Error (MSE) für Regression",
+      "time": 10926.9,
+      "token": 489,
+      "quality": 0.495,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.991,
+        "completeness_score": 0.417,
+        "relevance_score": 0.022,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.464,
+        "coherence_score": 0.426,
+        "overall_quality": 0.495,
+        "word_count": 243,
+        "sentence_count": 28,
+        "avg_sentence_length": 8.7,
+        "unique_words_ratio": 0.741
+      }
+    },
+    {
+      "question": "Was sind die Vor- und Nachteile von Cloud Computing?",
+      "answer": "**Cloud‑Computing – Vorteile & Nachteile**\n\n| **Vorteil** | **Beschreibung / Nutzen** |\n|-------------|---------------------------|\n| **Kosten‑Effizienz** | - Keine großen CAPEX (Hardware, Rechenzentren).<br>- Betriebskosten werden variabel („Pay‑as‑You‑Go“). |\n| **Skalierbarkeit & Flexibilität** | - Ressourcen können je nach Bedarf schnell hoch- oder runtergefahren werden.<br>- Unterstützt sowohl kurzfristige Spitzenbelastungen als auch langfristiges Wachstum. |\n| **Zugänglichkeit & Mobilität** | - Zugriff von überall mit Internetverbindung.<br>- Multi‑Device-Unterstützung (PC, Tablet, Smartphone). |\n| **Wartung und Updates** | - Der Cloud‑Provider übernimmt Hardware‑/Softwarewartung, Patches, Backups. |\n| **Schnelle Bereitstellung** | - Virtuelle Maschinen, Datenbanken oder Anwendungen können in Minuten statt Wochen bereitgestellt werden. |\n| **Globale Reichweite & Redundanz** | - Geografisch verteilte Rechenzentren ermöglichen niedrige Latenz und Disaster‑Recovery‑Optionen. |\n| **Innovationsförderung** | - Zugang zu modernen Diensten (KI, Machine Learning, Big‑Data‑Analytics) ohne eigene Infrastruktur aufzubauen. |\n| **Umweltfreundlichkeit** | - Bessere Auslastung von Servern führt zu geringeren Energieverbrauch und CO₂‑Emissionen im Vergleich zu On‑Prem‑Installationen. |\n\n---\n\n| **Nachteil** | **Beschreibung / Risiko** |\n|--------------|---------------------------|\n| **Abhängigkeit vom Anbieter (Vendor Lock‑In)** | - Daten, Anwendungen oder spezifische Konfigurationen können schwer portierbar sein.<br>- Wechsel kann teuer und zeitaufwendig werden. |\n| **Datensicherheit & Datenschutz** | - Sensible Daten liegen in fremden Rechenzentren; rechtliche Anforderungen (z.B. DSGVO) müssen strikt eingehalten werden.<br>- Potenzielle Angriffsflächen durch Cloud‑APIs. |\n| **Kostenkontrolle bei unvorhersehbarem Traffic** | - Bei stark schwankenden Lasten können Kosten explodieren, wenn keine geeigneten Budget‑ oder Skalierungsregeln definiert sind.",
+      "time": 5491.4,
+      "token": 489,
+      "quality": 0.524,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.847,
+        "completeness_score": 0.5,
+        "relevance_score": 0.027,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.625,
+        "coherence_score": 0.386,
+        "overall_quality": 0.524,
+        "word_count": 231,
+        "sentence_count": 18,
+        "avg_sentence_length": 12.8,
+        "unique_words_ratio": 0.693
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen HTTP und HTTPS.",
+      "answer": "**HTTP (Hypertext Transfer Protocol)**  \n- Ist das Standardprotokoll für die Übertragung von Webseiten‑Inhalten über das Internet.  \n- Verwendet Port 80 (standardmäßig).  \n- Die Daten werden im Klartext übertragen – jeder, der den Netzwerkverkehr abfangen kann, sieht also Inhalt und ggf. Login‑Daten.  \n- Kein eingebautes Verschlüsselungs‑ oder Authentifizierungs‑Mechanismus.\n\n**HTTPS (HTTP Secure)**  \n- Ist HTTP + TLS/SSL (Transport Layer Security / Secure Sockets Layer).  \n- Verwendet standardmäßig Port 443.  \n- Alle Daten, die zwischen Client und Server ausgetauscht werden, sind verschlüsselt. Das schützt vor Abhören und Manipulation.  \n- Zusätzlich wird durch das Zertifikat des Servers sichergestellt, dass der Client tatsächlich mit dem beabsichtigten Ziel kommuniziert (Authentifizierung).  \n\nKurz gesagt: **HTTP** sendet Daten unverschlüsselt; **HTTPS** verschlüsselt die Verbindung, sorgt für Vertraulichkeit, Integrität und Authentizität.",
+      "time": 8063.4,
+      "token": 230,
+      "quality": 0.608,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.92,
+        "completeness_score": 0.9,
+        "relevance_score": 0.051,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.727,
+        "coherence_score": 0.441,
+        "overall_quality": 0.608,
+        "word_count": 120,
+        "sentence_count": 11,
+        "avg_sentence_length": 10.9,
+        "unique_words_ratio": 0.808
+      }
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Liste und einem Tupel in Python?",
+      "answer": "**Kurzfassung**\n\n| Merkmal | Liste (`list`) | Tupel (`tuple`) |\n|---------|----------------|-----------------|\n| Mutabilität | **änderbar** (eintrag hinzufügen, löschen, ersetzen) | **unveränderlich** – nach der Erstellung nicht mehr zu ändern |\n| Syntax | `[]` | `()` |\n| Speicher & Geschwindigkeit | etwas größer und langsamer wegen Flexibilität | kleiner und schneller |\n| Verwendung | Daten, die sich verändern können (z. B. Sammlungen von Elementen) | Konstanten, Schlüssel in Dictionaries, Rückgabewerte mehrerer Funktionen |\n\n---\n\n## 1. Mutabilität\n\n- **Liste**  \n  ```python\n  a = [1, 2, 3]\n  a.append(4)      # => [1, 2, 3, 4]\n  a[0] = 10        # => [10, 2, 3, 4]\n  ```\n  Elemente können jederzeit verändert werden.\n\n- **Tupel**  \n  ```python\n  t = (1, 2, 3)\n  t.append(4)      # Fehler: 'tuple' object has no attribute 'append'\n  t[0] = 10        # Fehler: 'tuple' object does not support item assignment\n  ```\n  Nach dem Erstellen kann man nichts mehr ändern. Man kann nur neue Tupel erzeugen.\n\n---\n\n## 2. Syntax\n\n| Typ | Erzeugung | Beispiel |\n|-----|-----------|----------|\n| Liste | `[]` oder `list()` | `[1, 2, 3]`, `list(range(5))` |\n| Tupel | `()` oder `tuple()` | `(1, 2, 3)`, `tuple('abc')` |\n\n> **Hinweis**: Ein einzelnes Element in einem Tupel muss ein Komma enthalten, z. B. `(42,)`. Ohne das Komma ist es keine Tupel‑Konstruktion.\n\n---\n\n## 3. Speicher und Geschwindigkeit\n\n- Listen benötigen mehr Speicher für die Metadaten (z. B. Größe, Kapazität) und sind etwas langsamer bei Zugriffsoperationen.\n- Tupel haben einen kleineren Footprint und können schneller iteriert werden – besonders bei",
+      "time": 5502.7,
+      "token": 489,
+      "quality": 0.541,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.393,
+        "relevance_score": 0.041,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.708,
+        "coherence_score": 0.512,
+        "overall_quality": 0.541,
+        "word_count": 249,
+        "sentence_count": 18,
+        "avg_sentence_length": 13.8,
+        "unique_words_ratio": 0.618
+      }
+    },
+    {
+      "question": "Erkläre das Konzept der Vererbung in der objektorientierten Programmierung.",
+      "answer": "## Was ist Vererbung?\n\nVererbung (englisch *inheritance*) ist ein zentrales Prinzip der objektorientierten Programmierung (OOP).  \nSie ermöglicht es, **Klassen** (die in Java, C#, Python, C++ usw. als „Typen“ oder „Objekte“ bezeichnet werden) untereinander zu verknüpfen und dadurch Code‑Wiederverwendung sowie eine hierarchische Struktur des Typsystems zu schaffen.\n\n---\n\n## Grundidee\n\n- **Basisklasse / Superklasse**: Die Klasse, die bereits allgemeine Eigenschaften (Attribute) und Verhaltensweisen (Methoden) definiert.\n- **Abgeleitete Klasse / Subklasse**: Die Klasse, die von der Basisklasse erbt. Sie erhält alle Attribute und Methoden der Basisklasse und kann zusätzlich eigene Felder oder Funktionen definieren bzw. vorhandene überschreiben.\n\n---\n\n## Vorteile\n\n| Vorteil | Erläuterung |\n|---------|-------------|\n| **Wiederverwendbarkeit** | Gemeinsame Logik in einer einzigen Klasse kapseln, statt sie in vielen Klassen zu duplizieren. |\n| **Erweiterbarkeit** | Neue Funktionalität durch Unterklassen hinzufügen, ohne bestehenden Code zu verändern (Open/Closed-Prinzip). |\n| **Polymorphismus** | Objekte unterschiedlicher Subklassen können als Instanzen der Basisklasse behandelt werden – nützlich für generische Algorithmen. |\n| **Klarere Modellierung** | Die reale Welt lässt sich oft in „Allgemeines“ und „Spezifisches“ zerlegen (z.B. `Fahrzeug` → `Auto`, `Motorrad`). |\n\n---\n\n## Beispiel in Java\n\n```java\n// Basisklasse\npublic class Fahrzeug {\n    protected String hersteller;\n    protected int anzahlTüren;\n\n    public Fahrzeug(String hersteller, int anzahlTüren) {\n        this.hersteller = hersteller;\n        this.anzahlTüren = anzahlTüren;\n    }\n\n    public void starten() {\n        System.out.println(hersteller + \" startet.\");\n    }\n}\n\n// Abgeleitete Klasse\npublic class Auto extends Fahrzeug {\n\n    private String modell;\n\n    public Auto(String hersteller, int anzahlTüren, String modell) {\n        super(hersteller, anzahlTüren);",
+      "time": 11014.3,
+      "token": 489,
+      "quality": 0.519,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.92,
+        "completeness_score": 0.4,
+        "relevance_score": 0.024,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.625,
+        "coherence_score": 0.47,
+        "overall_quality": 0.519,
+        "word_count": 240,
+        "sentence_count": 20,
+        "avg_sentence_length": 12.0,
+        "unique_words_ratio": 0.7
+      }
+    },
+    {
+      "question": "Was ist ein REST-API und wie funktioniert es?",
+      "answer": "## Was ist ein REST‑API?\n\n**REST** steht für **Representational State Transfer** – eine Architekturstilrichtung für verteilte Systeme, die auf dem HTTP-Protokoll basiert.  \nEin **REST‑API (Application Programming Interface)** ist also eine Sammlung von Endpunkten (URLs), über die Clients (z. B. Webbrowser, mobile Apps oder andere Server) Daten abrufen, erstellen, aktualisieren und löschen können – alles unter Verwendung der Standard-HTTP‑Methoden.\n\n### Kernprinzipien eines REST‑APIs\n\n| Prinzip | Was bedeutet das? |\n|---------|-------------------|\n| **Client–Server** | Der Client sendet Anfragen; der Server liefert Antworten. Beide sind unabhängig voneinander, was Skalierbarkeit und Wartbarkeit erleichtert. |\n| **Statelessness (Zustandslosigkeit)** | Jede Anfrage enthält alle Informationen, die zum Verarbeiten benötigt werden. Der Server speichert keine Sitzungsinformationen zwischen den Aufrufen – das reduziert Speicherbedarf und vereinfacht horizontale Skalierung. |\n| **Cacheable** | Antworten können als cache‑fähig markiert werden, sodass Clients (oder Zwischenspeicher) Ergebnisse wiederverwenden können, ohne den Server erneut zu belasten. |\n| **Uniform Interface** | Einheitliche Art der Kommunikation: klare Ressourcennamen in URLs + standardisierte HTTP‑Methoden und Statuscodes. |\n| **Layered System** | Das System kann aus mehreren Schichten bestehen (z. B. Load Balancer, Authentifizierungsserver), ohne dass der Client diese kennt. |\n\n---\n\n## Wie funktioniert ein REST‑API?\n\n### 1. Ressourcen identifizieren\n\nREST arbeitet mit **Ressourcen** – z. B. `Benutzer`, `Artikel`, `Produkt`. Jede Ressource bekommt eine eindeutige URI:\n\n```\nGET    https://api.beispiel.com/benutzer        # Alle Benutzer\nGET    https://api.beispiel.com/benutzer/123   # Benutzer mit ID 123\nPOST   https://api.beispiel.com/benutzer       # Neuer Benutzer\nPUT    https://api.beispiel.com/benutzer/123   # Benutzer 123 komplett ersetzen\nPATCH  https://api.beispiel",
+      "time": 5494.0,
+      "token": 489,
+      "quality": 0.528,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.894,
+        "completeness_score": 0.5,
+        "relevance_score": 0.03,
+        "factual_consistency": 0.7,
+        "fluency_score": 0.675,
+        "coherence_score": 0.448,
+        "overall_quality": 0.528,
+        "word_count": 239,
+        "sentence_count": 30,
+        "avg_sentence_length": 8.0,
+        "unique_words_ratio": 0.728
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen SQL und NoSQL-Datenbanken.",
+      "answer": "**SQL‑Datenbanken (Relationale Datenbanken)**  \n- **Struktur:** Tabellarisch mit vordefinierten Schemata (Spalten, Datentypen).  \n- **Beziehungen:** Durch Fremdschlüssel und JOIN‑Operationen explizit definiert.  \n- **Transaktionen:** ACID‑Eigenschaften (Atomicity, Consistency, Isolation, Durability). Ideal für konsistente Daten und komplexe Abfragen.  \n- **Sprache:** Standardisierte SQL‑Syntax (SELECT, INSERT, UPDATE, DELETE).  \n- **Skalierung:** Primär vertikal (mehr CPU/RAM) oder mit Replikation/Sharding, aber das Schema muss oft angepasst werden.\n\n**NoSQL‑Datenbanken (Nicht‑relationale Datenbanken)**  \n- **Struktur:** Flexibel – Dokumente (JSON/BSON), Schlüssel‑Wert‑Paare, Spaltenfamilien oder Graphen. Schemalos oder schematisierbar je nach Typ.  \n- **Beziehungen:** In der Regel nicht durch JOINs abgebildet; Beziehungen werden in den Daten selbst oder über Referenzen gehandhabt.  \n- **Transaktionen:** Oft eventual consistency, manche Systeme bieten eingeschränkte ACID‑Unterstützung (z. B. MongoDB, Cassandra).  \n- **Sprache:** Je nach Typ eigene APIs oder Abfragesprachen (MongoDB‑Query‑Language, CQL für Cassandra, Gremlin für Graphdatenbanken).  \n- **Skalierung:** Horizontal sehr gut – Sharding und Replikation sind Standard. Geeignet für große, verteilte Datenmengen mit hohem Schreibaufkommen.\n\n| Merkmal | SQL | NoSQL |\n|---------|-----|-------|\n| Schema | Statisch, strikt | Dynamisch oder optional |\n| Beziehungen | JOIN‑basierte | Referenzen/Embedded |\n| Konsistenz | ACID | Eventual consistency (oft) |\n| Skalierung | Vertikal + Sharding | Horizontal nativ |\n| Anwendungsfälle | Finanzdaten, ERP, komplexe Joins | Big Data, Echtzeit-Analytics, flexible Datenmodelle |\n\nKurz gesagt: SQL‑Datenbanken sind ideal für strukturierte, konsistente Daten mit komplexen Abfragen, während NoSQL‑Datenbanken Flexibilität und horizontale Skalierbarkeit für un",
+      "time": 10984.0,
+      "token": 489,
+      "quality": 0.589,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.866,
+        "completeness_score": 0.85,
+        "relevance_score": 0.031,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.688,
+        "coherence_score": 0.517,
+        "overall_quality": 0.589,
+        "word_count": 222,
+        "sentence_count": 16,
+        "avg_sentence_length": 13.9,
+        "unique_words_ratio": 0.667
+      }
+    },
+    {
+      "question": "Was ist Docker und wofür wird es verwendet?",
+      "answer": "**Docker – Was ist das?**\n\nDocker ist eine Open‑Source-Plattform für die Automatisierung des Deployments von Anwendungen in Containern. Ein Container ist ein leichtgewichtiger, eigenständiger Prozess, der alles enthält, was zur Ausführung einer Anwendung nötig ist: Code, Laufzeitumgebung, Bibliotheken, Systemwerkzeuge und Einstellungen – aber keine eigene Betriebssystem‑Kernel.\n\n**Warum Docker?**\n\n1. **Portabilität**  \n   - Ein Container läuft überall dort, wo Docker installiert ist (Linux, Windows, macOS). Das bedeutet „write once, run everywhere“: die Anwendung funktioniert identisch auf einem Entwickler­rechner, in der Testumgebung und im Produktions‑Server.\n\n2. **Isolation & Konsistenz**  \n   - Jeder Container hat seinen eigenen Dateisystem‑Space, Netzwerk‑Stack und Prozess‑Namespace. Dadurch werden Konflikte zwischen unterschiedlichen Anwendungen (z. B. verschiedene Versionsanforderungen von Bibliotheken) vermieden.\n\n3. **Ressourceneffizienz**  \n   - Im Gegensatz zu virtuellen Maschinen teilen sich Docker‑Container den Host‑Kernel und benötigen daher deutlich weniger Speicher und CPU. Das ermöglicht eine höhere Dichte an Anwendungen pro Server.\n\n4. **Schnelles Deployment & Skalierung**  \n   - Container können innerhalb von Sekunden gestartet oder gestoppt werden. In Kombination mit Orchestratoren wie Kubernetes lässt sich so die Last automatisch skalieren – zum Beispiel bei steigenden Besucherzahlen auf einer Website.\n\n5. **Versionierung und Reproduzierbarkeit**  \n   - Docker‑Images (die „Bilder“, aus denen Container laufen) können versioniert, in Registries gespeichert und jederzeit exakt reproduziert werden. Das erleichtert Continuous Integration / Continuous Deployment (CI/CD).\n\n6. **Microservices-Architektur**  \n   - Jede Funktionalität einer Anwendung kann als eigenständiger Service in einem eigenen Container laufen. Dadurch wird die Wartbarkeit erhöht und neue Features können unabhängig entwickelt, getestet und ausgerollt werden.\n\n---\n\n### Typische Einsatzgebiete\n\n| Bereich | Beispiel |\n|---------|----------|\n| **Entwicklung** | Lokale Entwicklungsumgebung mit exakt identischer Konfiguration wie Produktion (z. B. Datenbank‑Version 12.5). |\n| **Test & QA** | Automatisierte Test‑Runner in CI/CD-Pipelines, die in",
+      "time": 5499.0,
+      "token": 489,
+      "quality": 0.556,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.89,
+        "completeness_score": 0.375,
+        "relevance_score": 0.012,
+        "factual_consistency": 0.7,
+        "fluency_score": 0.991,
+        "coherence_score": 0.548,
+        "overall_quality": 0.556,
+        "word_count": 274,
+        "sentence_count": 29,
+        "avg_sentence_length": 9.4,
+        "unique_words_ratio": 0.719
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 68688.8,
+    "runtime_avg": 6868.9,
+    "runtime_min": 239.2,
+    "runtime_max": 11014.3,
+    "token_sum": 4154,
+    "token_avg": 415,
+    "token_min": 12,
+    "token_max": 489,
+    "quality_sum": 5.22,
+    "quality_avg": 0.522,
+    "quality_min": 0.312,
+    "quality_max": 0.608,
+    "llm_load_time": 1493.5,
+    "cold_start_factor": 0.22
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "15:37:12.902",
+    "end_date": "2025-08-13",
+    "end_time": "15:49:43.891",
+    "server": "http://test-ki.ams.local:11434",
+    "server_name": "TEST-KI",
+    "model": "Qwen3:14b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 750989.5,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "<think>\nOkay, the user is asking for the capital of Germany. Let me start by confirming that the capital is Berlin. I remember that after the reunification in 1990, Berlin became the capital, replacing Bonn. But I should double-check that to make sure I'm not mixing things up.\n\nWait, before reunification, West Germany had Bonn as its capital, and East Germany had East Berlin. But when the two countries reunited, they decided to move the capital back to Berlin. So now Berlin is the capital. I should mention that it's the largest city in Germany and has a rich history, including the Berlin Wall and Brandenburg Gate. Also, it's a major cultural and political center. Let me make sure there's no confusion with other cities like Munich or Hamburg, but those are not capitals. Yes, Berlin is definitely the correct answer here.\n</think>\n\nDie Hauptstadt von Deutschland ist **Berlin**.  \nNach der Wiedervereinigung Deutschlands im Jahr 1990 wurde Berlin zum neuen Hauptstadtstandort ausgewählt, wodurch die historische Funktion Bonns als Hauptstadt der Bundesrepublik Deutschland nach 1949 endgültig beendet wurde. Berlin ist heute nicht nur die politische, sondern auch die kulturelle und wirtschaftliche Mitte Deutschlands.",
+      "time": 321315.8,
+      "token": 277,
+      "quality": 0.531,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 1.0,
+        "completeness_score": 0.5,
+        "relevance_score": 0.028,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.75,
+        "coherence_score": 0.461,
+        "overall_quality": 0.531,
+        "word_count": 192,
+        "sentence_count": 14,
+        "avg_sentence_length": 13.7,
+        "unique_words_ratio": 0.708
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "<think>\nOkay, the user wants me to explain machine learning in simple terms. Let me start by recalling what I know. Machine learning is a subset of artificial intelligence where computers learn from data without being explicitly programmed. But how to make that easy to understand?\n\nMaybe use an analogy. Like teaching a child? Or maybe something more relatable. Oh, like a student learning from examples. Wait, the user might not be familiar with technical terms, so I should avoid jargon.\n\nLet me break it down. Machine learning is about algorithms that improve at tasks through experience. So, instead of coding specific rules, the computer learns patterns from data. Examples could be things like recognizing images, predicting stock prices, or recommending movies.\n\nWait, I should mention that it's a type of AI. But maybe that's complicating it. Maybe start with the basics: computers learning from data. Then explain how they find patterns. Use simple examples like a spam filter learning which emails are spam based on previous examples.\n\nAlso, mention that it's not just one method. There are different types like supervised learning, unsupervised learning, etc. But maybe not go into detail unless the user asks. Keep it high-level.\n\nMake sure to highlight that the computer doesn't know the answer beforehand, it figures it out from the data. Maybe use a simple example like sorting emails into spam and not spam by looking at keywords and other features.\n\nAvoid technical terms like \"algorithms\" unless necessary. Maybe say \"rules\" or \"patterns\" instead. Also, emphasize that it's used in many areas: healthcare, finance, self-driving cars, etc.\n\nCheck if there's anything I'm missing. Maybe differentiate between machine learning and traditional programming. In traditional programming, you give the computer instructions to solve a problem. In machine learning, you give it data and let it find the solution.\n\nYes, that's a good point. So, in summary: Machine learning is when computers learn from data to make decisions or predictions, instead of following strict instructions. They find patterns and improve over time with more data.\n\nI should structure this in a way that's easy to follow, maybe start with a definition, then an example, then how it works, and its applications. Keep sentences short and simple. Avoid any complex terms unless necessary, and explain them if used.\n</think>\n\n**Machine Learning in einfachen Worten:**\n\nStell dir vor, du willst ein Kind lehren, wie man",
+      "time": 223194.8,
+      "token": 500,
+      "quality": 0.609,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.7,
+        "relevance_score": 0.022,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.73,
+        "coherence_score": 0.539,
+        "overall_quality": 0.609,
+        "word_count": 397,
+        "sentence_count": 38,
+        "avg_sentence_length": 10.4,
+        "unique_words_ratio": 0.564
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "ERROR: Request timed out.",
+      "time": 0.0,
+      "token": 0,
+      "quality": 0.0
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 544510.6,
+    "runtime_avg": 272255.3,
+    "runtime_min": 223194.8,
+    "runtime_max": 321315.8,
+    "token_sum": 777,
+    "token_avg": 388,
+    "token_min": 277,
+    "token_max": 500,
+    "quality_sum": 1.14,
+    "quality_avg": 0.57,
+    "quality_min": 0.531,
+    "quality_max": 0.609,
+    "llm_load_time": -258173.5,
+    "cold_start_factor": 0
+  }
+}

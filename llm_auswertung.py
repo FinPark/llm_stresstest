@@ -17,6 +17,7 @@ from typing import Dict, List, Any, Optional
 import glob
 import os
 import platform
+import requests
 
 # Windows-Kompatibilität sicherstellen
 if platform.system() == 'Windows':
@@ -92,6 +93,41 @@ st.markdown("""
     
     .stApp[data-theme="dark"] .warning-box {
         background-color: #4a3a1a !important;
+        color: #ffffff !important;
+    }
+    
+    /* Button-Fixes für Lesbarkeit - ALLE Varianten abdecken */
+    .stButton > button,
+    div[data-testid="stButton"] > button,
+    button[kind="primary"],
+    button[kind="secondary"] {
+        background-color: #0066cc !important;
+        color: #ffffff !important;
+        border: 2px solid #0066cc !important;
+        border-radius: 8px !important;
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        min-width: 150px !important;
+        height: 50px !important;
+    }
+    
+    .stButton > button:hover,
+    div[data-testid="stButton"] > button:hover,
+    button[kind="primary"]:hover,
+    button[kind="secondary"]:hover {
+        background-color: #0052a3 !important;
+        color: #ffffff !important;
+    }
+    
+    .stButton > button[data-testid="baseButton-primary"] {
+        background-color: #28a745 !important;
+        border: 1px solid #28a745 !important;
+        color: #ffffff !important;
+    }
+    
+    .stButton > button[data-testid="baseButton-primary"]:hover {
+        background-color: #218838 !important;
         color: #ffffff !important;
     }
     
@@ -598,21 +634,52 @@ def main():
         # Platzhalter für Filter-Status (wird später gesetzt)
         filter_placeholder = st.empty()
     
+    # GLOBALES CSS FÜR ALLE BUTTONS
+    st.markdown("""
+    <style>
+    /* Force-Override für ALLE Streamlit Buttons */
+    [data-testid="stButton"] > button {
+        background-color: #0066cc !important;
+        color: white !important;
+        border: 2px solid #0066cc !important;
+        border-radius: 8px !important;
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        min-width: 150px !important;
+        height: 50px !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 4px rgba(0,102,204,0.2) !important;
+    }
+    
+    [data-testid="stButton"] > button:hover {
+        background-color: #0052a3 !important;
+        border-color: #0052a3 !important;
+        box-shadow: 0 4px 8px rgba(0,102,204,0.3) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    [data-testid="stButton"] > button:active {
+        transform: translateY(0px) !important;
+        box-shadow: 0 2px 4px rgba(0,102,204,0.2) !important;
+    }
+    
+    /* Sidebar buttons special styling */
+    section[data-testid="stSidebar"] [data-testid="stButton"] > button {
+        min-width: 100% !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     st.markdown("---")
     
     # Analyzer initialisieren
     analyzer = LLMAnalyzer()
     
-    # Elegante Sidebar Navigation
-    st.sidebar.markdown("""
-    <div style="text-align: center; padding: 20px 0;">
-        <h2 style="color: #1f77b4; margin-bottom: 30px;">🎛️ Dashboard</h2>
-    </div>
-    """, unsafe_allow_html=True)
-    
     # Navigation mit custom styling
     nav_options = {
         "📊 Übersicht": {"icon": "📊", "desc": "Gesamtstatistiken & Übersicht"},
+        "⚡ Stresstest": {"icon": "⚡", "desc": "Stresstest-Konfiguration & Start"},
         "🤖 Model-Information": {"icon": "🤖", "desc": "Detaillierte Model-Eigenschaften"},
         "📝 Logs": {"icon": "📝", "desc": "Log-Analyse & Fehlersuche"},
         "⚡ Performance": {"icon": "⚡", "desc": "Performance & Ladezeiten"},
@@ -623,8 +690,10 @@ def main():
     # Custom Radio Buttons mit Beschreibungen
     selected_page = None
     for i, (page_name, info) in enumerate(nav_options.items()):
+        # Extrahiere den Text ohne Icon (alles nach erstem Space, oder ganzer Text wenn kein Space)
+        button_text = page_name.split(' ', 1)[1] if ' ' in page_name else page_name
         if st.sidebar.button(
-            f"{info['icon']} {page_name.split(' ', 1)[1]}",
+            f"{info['icon']} {button_text}",
             key=f"nav_{i}",
             use_container_width=True
         ):
@@ -639,7 +708,11 @@ def main():
     # Daten laden
     with st.spinner("Lade Daten..."):
         results = analyzer.load_all_results()
-        logs = analyzer.load_logs()
+        
+        # Logs mit Cache laden (für Refresh-Funktionalität)
+        if 'log_cache' not in st.session_state:
+            st.session_state.log_cache = analyzer.load_logs()
+        logs = st.session_state.log_cache
     
     if not results:
         st.error("❌ Keine Result-Dateien im ./results Verzeichnis gefunden!")
@@ -648,13 +721,6 @@ def main():
     
     df = analyzer.get_dataframe()
     
-    # Model Registry Info in Sidebar
-    st.sidebar.markdown("---")
-    if analyzer.models_info:
-        st.sidebar.success(f"✅ {len(analyzer.models_info)} Modelle in Registry")
-    else:
-        st.sidebar.warning("⚠️ Keine models.json gefunden")
-        st.sidebar.info("Führe `python update_model_registry.py` aus")
     
     # Filter-Optionen für Model-Eigenschaften
     st.sidebar.markdown("---")
@@ -681,45 +747,27 @@ def main():
     # Feature Toggles
     st.sidebar.markdown("**Spezielle Features:**")
     
-    # Feature Toggles mit Info-Buttons
-    col1, col2 = st.sidebar.columns([0.85, 0.15])
-    with col1:
-        filter_reasoning = st.checkbox(
-            "Nur Reasoning-optimierte",
-            value=False,
-            key="reasoning_filter"
-        )
-    with col2:
-        if st.button("ℹ️", key="reasoning_info", help="Info zu Reasoning-Optimierung"):
-            st.session_state.current_page = "🤖 Model-Information"
-            st.session_state.show_reasoning_info = True
-            st.rerun()
+    # Feature Toggles ohne Info-Buttons
+    filter_reasoning = st.sidebar.checkbox(
+        "Nur Reasoning-optimierte",
+        value=False,
+        key="reasoning_filter",
+        help="Zeigt nur Modelle die für logisches Denken optimiert sind"
+    )
     
-    col1, col2 = st.sidebar.columns([0.85, 0.15])
-    with col1:
-        filter_multimodal = st.checkbox(
-            "Nur Multimodale",
-            value=False,
-            key="multimodal_filter"
-        )
-    with col2:
-        if st.button("ℹ️", key="multimodal_info", help="Info zu Multimodalen Modellen"):
-            st.session_state.current_page = "🤖 Model-Information"
-            st.session_state.show_multimodal_info = True
-            st.rerun()
+    filter_multimodal = st.sidebar.checkbox(
+        "Nur Multimodale",
+        value=False,
+        key="multimodal_filter",
+        help="Zeigt nur Modelle die Bilder verarbeiten können"
+    )
     
-    col1, col2 = st.sidebar.columns([0.85, 0.15])
-    with col1:
-        filter_tools = st.checkbox(
-            "Nur mit Tool-Support",
-            value=False,
-            key="tools_filter"
-        )
-    with col2:
-        if st.button("ℹ️", key="tools_info", help="Info zu Tool-Support"):
-            st.session_state.current_page = "🤖 Model-Information"
-            st.session_state.show_tools_info = True
-            st.rerun()
+    filter_tools = st.sidebar.checkbox(
+        "Nur mit Tool-Support",
+        value=False,
+        key="tools_filter",
+        help="Zeigt nur Modelle die Function Calling unterstützen"
+    )
     
     st.sidebar.markdown("---")
     
@@ -794,6 +842,8 @@ def main():
         show_comparisons(df, results)
     elif page == "📈 Qualitätsmetriken":
         show_quality_metrics(analyzer, results)
+    elif page == "⚡ Stresstest":
+        show_configuration(results)
 
 
 def show_model_information(analyzer: LLMAnalyzer, df: pd.DataFrame, results: List[Dict]):
@@ -931,6 +981,16 @@ def show_model_information(analyzer: LLMAnalyzer, df: pd.DataFrame, results: Lis
                 "Info Quality": model_info.get('info_quality', 'unknown'),
                 "Sources": ", ".join(model_info.get('sources', [])) if model_info.get('sources') else 'none'
             }
+            
+            # Festplattengröße aus DataFrame holen (falls verfügbar)
+            if not model_df.empty and 'size_gb' in model_df.columns:
+                size_gb = model_df['size_gb'].iloc[0]
+                if pd.notna(size_gb) and size_gb > 0:
+                    props_data["Festplattengröße"] = f"{size_gb} GB"
+                else:
+                    props_data["Festplattengröße"] = "unbekannt"
+            else:
+                props_data["Festplattengröße"] = "unbekannt"
             
             for key, value in props_data.items():
                 st.markdown(f"**{key}:** {value}")
@@ -1113,49 +1173,42 @@ def find_similar_models(selected_model: str, models_info: Dict, df: pd.DataFrame
 
 def show_overview(df: pd.DataFrame, results: List[Dict]):
     """Zeigt Übersichtsseite"""
-    st.header("📊 Gesamtübersicht")
+    st.header("Gesamtübersicht")
     
-    # Metriken in Spalten
-    col1, col2, col3, col4 = st.columns(4)
+    # Kompakte Metriken-Übersicht in einer Zeile
+    col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
     
     with col1:
-        st.metric("Tests durchgeführt", len(results))
+        st.metric("Tests", len(results))
     with col2:
-        st.metric("Verschiedene Modelle", df['model'].nunique())
+        st.metric("Modelle", df['model'].nunique())
     with col3:
-        st.metric("Verschiedene Server", df['server'].nunique())
+        st.metric("Server", df['server'].nunique())
     with col4:
         avg_quality = df['quality_avg'].mean()
         st.metric("Ø Qualität", f"{avg_quality:.3f}" if not pd.isna(avg_quality) else "N/A")
     
-    st.markdown("---")
-    
-    # Model-Eigenschaften Zusammenfassung
-    st.subheader("🤖 Model-Eigenschaften Übersicht")
-    
-    prop_col1, prop_col2, prop_col3, prop_col4 = st.columns(4)
-    
-    with prop_col1:
+    with col5:
         reasoning_models = df[df['reasoning_optimized'] == True]['model'].nunique()
-        st.metric("Reasoning-Modelle", reasoning_models, 
-                 help="Modelle mit Reasoning-Optimierung (z.B. o1, DeepSeek-R1)")
+        st.metric("Reasoning", reasoning_models, 
+                 help="Modelle mit Reasoning-Optimierung")
     
-    with prop_col2:
+    with col6:
         multimodal_models = df[df['multimodal'] == True]['model'].nunique()
-        st.metric("Multimodale Modelle", multimodal_models,
+        st.metric("Multimodal", multimodal_models,
                  help="Modelle mit Bildverarbeitung")
     
-    with prop_col3:
+    with col7:
         tools_models = df[df['tools_support'] == True]['model'].nunique()
-        st.metric("Mit Tool-Support", tools_models,
+        st.metric("Tools", tools_models,
                  help="Modelle mit Function-Calling")
     
-    with prop_col4:
+    with col8:
         # Größenverteilung
         size_dist = df.groupby('size_category')['model'].nunique()
         most_common_size = size_dist.idxmax() if not size_dist.empty else "unknown"
-        st.metric("Häufigste Größe", most_common_size.upper(),
-                 help=f"Verteilung: {dict(size_dist)}")
+        st.metric("Größe", most_common_size.upper(),
+                 help=f"Häufigste Größe, Verteilung: {dict(size_dist)}")
     
     st.markdown("---")
     
@@ -1178,8 +1231,8 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
     # Übersichtstabelle
     st.subheader("📋 Alle Tests")
     
-    # Spalten auswählen - erweitert um Model-Eigenschaften
-    display_cols = ['filename', 'server', 'model', 'size_category', 'model_type', 
+    # Spalten auswählen - erweitert um Model-Eigenschaften (ohne filename)
+    display_cols = ['server', 'model', 'size_category', 'model_type', 
                     'reasoning_optimized', 'multimodal', 'tools_support',
                     'parameter_size', 'quantization_level', 'questions', 'concurrent', 
                     'runtime_avg', 'token_avg', 'quality_avg', 'performance']
@@ -1197,7 +1250,6 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
         use_container_width=True,
         hide_index=True,
         column_config={
-            'filename': st.column_config.TextColumn('Datei'),
             'server': st.column_config.TextColumn('Server'),
             'model': st.column_config.TextColumn('Modell'),
             'parameter_size': st.column_config.TextColumn('Parameter'),
@@ -1389,7 +1441,50 @@ def show_overview(df: pd.DataFrame, results: List[Dict]):
 
 def show_logs(logs: List[Dict]):
     """Zeigt Log-Analyse"""
-    st.header("📝 Log-Analyse")
+    col_header, col_spacer, col_delete = st.columns([2, 1, 1])
+    
+    with col_header:
+        st.header("📝 Log-Analyse")
+    
+    with col_delete:
+        st.markdown("<br>", unsafe_allow_html=True)  # Spacer für Alignment
+        if st.button("🗑️ Logs löschen", help="Alle Log-Dateien löschen"):
+            st.session_state.show_delete_logs_dialog = True
+    
+    # Dialog für Log-Löschung
+    if st.session_state.get('show_delete_logs_dialog', False):
+        st.warning("⚠️ **Möchten Sie wirklich alle Log-Dateien löschen?** Diese Aktion kann nicht rückgängig gemacht werden.")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("✅ Ja, löschen"):
+                import glob
+                import os
+                try:
+                    log_files = glob.glob("logs/llm_stresstest_*.log")
+                    deleted_count = 0
+                    for log_file in log_files:
+                        try:
+                            os.remove(log_file)
+                            deleted_count += 1
+                        except Exception as e:
+                            st.error(f"Fehler beim Löschen von {log_file}: {e}")
+                    
+                    if deleted_count > 0:
+                        st.success(f"✅ {deleted_count} Log-Dateien wurden gelöscht!")
+                        del st.session_state.show_delete_logs_dialog
+                        st.rerun()
+                    else:
+                        st.info("Keine Log-Dateien zum Löschen gefunden.")
+                except Exception as e:
+                    st.error(f"Fehler beim Löschen der Logs: {e}")
+        
+        with col2:
+            if st.button("❌ Abbrechen"):
+                del st.session_state.show_delete_logs_dialog
+                st.rerun()
+        
+        st.markdown("---")
     
     if not logs:
         st.warning("Keine Log-Dateien gefunden!")
@@ -1407,9 +1502,9 @@ def show_logs(logs: List[Dict]):
         )
     
     with col2:
-        # Setze WARNING als Standard, falls vorhanden
+        # Setze "Alle" als Standard
         unique_levels = ["Alle"] + list(log_df['level'].unique())
-        default_index = unique_levels.index("WARNING") if "WARNING" in unique_levels else 0
+        default_index = 0
         
         level_filter = st.selectbox(
             "Log-Level:",
@@ -1449,7 +1544,18 @@ def show_logs(logs: List[Dict]):
     
     
     # Log-Tabelle mit horizontalem Scrollbalken
-    st.markdown("### 📋 Log-Einträge")
+    col_log_title, col_refresh = st.columns([3, 1])
+    
+    with col_log_title:
+        st.markdown("### 📋 Log-Einträge")
+    
+    with col_refresh:
+        st.markdown("<br>", unsafe_allow_html=True)  # Spacer für Alignment
+        if st.button("🔄 Aktualisieren", help="Logs neu laden", key="refresh_logs_btn"):
+            # Lösche Log-Cache um Neu-Einlesen zu erzwingen
+            if 'log_cache' in st.session_state:
+                del st.session_state.log_cache
+            st.rerun()
     
     # Sortiere nach Timestamp (neueste zuerst) und begrenze auf 200 Einträge
     display_df = filtered_df.sort_values('timestamp', ascending=False).head(200).copy()
@@ -2076,6 +2182,381 @@ def show_quality_metrics(analyzer: LLMAnalyzer, results: List[Dict]):
         with col3:
             consistency = filtered_quality.groupby('model')['overall_quality'].std().mean()
             st.metric("Ø Konsistenz (Std)", f"{consistency:.3f}", delta_color="inverse")
+
+
+def show_configuration(results: List[Dict]):
+    """Zeigt Stresstest-Konfiguration und Start-Seite"""
+    
+    # Drei-Spalten-Layout mit Abstand
+    col1, col_spacer, col2 = st.columns([2, 0.5, 1.5])
+    
+    with col1:
+        st.subheader("🔧 Server & Model")
+        
+        # Config laden
+        config_path = Path("config/config.json")
+        try:
+            with open(config_path, 'r') as f:
+                config = json.load(f)
+        except:
+            config = {
+                "questions": 10,
+                "concurrent": 2,
+                "url": "http://localhost:11434",
+                "server_name": "localhost",
+                "model": "llama2",
+                "timeout": 120.0,
+                "max_keepalive_connections": 20
+            }
+        
+        # Server-Historie aus Results extrahieren
+        server_history = {}
+        for result in results:
+            if 'meta' in result:
+                server_name = result['meta'].get('server_name', '')
+                server_url = result['meta'].get('server', '')
+                if server_name and server_url:
+                    server_history[server_name] = server_url
+        
+        # Server-Auswahl
+        st.markdown("**Server-Konfiguration:**")
+        server_options = ["[Neuer Server]"] + sorted(server_history.keys())
+        selected_server_option = st.selectbox(
+            "Server auswählen:",
+            server_options,
+            index=0 if config.get('server_name') not in server_history else server_options.index(config.get('server_name')),
+            key="config_server_select"
+        )
+        
+        # URL-Validierungsfunktion
+        def validate_url(url):
+            """Validiert und bereinigt Server-URLs"""
+            from urllib.parse import urlparse
+            
+            # Bereinige Whitespace
+            url = url.strip()
+            
+            # Prüfe auf gefährliche Zeichen
+            if any(char in url for char in [';', '`', '$', '|', '>', '<', '&', '\n', '\r']):
+                return None, "❌ URL enthält ungültige Zeichen"
+            
+            # Parse URL
+            try:
+                parsed = urlparse(url)
+                # Erlaube nur http und https
+                if parsed.scheme not in ['http', 'https']:
+                    return None, "❌ Nur http:// oder https:// URLs erlaubt"
+                # Prüfe auf gültigen Host
+                if not parsed.hostname:
+                    return None, "❌ Kein gültiger Hostname in der URL"
+                # Blocke gefährliche Hosts
+                blocked_hosts = ['0.0.0.0', '255.255.255.255']
+                if parsed.hostname in blocked_hosts:
+                    return None, "❌ Diese Host-Adresse ist nicht erlaubt"
+                return url, None
+            except Exception as e:
+                return None, f"❌ Ungültige URL: {str(e)}"
+        
+        if selected_server_option == "[Neuer Server]":
+            server_name = st.text_input(
+                "Server-Name:",
+                value=config.get('server_name', 'localhost'),
+                key="config_server_name_input",
+                max_chars=50,  # Begrenze Länge
+                help="Eindeutiger Name für diesen Server (max. 50 Zeichen)"
+            )
+            server_url_input = st.text_input(
+                "Server-URL:",
+                value=config.get('url', 'http://localhost:11434'),
+                key="config_server_url_input",
+                max_chars=200,  # Begrenze Länge
+                help="URL des LLM-Servers (z.B. http://localhost:11434)"
+            )
+            # Validiere URL
+            server_url, url_error = validate_url(server_url_input)
+            if url_error:
+                st.error(url_error)
+                server_url = None  # Verhindere Speicherung ungültiger URLs
+            else:
+                server_url = server_url_input
+        else:
+            server_name = selected_server_option
+            server_url = server_history[selected_server_option]
+            st.info(f"**URL:** {server_url}")
+        
+        # Model-Auswahl (ohne Überschrift)
+        
+        # Versuche verfügbare Modelle von API zu laden
+        available_models = []
+        if st.button("🔄 Modelle laden", key="config_load_models_btn", help="Verfügbare Modelle von API laden"):
+            models_found = False
+            
+            with st.spinner("Lade verfügbare Modelle..."):
+                # 1. Versuche Ollama API (/api/tags)
+                try:
+                    api_url = f"{server_url}/api/tags"
+                    response = requests.get(api_url, timeout=5)
+                    if response.status_code == 200:
+                        models_data = response.json()
+                        if 'models' in models_data:
+                            available_models = [m['name'] for m in models_data['models']]
+                            models_found = True
+                except Exception as e:
+                    pass  # Versuche nächste API
+                
+                # 2. Versuche OpenAI-kompatible API (/v1/models)
+                if not models_found:
+                    try:
+                        api_url = f"{server_url}/v1/models"
+                        response = requests.get(api_url, timeout=5)
+                        if response.status_code == 200:
+                            models_data = response.json()
+                            if 'data' in models_data:
+                                available_models = [m['id'] for m in models_data['data']]
+                                models_found = True
+                    except Exception as e:
+                        pass  # Versuche nächste API
+                
+                # 3. Versuche LM Studio API (/models)
+                if not models_found:
+                    try:
+                        api_url = f"{server_url}/models"
+                        response = requests.get(api_url, timeout=5)
+                        if response.status_code == 200:
+                            models_data = response.json()
+                            if isinstance(models_data, list):
+                                available_models = [m.get('id', m.get('name', str(m))) for m in models_data if isinstance(m, dict)]
+                            elif isinstance(models_data, dict) and 'models' in models_data:
+                                available_models = [m.get('id', m.get('name', str(m))) for m in models_data['models']]
+                            if available_models:
+                                models_found = True
+                    except Exception as e:
+                        pass
+                
+                # 4. Fallback: Direkter API-Test mit /api/chat
+                if not models_found:
+                    try:
+                        # Test ob Server überhaupt erreichbar ist
+                        test_url = f"{server_url}/api/chat"
+                        response = requests.post(test_url, json={"model": "test", "messages": []}, timeout=2)
+                        if response.status_code in [200, 400, 422]:  # 400/422 = Server antwortet, aber falsches Format
+                            st.info("🔍 Server erreichbar, aber keine Modell-Liste verfügbar")
+                            st.info("💡 Bitte Model manuell eingeben")
+                        else:
+                            st.warning("⚠️ Server antwortet nicht auf API-Anfragen")
+                    except Exception as e:
+                        st.error(f"❌ Server nicht erreichbar: {type(e).__name__}")
+                
+                # Session State für persistente Model-Liste
+                if available_models:
+                    st.session_state.config_available_models = available_models
+        
+        # Model-Eingabe - verwende Session State für Persistenz
+        session_models = st.session_state.get('config_available_models', [])
+        combined_models = list(set(available_models + session_models))  # Kombiniere aktuelle und gespeicherte Modelle
+        
+        if combined_models:
+            # Zeige gefundene Modelle in Selectbox
+            model_input = st.selectbox(
+                "Model:",
+                combined_models,
+                index=combined_models.index(config.get('model')) if config.get('model') in combined_models else 0,
+                key="config_model_select"
+            )
+            # Zusätzliche manuelle Eingabe für andere Modelle
+            manual_model = st.text_input(
+                "Oder Model manuell eingeben:",
+                value="",
+                key="config_model_manual",
+                help="Lässt das obige Dropdown außer Acht"
+            )
+            if manual_model.strip():
+                model_input = manual_model.strip()
+        else:
+            # Fallback: Nur manuelle Eingabe
+            model_input = st.text_input(
+                "Model (manuell eingeben):",
+                value=config.get('model', 'qwen2.5:14b'),
+                key="config_model_input"
+            )
+    
+    with col2:
+        st.subheader("📊 Test-Parameter")
+        
+        # Sicherheitslimits für Parameter
+        questions = st.number_input(
+            "Anzahl Fragen:",
+            min_value=1,
+            max_value=100,  # Reduziert von 234 auf 100 für Sicherheit
+            value=min(config.get('questions', 10), 100),
+            key="config_questions_input",
+            help="⚠️ Max. 100 Fragen für Serverschutz (Pool: 234 verfügbar)"
+        )
+        
+        concurrent = st.number_input(
+            "Parallele Anfragen:",
+            min_value=1,
+            max_value=20,  # Reduziert von 50 auf 20 für Sicherheit
+            value=min(config.get('concurrent', 2), 20),
+            key="config_concurrent_input",
+            help="⚠️ Max. 20 parallele Anfragen zum Schutz des Servers"
+        )
+        
+        timeout = st.number_input(
+            "Timeout (Sekunden):",
+            min_value=10.0,
+            max_value=300.0,  # Reduziert von 600 auf 300 (5 Min)
+            value=min(config.get('timeout', 120.0), 300.0),
+            step=10.0,
+            key="config_timeout_input",
+            help="⚠️ Max. 300 Sekunden (5 Min) Timeout"
+        )
+        
+        max_keepalive = st.number_input(
+            "Max Keepalive Connections:",
+            min_value=1,
+            max_value=50,  # Reduziert von 100 auf 50
+            value=min(config.get('max_keepalive_connections', 20), 50),
+            key="config_keepalive_input",
+            help="⚠️ Max. 50 persistente Verbindungen"
+        )
+        
+        # Sicherheitswarnung bei hohen Werten
+        if questions > 50 or concurrent > 10:
+            st.warning("⚠️ **Achtung:** Hohe Werte können den Server überlasten!")
+        
+        # Config speichern
+        new_config = {
+            "questions": questions,
+            "concurrent": concurrent,
+            "url": server_url,
+            "server_name": server_name,
+            "model": model_input,
+            "timeout": timeout,
+            "max_keepalive_connections": max_keepalive
+        }
+        
+        # Automatisch speichern wenn sich was ändert
+        if new_config != config:
+            try:
+                with open(config_path, 'w') as f:
+                    json.dump(new_config, f, indent=4)
+                st.success("✅ Konfiguration gespeichert")
+            except Exception as e:
+                st.error(f"❌ Fehler beim Speichern: {str(e)}")
+    
+    # Stresstest-Start Bereich
+    st.markdown("---")
+    st.subheader("🚀 Stresstest starten")
+    
+    col_start = st.columns([1])[0]
+    
+    with col_start:
+        if st.button("▶️ Stresstest starten", key="start_test_btn", help="Starte den konfigurierten Stresstest"):
+            # Bestätige alle erforderlichen Parameter
+            try:
+                with open("config/config.json", "r") as f:
+                    current_config = json.load(f)
+            except Exception as e:
+                st.error(f"❌ Fehler beim Laden der Konfiguration: {e}")
+                return
+            
+            # Prüfe Dateienanme für mögliche Überschreibung
+            server_name = current_config.get('server_name', 'unknown')
+            model = current_config.get('model', 'unknown')
+            
+            # Dateiname generieren (gleiche Logik wie im Stresstest)
+            def sanitize_filename(text: str) -> str:
+                import re
+                text = text.replace(' ', '-')
+                text = re.sub(r'[^a-zA-Z0-9\\-]', '_', text)
+                text = re.sub(r'[-_]+', lambda m: m.group(0)[0], text)
+                return text.strip('-_')
+            
+            clean_server = sanitize_filename(server_name)
+            clean_model = sanitize_filename(model)
+            filename = f"result_{clean_server}_{clean_model}"
+            result_path = Path('results') / f"{filename}.json"
+            
+            # Dialog bei existierender Datei
+            if result_path.exists() and 'test_confirmed' not in st.session_state:
+                st.warning(f"📊 **Für diese Konfiguration wurde bereits ein Test durchgeführt.**")
+                st.info("Die Ergebnisdatei wird überschrieben.")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    if st.button("🔄 Fortfahren", key="continue_test_btn"):
+                        try:
+                            result_path.unlink()
+                            st.success("✅ Datei gelöscht - Test startet...")
+                            st.session_state.test_confirmed = True
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Fehler: {e}")
+                            return
+                
+                with col2:
+                    if st.button("❌ Abbrechen", key="cancel_test_btn"):
+                        st.info("Test abgebrochen")
+                        return
+                
+                return
+            
+            # Lösche Flag nach Test-Start
+            if 'test_confirmed' in st.session_state:
+                del st.session_state.test_confirmed
+                
+            # Starte Stresstest
+            st.success("🚀 Stresstest wird gestartet...")
+            
+            import subprocess
+            import os
+            
+            try:
+                # Starte llm_stresstest.py mit --force Parameter
+                process = subprocess.Popen(
+                    ["python", "llm_stresstest.py", "--force"], 
+                    cwd=os.getcwd(),
+                    stdout=subprocess.PIPE, 
+                    stderr=subprocess.PIPE,
+                    text=True
+                )
+                
+                # Warte auf Ende mit Spinner
+                with st.spinner("🔄 Test läuft... Bitte warten"):
+                    stdout, stderr = process.communicate()
+                
+                # Zeige Ergebnis
+                if process.returncode == 0:
+                    st.success("✅ Stresstest erfolgreich abgeschlossen!")
+                    
+                    # Zeige letzte Ausgabezeilen
+                    if stdout:
+                        lines = stdout.strip().split('\n')
+                        recent_lines = lines[-5:] if len(lines) > 5 else lines
+                        with st.expander("📄 Test-Ausgabe (letzte Zeilen)", expanded=False):
+                            st.text('\n'.join(recent_lines))
+                    
+                    # Nach Erfolg zu Ergebnissen wechseln
+                    import time
+                    time.sleep(1)
+                    st.session_state.current_page = "📊 Vergleiche" 
+                    st.rerun()
+                else:
+                    st.error(f"❌ Stresstest fehlgeschlagen (Exit Code: {process.returncode})")
+                    
+                    if stderr:
+                        st.error(f"**Fehlerdetails:**\n{stderr}")
+                    
+                    if stdout:
+                        with st.expander("📄 Vollständige Ausgabe", expanded=False):
+                            st.text(stdout)
+            
+            except Exception as e:
+                st.error(f"❌ Fehler beim Starten des Stresstests: {str(e)}")
+                st.code(str(e), language="python")
+
 
 
 if __name__ == "__main__":

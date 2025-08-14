@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "15:56:21.645",
+    "end_date": "2025-08-13",
+    "end_time": "15:57:13.193",
+    "server": "http://127.0.0.1:1234/",
+    "server_name": "PC-FIN",
+    "model": "openai/gpt-oss-20b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 51548.3,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "Die Hauptstadt von Deutschland ist **Berlin**.",
+      "time": 526.8,
+      "token": 53,
+      "quality": 0.484,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 0.917,
+        "completeness_score": 0.25,
+        "relevance_score": 0.75,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.0,
+        "overall_quality": 0.484,
+        "word_count": 6,
+        "sentence_count": 1,
+        "avg_sentence_length": 6.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "**Was ist Machine Learning? – Kurz und einfach erklärt**\n\nStell dir vor, du hast einen sehr neugierigen Lernenden (z. B. ein Kind oder einen Roboter).  \nAnstatt ihm jeden Schritt zu erklären („Wenn es regnet, nimm den Regenschirm.“), gibst du ihm viele Beispiele:\n\n| Situation | Beispiel‑Ausgabe |\n|-----------|-----------------|\n| Regen?    | Schirm benutzen |\n| Sonne?    | Sonnencreme auftragen |\n\nDer Lernende schaut sich die Beispiele an, erkennt Muster und **lernt selbst**, welche Aktion in welcher Situation sinnvoll ist.  \nMachine Learning (ML) funktioniert im Grunde genau so – aber mit einem Computer.\n\n---\n\n### Die Grundschritte des Machine‑Learning-Prozesses\n\n1. **Daten sammeln**  \n   → „Beispiele“ für das Problem (z. B. Fotos von Hunden und Katzen, E‑Mail‑Texten, Wetterdaten).\n\n2. **Modell wählen**  \n   → Eine bestimmte Art von Computerprogramm (ein Algorithmus), der dafür geeignet ist, Muster zu erkennen.\n\n3. **Training**  \n   → Das Modell wird mit den gesammelten Daten „gefüttert“. Dabei passt es interne Parameter an, damit seine Vorhersagen immer genauer werden – ähnlich wie ein Kind beim Üben besser wird.\n\n4.",
+      "time": 4964.8,
+      "token": 500,
+      "quality": 0.566,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.6,
+        "relevance_score": 0.02,
+        "factual_consistency": 0.8,
+        "fluency_score": 0.737,
+        "coherence_score": 0.408,
+        "overall_quality": 0.566,
+        "word_count": 166,
+        "sentence_count": 19,
+        "avg_sentence_length": 8.7,
+        "unique_words_ratio": 0.801
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "## Was ist ein neuronales Netzwerk?\n\nEin neuronales Netzwerk (NN) ist eine rechnerische Modellierung von Nervenzellen (Neuronen), die aus vielen miteinander verbundenen „Knoten“ besteht. Es dient dazu, komplexe Muster und Zusammenhänge in Daten zu erkennen – etwa Bild‑, Sprach‑ oder Textverarbeitung.\n\n---\n\n## Grundstruktur eines Feedforward‑Netzwerks\n\n```\nEingabeschicht → versteckte Schichten (1…n) → Ausgabeschicht\n```\n\n* **Neuron**: Ein einzelner Knoten berechnet eine lineare Kombination seiner Eingänge und wendet danach eine nichtlineare Aktivierungsfunktion an.\n  * Gleichung eines Neurons  \n    \\[\n    a = f\\!\\Bigl(\\sum_{i} w_i x_i + b\\Bigr)\n    \\]\n    * \\(x_i\\) – Eingangswerte (Ausgänge der vorherigen Schicht oder Rohdaten)\n    * \\(w_i\\) – Gewichtungen (Parameter, die gelernt werden)\n    * \\(b\\) – Bias (ein zusätzlicher Parameter)\n",
+      "time": 9886.0,
+      "token": 499,
+      "quality": 0.546,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.968,
+        "completeness_score": 0.417,
+        "relevance_score": 0.047,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.412,
+        "overall_quality": 0.546,
+        "word_count": 111,
+        "sentence_count": 6,
+        "avg_sentence_length": 18.5,
+        "unique_words_ratio": 0.82
+      }
+    },
+    {
+      "question": "Was sind die Vor- und Nachteile von Cloud Computing?",
+      "answer": "**Cloud‑Computing – Vor- und Nachteile**\n\n| Vorteil | Beschreibung |\n|--------|--------------|\n| **Kostenersparnis & Pay‑as‑You‑Go** | Statt teure Hardware zu kaufen, zahlt man nur für die tatsächlich genutzten Ressourcen (Rechenleistung, Speicher). Initialkosten bleiben niedrig. |\n| **Skalierbarkeit & Elastizität** | Kapazitäten können je nach Bedarf schnell hoch- oder runtergefahren werden – ideal für saisonale Spitzen oder wachsende Unternehmen. |\n| **Flexibilität & Mobilität** | Von überall mit Internetzugang lässt sich auf Daten und Anwendungen zugreifen. Das erleichtert Remote‑Work, Collaboration und globale Teams. |\n| **Wartungs­frei (oder minimal)** | Hardware‑ und Software‑Updates werden vom Cloud‑Provider übernommen; IT-Mitarbeiter können sich auf strategische Projekte konzentrieren. |\n| **High Availability & Disaster Recovery** | Viele Anbieter bieten Multi‑Region‑Redundanz, automatische Backups und schnelle Wiederherstellungspunkte – was Ausfallzeiten drastisch reduziert. |\n| **Innovation & Integration** | APIs, Container‑Services (z. B. Kubernetes), AI/ML‑Plattformen sind sofort verfügbar; Unternehmen können neue Technologien ohne große Vorlaufkosten ausprobieren. |\n\n---\n\n| Nachteil | Beschreibung |\n|----------|--------------|\n| **Abhängigkeit vom Internet** | Ohne stabile Verbindung kann kein Zugriff auf Daten oder Anwendungen erfolgen – ein kritischer Punkt für Anwendungen, die 24/7 erreichbar sein müssen. |\n| **Datensicherheit & Datenschutz** | Sensible Daten liegen bei Dritten; es entstehen Fragen zu Zugriffsrechten, Verschlüsselung und Einhaltung von Gesetzen (z. B. DSGVO). |\n| **Compliance‑Risiken** | Branchen‑ oder länders",
+      "time": 4915.5,
+      "token": 500,
+      "quality": 0.55,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.917,
+        "completeness_score": 0.5,
+        "relevance_score": 0.038,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.733,
+        "coherence_score": 0.392,
+        "overall_quality": 0.55,
+        "word_count": 213,
+        "sentence_count": 15,
+        "avg_sentence_length": 14.2,
+        "unique_words_ratio": 0.69
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen HTTP und HTTPS.",
+      "answer": "**HTTP (Hypertext Transfer Protocol)**  \n- **Transportschicht**: Arbeitet auf Ebene 7 (Anwendung) des OSI-Modells und nutzt TCP als Transportprotokoll.  \n- **Port**: Standardmäßig Port 80.  \n- **Datenfluss**: Die Anfragen vom Browser (`GET /index.html`) und die Antworten vom Server (`HTTP/1.1 200 OK …`) werden im Klartext (unverschlüsselt) übertragen.  \n- **Sicherheit**: Keine Verschlüsselung, keine Authentifizierung des Servers – jeder kann Daten abfangen oder manipulieren (Man‑in‑the‑Middle).  \n\n---\n\n**HTTPS (HTTP Secure)**  \n- **Transportschicht**: HTTP + TLS/SSL (Transport Layer Security / Secure Sockets Layer).  \n- **Port**: Standardmäßig Port 443.  \n- **Datenfluss**:\n  1. **TLS‑Handshake**: Der Client fordert ein Serverzertifikat an, überprüft die Signatur des Zertifikats (CA), tauscht Symmetrische Schlüssel aus (z. B. mittels RSA/ElGamal oder Diffie–Hellman).  \n  2. **Verschlüsselung**: Alle nachfolgenden HTTP‑Nachrichten werden mit einem symmetrischen Schlüssel verschlüsselt, der nur Client und Server kennen.  \n  3. **Integrität & Authentizität**: MAC (Message Authentication Code) oder Signatur stellt sicher, dass die Daten nicht verändert wurden und wirklich vom angegebenen Server stammen.  \n\n- **Sicherheit**:\n  - *Vertraulichkeit*: Dritte können den Inhalt der Übertragung nicht lesen.  \n  - *Integrität*: Manipulationen werden erkannt.  \n  - *Authentifizierung*: Der Client kann sicher sein, dass er mit dem legitimen Server kommuniziert (über Zertifikatskette).  \n\n---\n\n### Kurz zusammen",
+      "time": 9684.3,
+      "token": 500,
+      "quality": 0.479,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.907,
+        "completeness_score": 0.35,
+        "relevance_score": 0.027,
+        "factual_consistency": 0.7,
+        "fluency_score": 0.713,
+        "coherence_score": 0.5,
+        "overall_quality": 0.479,
+        "word_count": 186,
+        "sentence_count": 20,
+        "avg_sentence_length": 9.3,
+        "unique_words_ratio": 0.747
+      }
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Liste und einem Tupel in Python?",
+      "answer": "**Kurz gesagt**\n\n| Merkmal | Liste (`list`) | Tupel (`tuple`) |\n|---------|----------------|-----------------|\n| **Mutierbarkeit** | *Mutable* – Elemente können geändert, hinzugefügt oder entfernt werden. | *Immutable* – Einmal erstellt, kann man die Inhalte nicht mehr verändern. |\n| **Syntax** | `my_list = [1, 2, 3]` | `my_tuple = (1, 2, 3)` |\n| **Leistungsfähigkeit** | Größerer Overhead (mehr Speicher, dynamische Größe). | Geringerer Overhead (kompakter, schneller bei kleinen Datenmengen). |\n| **Methoden / Operationen** | Viele eingebaute Methoden (`append`, `extend`, `pop`, `remove`, …). | Nur die Basis‑Operationen (`len`, `count`, `index`). |\n| **Verwendbarkeit als Schlüssel** | Nicht hashbar → kann nicht in Sets oder als Dictionary‑Schlüssel verwendet werden. | Hashbar – eignet sich gut als Schlüssel (z. B. in Dictionaries, Sets). |\n| **Typische Anwendungsfälle** | Datenstrukturen mit variabler Größe und häufigen Änderungen: z. B. Warteschlangen, Stapel, Listen von Benutzereingaben. | Konstant gehaltene Gruppen von Werten: z. B. Koordinaten `(x, y)`, RGB‑Farben `(r,g,b)`, Rückgabe mehrerer Werte aus einer Funktion. |\n\n---\n\n### Warum die Unterscheidung wichtig ist\n\n1. **Sicherheit**  \n   Ein Tuple garantiert, dass sein Inhalt während der Laufzeit nicht versehentlich verändert wird – das schützt vor Seiteneffekten",
+      "time": 4779.1,
+      "token": 500,
+      "quality": 0.593,
+      "quality_metrics": {
+        "structure_score": 0.8,
+        "readability_score": 0.989,
+        "completeness_score": 0.857,
+        "relevance_score": 0.028,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.722,
+        "coherence_score": 0.427,
+        "overall_quality": 0.593,
+        "word_count": 187,
+        "sentence_count": 18,
+        "avg_sentence_length": 10.4,
+        "unique_words_ratio": 0.738
+      }
+    },
+    {
+      "question": "Erkläre das Konzept der Vererbung in der objektorientierten Programmierung.",
+      "answer": "## Das Konzept der Vererbung (Inheritance) – ein Überblick\n\nVererbung ist eines der Kernkonzepte der objektorientierten Programmierung (OOP). Sie ermöglicht es, **Klassen in einer Hierarchie zu organisieren**, sodass eine „Kind“- oder „abgeleitete“ Klasse Eigenschaften und Verhalten von einer „Eltern“- oder „Basisklasse“ erbt. Dadurch wird Code wiederverwendbar, übersichtlich und leichter wartbar.\n\n---\n\n### 1. Warum Vererbung?\n\n| Problem | Lösung durch Vererbung |\n|---------|------------------------|\n| **Code‑Duplikation** – mehrere Klassen haben gleiche Attribute/Methoden | Gemeinsame Teile werden in einer Basisklasse definiert; abgeleitete Klassen erben sie. |\n| **Wartbarkeit** – Änderungen an gemeinsamen Teilen müssen nur einmal gemacht werden | Änderung in der Basis­klasse wirkt sich automatisch auf alle Unterklassen aus. |\n| **Polymorphie** – ein Objekt kann als Instanz seiner eigenen Klasse *oder* ihrer Basisklasse behandelt werden | Ermöglicht generische Programmierung (z. B. Methoden, die mit `Animal` arbeiten). |\n\n---\n\n### 2. Grundbegriffe\n\n| Begriff | Bedeutung |\n|---------|-----------|\n| **Basisklasse / Superklasse** | Die Klasse, von der geerbt wird. Enthält gemeinsame Attribute und Methoden. |\n| **Abgeleitete Klasse / Subklasse** | Erbt die Struktur der Basisklasse, kann sie erweitern oder überschreiben. |\n| **Erben (Inheritance)** | Mechanismus, durch den eine Unterklasse auf die Mitglieder ihrer Oberklasse zugreift. |\n| **Überschreiben (Override)** | Eine Methode in einer Unterklasse bekommt dieselbe Signatur wie in der Basis­klasse, aber einen eigenen Körper. |\n| **Polymorphie** | Ein Objekt kann als Instanz mehrerer Typen betrachtet werden – z. B. `Animal` und gleichzeitig `Dog`. |\n| **Konstruktor‑Verkettung** | Aufruf des Basiskonstruktors von der Unter",
+      "time": 9543.7,
+      "token": 500,
+      "quality": 0.558,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.973,
+        "completeness_score": 0.45,
+        "relevance_score": 0.036,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.725,
+        "coherence_score": 0.528,
+        "overall_quality": 0.558,
+        "word_count": 247,
+        "sentence_count": 20,
+        "avg_sentence_length": 12.3,
+        "unique_words_ratio": 0.628
+      }
+    },
+    {
+      "question": "Was ist ein REST-API und wie funktioniert es?",
+      "answer": "## Was ist ein REST‑API?\n\n**REST** steht für *Representational State Transfer* und beschreibt einen Architekturstil (nicht einen konkreten Standard) zur Gestaltung von verteilten Systemen – vor allem Web‑Services.  \nEin **REST‑API** („Application Programming Interface“) ist eine Schnittstelle, die diese Prinzipien nutzt, um Daten über das Internet zwischen Client (z.B. Browser, Mobile App, IoT‑Gerät) und Server auszutauschen.\n\n---\n\n## Grundprinzipien von REST\n\n",
+      "time": 4776.9,
+      "token": 500,
+      "quality": 0.516,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.935,
+        "completeness_score": 0.375,
+        "relevance_score": 0.067,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.625,
+        "coherence_score": 0.371,
+        "overall_quality": 0.516,
+        "word_count": 60,
+        "sentence_count": 6,
+        "avg_sentence_length": 10.0,
+        "unique_words_ratio": 0.9
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen SQL und NoSQL-Datenbanken.",
+      "answer": "## SQL – Relationale Datenbanken  \n**Beispiele:** MySQL, PostgreSQL, Oracle DB, Microsoft SQL Server  \n\n| Merkmal | SQL‑DB |\n|---------|--------|\n| **Datenmodell** | Tabellen (Relationen) mit Zeilen und Spalten. Jede Tabelle besitzt einen vordefinierten Schemata‑Typ (Datentypen, Constraints). |\n| **Schema** | Statisch – Schemaänderungen erfordern ALTER TABLE oder Migrationstools. |\n| **Transaktionen** | ACID‑konform (Atomicity, Consistency, Isolation, Durability). |\n| **Konsistenz** | Starke Konsistenz: jede Transaktion sieht die Daten in einem konsistenten Zustand. |\n| **Abfrage** | SQL – deklaratives, mächtiges Sprachelement für Joins, Aggregationen, Unterabfragen etc. |\n| **Skalierung** | Vertikal (bessere Hardware) und gelegentlich sharding‑basierte horizontale Skalierung; meist komplexer Setup. |\n| **Verwendung** | OLTP‑Systeme, Finanzapplikationen, ERP, Systeme, die konsistente Transaktionen erfordern. |\n| **Stärken** | 1. Klare Datenmodellierung<br>2. Mächtige Abfragefunktionen (Joins, Window‑Funktionen)<br>3. Hohe Datenintegrität und Konsistenz<br>4. We",
+      "time": 9543.6,
+      "token": 500,
+      "quality": 0.505,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.868,
+        "completeness_score": 0.3,
+        "relevance_score": 0.023,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.394,
+        "overall_quality": 0.505,
+        "word_count": 129,
+        "sentence_count": 13,
+        "avg_sentence_length": 9.9,
+        "unique_words_ratio": 0.744
+      }
+    },
+    {
+      "question": "Was ist Docker und wofür wird es verwendet?",
+      "answer": "**Docker – Kurz erklärt**\n\nDocker ist eine Open‑Source-Plattform für *Containerisierung*.  \nEin Container ist ein leichtgewichtiger, eigenständiger Prozess‑Stack, der genau die Anwendungsabhängigkeiten (Bibliotheken, Runtime, Konfigurationen) enthält, die deine Software benötigt. Im Gegensatz zu herkömmlichen virtuellen Maschinen (VMs) teilt sich ein Docker‑Container den Kernel des Host‑Systems und ist daher viel ressourcenschonender.\n\n---\n\n## 1. Was macht Docker?\n\n| Element | Erklärung |\n|---------|-----------|\n| **Docker Engine** | Die Laufzeitumgebung, die Container startet, stoppt und verwaltet. |\n| **Images** | Unveränderliche Snapshots (Bilder) deiner Anwendung + Umgebung. Erstellen aus einer `Dockerfile`. |\n| **Container** | Aus einem Image gestartete Instanz – läuft isoliert, aber nutzt den Kernel des Hosts. |\n| **Registry** | Speicher für Images (z.B. Docker Hub, GitHub Container Registry, private Registries). |\n\n---\n\n## 2. Warum wird Docker verwendet?\n\n1. **Portabilität & Konsistenz**\n   - *Einmal bauen – überall laufen.*  \n     Ein Image enthält alles, was deine App benötigt. Ob auf deinem Laptop, einem CI‑Server oder in der Cloud – es läuft gleich.\n\n2. **Isolation**\n   - Jede Anwendung hat ihren eigenen Container; Konflikte zwischen Bibliotheken/Ports werden vermieden.\n   - Mehrere Versionen einer Abhängigkeit können gleichzeitig existieren (z.B. zwei verschiedene PHP‑Versionen).\n\n3. **Ressourceneffizienz**\n   - Da Container den Host‑Kernel teilen, verbrauchen sie deutlich weniger CPU/RAM als VMs.\n\n4. **Schn",
+      "time": 4782.1,
+      "token": 500,
+      "quality": 0.569,
+      "quality_metrics": {
+        "structure_score": 1.0,
+        "readability_score": 0.957,
+        "completeness_score": 0.438,
+        "relevance_score": 0.026,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.866,
+        "coherence_score": 0.546,
+        "overall_quality": 0.569,
+        "word_count": 204,
+        "sentence_count": 27,
+        "avg_sentence_length": 7.6,
+        "unique_words_ratio": 0.73
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 63402.8,
+    "runtime_avg": 6340.3,
+    "runtime_min": 526.8,
+    "runtime_max": 9886.0,
+    "token_sum": 4552,
+    "token_avg": 455,
+    "token_min": 53,
+    "token_max": 500,
+    "quality_sum": 5.366,
+    "quality_avg": 0.537,
+    "quality_min": 0.479,
+    "quality_max": 0.593,
+    "llm_load_time": 7047.6,
+    "cold_start_factor": 1.11
+  }
+}

@@ -1,0 +1,22 @@
+2025-08-14 23:33:25,672 - __main__ - INFO - Starting LLM Stress Test
+2025-08-14 23:33:25,672 - __main__ - INFO - Configuration loaded: {'questions': 10, 'concurrent': 2, 'url': 'http://localhost:1234', 'server_name': 'MacStudio M1 FIN', 'model': 'meta-llama-3.1-8b-instruct', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-14 23:33:25,672 - __main__ - INFO - Generated filename: result_MacStudio-M1-FIN_meta-llama-3_1-8b-instruct
+2025-08-14 23:33:25,673 - __main__ - INFO - Loaded 10 questions
+2025-08-14 23:33:25,709 - __main__ - INFO - Testing connection to http://localhost:1234/v1
+2025-08-14 23:33:25,814 - httpx - INFO - HTTP Request: GET http://localhost:1234/v1/models "HTTP/1.1 200 OK"
+2025-08-14 23:33:25,816 - __main__ - INFO - Connection successful. Available models: ['google/gemma-3-12b', 'meta-llama-3.1-8b-instruct', 'qwen/qwen3-14b', 'gpt-oss-20b-mlx', 'qwen3-embedding-8b-dwq', 'text-embedding-nomic-embed-text-v1.5']
+2025-08-14 23:33:25,819 - __main__ - INFO - Starting warmup phase to measure LLM loading time...
+2025-08-14 23:33:40,595 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:40,611 - __main__ - INFO - [WARMUP] Model loading completed in 14791.0ms
+2025-08-14 23:33:40,611 - __main__ - INFO - Running first question again without loading time...
+2025-08-14 23:34:05,320 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:05,322 - __main__ - INFO - Question processed in 24710.1ms, 9 tokens, quality: 0.29
+2025-08-14 23:34:05,322 - __main__ - INFO - LLM load time calculated: 0ms (warmup: 14791.0ms, real: 24710.1ms, raw_diff: -9919.099999999999ms)
+2025-08-14 23:34:05,322 - __main__ - INFO - Added first question result to results (not warmup): 9 tokens, 24710.1ms
+2025-08-14 23:34:05,322 - __main__ - INFO - Processing remaining questions with concurrency: 2
+2025-08-14 23:34:41,845 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:41,848 - __main__ - INFO - Question processed in 36525.1ms, 410 tokens, quality: 0.567
+2025-08-14 23:34:54,808 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:54,815 - __main__ - INFO - Question processed in 49490.7ms, 500 tokens, quality: 0.552
+2025-08-14 23:35:19,187 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:35:19,190 - __main__ - INFO - Question processed in 24371.7ms, 500 tokens, quality: 0.552

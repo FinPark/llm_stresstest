@@ -11,6 +11,7 @@ import aiohttp
 import logging
 import time
 import re
+import argparse
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
@@ -351,7 +352,7 @@ class QualityEvaluator:
 
 
 class LLMStressTest:
-    def __init__(self):
+    def __init__(self, force_overwrite=False):
         self.output_filename = None
         self.config = {}
         self.questions = []
@@ -362,6 +363,7 @@ class LLMStressTest:
         self.quality_evaluator = QualityEvaluator()
         self.llm_load_time = 0
         self.model_metadata = {}
+        self.force_overwrite = force_overwrite
     
     def sanitize_filename(self, text: str) -> str:
         """Bereinigt Text für Dateinamen - Leerzeichen zu -, Sonderzeichen zu _"""
@@ -534,7 +536,15 @@ class LLMStressTest:
             
             result["answer"] = response.choices[0].message.content
             result["time"] = round(elapsed_ms, 1)
-            result["token"] = response.usage.completion_tokens if response.usage else 0
+            
+            # Token-Zählung - verwende completion_tokens für die generierten Tokens
+            if response.usage:
+                result["token"] = response.usage.completion_tokens
+                # Debug-Logging für Token-Analyse
+                if not is_warmup:
+                    logger.debug(f"Token usage - prompt: {response.usage.prompt_tokens}, completion: {response.usage.completion_tokens}, total: {response.usage.total_tokens}")
+            else:
+                result["token"] = 0
             
             if is_warmup:
                 # Bei Warmup nur Zeit loggen, keine Quality-Bewertung
@@ -588,6 +598,10 @@ class LLMStressTest:
         
         # Prüfe ob Datei bereits existiert
         if output_path.exists():
+            if self.force_overwrite:
+                logger.info(f"Force overwriting existing file: {output_path}")
+                return True
+            
             logger.warning(f"Output file {output_path} already exists!")
             print(f"\n⚠️  Die Datei '{output_path}' existiert bereits.")
             response = input("Möchten Sie die Datei überschreiben? (j/n): ").strip().lower()
@@ -632,14 +646,17 @@ class LLMStressTest:
                     real_result = await self.send_question(first_question, session, is_warmup=False)
                     real_time = real_result['time']
                     
-                    # LLM-Ladezeit berechnen
-                    self.llm_load_time = round(warmup_time - real_time, 1)
-                    logger.info(f"LLM load time calculated: {self.llm_load_time}ms (warmup: {warmup_time}ms, real: {real_time}ms)")
+                    # LLM-Ladezeit berechnen (nur positiv, bei negativen Werten = 0)
+                    calculated_load_time = warmup_time - real_time
+                    self.llm_load_time = round(max(0, calculated_load_time), 1)
+                    logger.info(f"LLM load time calculated: {self.llm_load_time}ms (warmup: {warmup_time}ms, real: {real_time}ms, raw_diff: {calculated_load_time}ms)")
                     
-                    # Nur das echte Ergebnis zu results hinzufügen
+                    # WICHTIG: Warmup-Ergebnis NICHT speichern, nur für Zeitmessung verwenden!
+                    # Das real_result (zweite Ausführung) wird als erste Frage in den Results gespeichert
                     self.results.append(real_result)
+                    logger.info(f"Added first question result to results (not warmup): {real_result['token']} tokens, {real_result['time']}ms")
                     
-                    # Restliche Fragen verarbeiten (ab Index 1)
+                    # Restliche Fragen verarbeiten (ab Index 1, erste Frage bereits erledigt!)
                     remaining_questions = self.questions[1:]
                 else:
                     self.llm_load_time = 0
@@ -798,9 +815,15 @@ class LLMStressTest:
 
 
 async def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='LLM Stress Test Tool')
+    parser.add_argument('--force', '-f', action='store_true', 
+                       help='Force overwrite existing result files without prompting')
+    args = parser.parse_args()
+    
     logger.info("Starting LLM Stress Test")
     
-    tester = LLMStressTest()
+    tester = LLMStressTest(force_overwrite=args.force)
     
     if not tester.load_config():
         logger.error("Failed to load configuration. Exiting.")

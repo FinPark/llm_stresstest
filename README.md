@@ -80,6 +80,9 @@ Bearbeite `config/config.json`:
 ```bash
 # Einfach starten - Dateiname wird automatisch generiert
 python llm_stresstest.py
+
+# Mit Force-Flag zum Überschreiben ohne Nachfrage
+python llm_stresstest.py --force
 ```
 
 Der Dateiname wird automatisch aus `server_name` und `model` aus der Konfiguration generiert:
@@ -226,6 +229,8 @@ streamlit run llm_auswertung.py --server.port 8502
   - **Verbesserte Log-Darstellung**: Von HTML-Tabelle zu `st.data_editor` für bessere Lesbarkeit
   - **Level-Emojis** für intuitive Fehlerkennung (🔴 ERROR, 🟡 WARNING, ℹ️ INFO)
   - **Optimierte Spalten-Konfiguration** für lange Log-Nachrichten
+  - **Refresh-Button** für aktuelles Log-Nachladen mit Cache-Management
+  - **Log-Löschfunktion** zum bereinigen alter Log-Dateien
 - **⚡ Performance**: 
   - Strukturiertes Performance-Ranking mit LLM Load Time Analyse
   - Performance-Empfehlungen basierend auf Hardware-Optimierung
@@ -244,6 +249,11 @@ streamlit run llm_auswertung.py --server.port 8502
   - Radar-Charts für Metrik-Vergleiche
   - Box-Plots für Verteilungen
   - Detaillierte Statistiken
+- **⚡ Stresstest**: 
+  - Integrierte Stresstest-Konfiguration direkt im Dashboard
+  - Server- und Modell-Auswahl mit Historie
+  - API-basierte Modell-Erkennung
+  - Sicherheitslimits zum Serverschutz
 - **🏷️ Modell-Information**: 
   - Interaktive Info-Buttons (ℹ️) bei speziellen Features
   - Navigation zu detaillierten Feature-Erklärungen

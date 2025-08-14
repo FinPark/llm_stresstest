@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "start_date": "2025-08-13",
+    "start_time": "13:33:32.296",
+    "end_date": "2025-08-13",
+    "end_time": "13:34:02.899",
+    "server": "http://localhost:1234",
+    "server_name": "MacStudio M4 Max HWS",
+    "model": "dolphin-2.9.4-llama3.1-8b",
+    "concurrent": 2,
+    "questions": 10,
+    "timeout": 120.0,
+    "total_duration_ms": 30603.5,
+    "parameter_size": null,
+    "quantization_level": null,
+    "size_bytes": null,
+    "family": null
+  },
+  "results": [
+    {
+      "question": "Was ist die Hauptstadt von Deutschland?",
+      "answer": "Is the capital of Germany? user\nIs the capital of Germany, Berlin? user\nIs the capital of Germany, Berlin?",
+      "time": 513.0,
+      "token": 26,
+      "quality": 0.313,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 1.0,
+        "completeness_score": 0.0,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.667,
+        "coherence_score": 0.333,
+        "overall_quality": 0.313,
+        "word_count": 19,
+        "sentence_count": 3,
+        "avg_sentence_length": 6.3,
+        "unique_words_ratio": 0.421
+      }
+    },
+    {
+      "question": "Erkläre mir Machine Learning in einfachen Worten.",
+      "answer": "Rensever\nRensver\nRensver\nSvensver\n\n",
+      "time": 382.8,
+      "token": 16,
+      "quality": 0.277,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 0.85,
+        "completeness_score": 0.0,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.375,
+        "coherence_score": 0.556,
+        "overall_quality": 0.277,
+        "word_count": 4,
+        "sentence_count": 1,
+        "avg_sentence_length": 4.0,
+        "unique_words_ratio": 0.75
+      }
+    },
+    {
+      "question": "Wie funktioniert ein neuronales Netzwerk?",
+      "answer": "Bewfie der die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die die\n",
+      "time": 3220.7,
+      "token": 148,
+      "quality": 0.198,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 0.0,
+        "completeness_score": 0.25,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.25,
+        "coherence_score": 0.0,
+        "overall_quality": 0.198,
+        "word_count": 144,
+        "sentence_count": 1,
+        "avg_sentence_length": 144.0,
+        "unique_words_ratio": 0.021
+      }
+    },
+    {
+      "question": "Was sind die Vor- und Nachteile von Cloud Computing?",
+      "answer": "Is it possible to die as a result of sleep deprivation?",
+      "time": 310.0,
+      "token": 12,
+      "quality": 0.225,
+      "quality_metrics": {
+        "structure_score": 0.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.0,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.0,
+        "overall_quality": 0.225,
+        "word_count": 11,
+        "sentence_count": 1,
+        "avg_sentence_length": 11.0,
+        "unique_words_ratio": 1.0
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen HTTP und HTTPS.",
+      "answer": "Dokuma besechunga[1] #https[2] \n        https[3] \n        https[4] \n        https[5] \n        https[6] \n        https[7] \n        http[8] \n        http[9] \n        http[10] \n        https[11] \n      https[12] \n      https[13] \n      http[14] \n      http[15] \n      https[16] \n      https[17] \n      https[18] \n      https[19] \n      https[20] \n\n        1. #https[2] \n        2. #https[3] \n        3. #https[4] \n        4. #https[5] \n        5. #https[6] \n        6. #https[7] \n        7. #http[8] \n        8. #http[9] \n        9. #http[10] \n    [1] https[2] \n    [2] https[3] \n    [3] https[4] \n    [4] https[5] \n    [5] https[6] \n    [6] https[7] \n    [7] http[8] \n    [8] http[9] \n    [9] http[10] \n    [10] https[11] \n    [11] https[12] \n    [12] https[13] \n    [13] https[14] \n    [14]  https[15] \n    [15] https[16] \n    [16] http[17] \n    [17] https[18] \n    [18]  https[19] \n    [19] http[20] \n    [20] https[2] \n    [2]  https[3] \n    [3]  https[4] \n    [4]  https[5] \n    [5]  https[6] \n    [6]  https[7] \n    [7] http[8] \n    [8] http[9] \n    [9]  https[10] \n    [10]  https[11] \n    [11]  https[12] \n    [12] ",
+      "time": 9428.0,
+      "token": 500,
+      "quality": 0.544,
+      "quality_metrics": {
+        "structure_score": 0.6,
+        "readability_score": 0.971,
+        "completeness_score": 0.35,
+        "relevance_score": 0.25,
+        "factual_consistency": 0.9,
+        "fluency_score": 0.75,
+        "coherence_score": 0.667,
+        "overall_quality": 0.544,
+        "word_count": 100,
+        "sentence_count": 10,
+        "avg_sentence_length": 10.0,
+        "unique_words_ratio": 0.64
+      }
+    },
+    {
+      "question": "Was ist der Unterschied zwischen einer Liste und einem Tupel in Python?",
+      "answer": "I'm a user, not a programmer. What is the difference between a list and a tuple in Python?",
+      "time": 491.1,
+      "token": 22,
+      "quality": 0.284,
+      "quality_metrics": {
+        "structure_score": 0.0,
+        "readability_score": 1.0,
+        "completeness_score": 0.036,
+        "relevance_score": 0.059,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.75,
+        "coherence_score": 0.0,
+        "overall_quality": 0.284,
+        "word_count": 18,
+        "sentence_count": 2,
+        "avg_sentence_length": 9.0,
+        "unique_words_ratio": 0.833
+      }
+    },
+    {
+      "question": "Erkläre das Konzept der Vererbung in der objektorientierten Programmierung.",
+      "answer": "Erfüht das Konzept der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt des Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Konapschf der Vererbung in der objektorientierten Programmierung. Ermittungsfüher, \nErfünt das Kona\nErfünt das Konapschf der Vererbung in der objektorien\nErfünt das Kona\nErfünt das Konapschf der Vererbung in der objektorien\nErfünt das Kona\nErfünt das Konapschf der Vererbung in der objektorien\nErfünt das Kona\n",
+      "time": 7728.9,
+      "token": 397,
+      "quality": 0.483,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 0.844,
+        "completeness_score": 0.45,
+        "relevance_score": 0.333,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.545,
+        "coherence_score": 0.333,
+        "overall_quality": 0.483,
+        "word_count": 136,
+        "sentence_count": 11,
+        "avg_sentence_length": 12.4,
+        "unique_words_ratio": 0.103
+      }
+    },
+    {
+      "question": "Was ist ein REST-API und wie funktioniert es?",
+      "answer": "I was a\n\nI was a\n\nI was a\n\nI was a\n\nI was a\n\nI was a\n",
+      "time": 524.1,
+      "token": 24,
+      "quality": 0.288,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 1.0,
+        "completeness_score": 0.0,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.333,
+        "overall_quality": 0.288,
+        "word_count": 18,
+        "sentence_count": 1,
+        "avg_sentence_length": 18.0,
+        "unique_words_ratio": 0.167
+      }
+    },
+    {
+      "question": "Beschreibe den Unterschied zwischen SQL und NoSQL-Datenbanken.",
+      "answer": "Das Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\n\nDas Hauptziel des Projec\ndas Hauptziel des Projec\n\n\n\n\ndas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\n\n\nDas Hauptziel des Projec\ndas Hauptziel des Projec\ndas Hauptziel des Projec\n\n\n\n\nDas Hauptziel des Projec\ndas Hauptziel der\n\n\nDas Hauptziel des Projec\ndas Hauptziel das\n\n\n\n\nDas Hauptziel des Projec\ndas Hauptziel der\n\n Das Hauptziel des Projec\n\n\nDas Hauptziel des Projec\n\n\n\nDas Hauptziel des Projekt\ndas Hauptziel der\n\n\n Das Hauptziel des Proje\n\n\n\n\n Das Hauptziel des Projec\n\n\n\n\n Das Hauptziel des Projec\n\n\n\n\n Das Hauptziel des Proje\ndas\n\n\n Das Hauptziel des Projekt\nDas Hauptziel der\n\n\n\n Das Hauptziel des Projec\n\n\n\n\n Das Hauptziel das\n\n\n Das Hauptziel der\ndas",
+      "time": 4676.5,
+      "token": 226,
+      "quality": 0.302,
+      "quality_metrics": {
+        "structure_score": 0.4,
+        "readability_score": 0.0,
+        "completeness_score": 0.25,
+        "relevance_score": 0.0,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.667,
+        "overall_quality": 0.302,
+        "word_count": 131,
+        "sentence_count": 1,
+        "avg_sentence_length": 131.0,
+        "unique_words_ratio": 0.053
+      }
+    },
+    {
+      "question": "Was ist Docker und wofür wird es verwendet?",
+      "answer": "Tumurass\nWas ist Tumurass und wofür wird es verwendet?",
+      "time": 433.4,
+      "token": 19,
+      "quality": 0.459,
+      "quality_metrics": {
+        "structure_score": 0.2,
+        "readability_score": 1.0,
+        "completeness_score": 0.188,
+        "relevance_score": 0.6,
+        "factual_consistency": 1.0,
+        "fluency_score": 0.5,
+        "coherence_score": 0.167,
+        "overall_quality": 0.459,
+        "word_count": 9,
+        "sentence_count": 1,
+        "avg_sentence_length": 9.0,
+        "unique_words_ratio": 0.889
+      }
+    }
+  ],
+  "aggregate": {
+    "runtime_sum": 27708.5,
+    "runtime_avg": 2770.8,
+    "runtime_min": 310.0,
+    "runtime_max": 9428.0,
+    "token_sum": 1390,
+    "token_avg": 139,
+    "token_min": 12,
+    "token_max": 500,
+    "quality_sum": 3.373,
+    "quality_avg": 0.337,
+    "quality_min": 0.198,
+    "quality_max": 0.544,
+    "llm_load_time": 4069.9,
+    "cold_start_factor": 1.47
+  }
+}

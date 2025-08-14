@@ -1,0 +1,39 @@
+2025-08-14 23:32:50,737 - __main__ - INFO - Starting LLM Stress Test
+2025-08-14 23:32:50,737 - __main__ - INFO - Configuration loaded: {'questions': 10, 'concurrent': 2, 'url': 'http://localhost:1234', 'server_name': 'MacStudio M1 FIN', 'model': 'meta-llama-3.1-8b-instruct', 'timeout': 120.0, 'max_keepalive_connections': 20}
+2025-08-14 23:32:50,737 - __main__ - INFO - Generated filename: result_MacStudio-M1-FIN_meta-llama-3_1-8b-instruct
+2025-08-14 23:32:50,737 - __main__ - INFO - Loaded 10 questions
+2025-08-14 23:32:50,771 - __main__ - INFO - Testing connection to http://localhost:1234/v1
+2025-08-14 23:32:50,878 - httpx - INFO - HTTP Request: GET http://localhost:1234/v1/models "HTTP/1.1 200 OK"
+2025-08-14 23:32:50,880 - __main__ - INFO - Connection successful. Available models: ['google/gemma-3-12b', 'meta-llama-3.1-8b-instruct', 'qwen/qwen3-14b', 'gpt-oss-20b-mlx', 'qwen3-embedding-8b-dwq', 'text-embedding-nomic-embed-text-v1.5']
+2025-08-14 23:32:50,887 - __main__ - INFO - Starting warmup phase to measure LLM loading time...
+2025-08-14 23:32:52,382 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:32:52,398 - __main__ - INFO - [WARMUP] Model loading completed in 1510.5ms
+2025-08-14 23:32:52,398 - __main__ - INFO - Running first question again without loading time...
+2025-08-14 23:32:52,631 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:32:52,635 - __main__ - INFO - Question processed in 234.7ms, 9 tokens, quality: 0.461
+2025-08-14 23:32:52,635 - __main__ - INFO - LLM load time calculated: 1275.8ms (warmup: 1510.5ms, real: 234.7ms, raw_diff: 1275.8ms)
+2025-08-14 23:32:52,635 - __main__ - INFO - Added first question result to results (not warmup): 9 tokens, 234.7ms
+2025-08-14 23:32:52,635 - __main__ - INFO - Processing remaining questions with concurrency: 2
+2025-08-14 23:33:04,671 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:04,675 - __main__ - INFO - Question processed in 12037.7ms, 467 tokens, quality: 0.553
+2025-08-14 23:33:17,585 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:17,589 - __main__ - INFO - Question processed in 24950.1ms, 500 tokens, quality: 0.488
+2025-08-14 23:33:30,482 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:30,486 - __main__ - INFO - Question processed in 12894.2ms, 500 tokens, quality: 0.559
+2025-08-14 23:33:40,264 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:40,267 - __main__ - INFO - Question processed in 22674.6ms, 381 tokens, quality: 0.549
+2025-08-14 23:33:52,026 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:33:52,030 - __main__ - INFO - Question processed in 11760.4ms, 445 tokens, quality: 0.607
+2025-08-14 23:34:04,985 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:04,986 - __main__ - INFO - Question processed in 24715.3ms, 500 tokens, quality: 0.561
+2025-08-14 23:34:18,295 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:18,296 - __main__ - INFO - Question processed in 13309.2ms, 500 tokens, quality: 0.546
+2025-08-14 23:34:31,251 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:34:31,254 - __main__ - INFO - Question processed in 26265.4ms, 500 tokens, quality: 0.588
+2025-08-14 23:35:06,207 - httpx - INFO - HTTP Request: POST http://localhost:1234/v1/chat/completions "HTTP/1.1 200 OK"
+2025-08-14 23:35:06,213 - __main__ - INFO - Question processed in 34954.9ms, 441 tokens, quality: 0.587
+2025-08-14 23:35:06,216 - __main__ - INFO - Results saved to results/result_MacStudio-M1-FIN_meta-llama-3_1-8b-instruct.json
+2025-08-14 23:35:06,216 - __main__ - INFO - Updating model registry...
+2025-08-14 23:35:06,365 - __main__ - INFO - Model registry: Already up to date
+2025-08-14 23:35:06,365 - __main__ - INFO - Test completed successfully. Results saved to results/result_MacStudio-M1-FIN_meta-llama-3_1-8b-instruct.json
+2025-08-14 23:35:06,366 - __main__ - INFO - Test completed successfully
